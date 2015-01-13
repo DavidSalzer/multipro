@@ -1,2 +1,95 @@
 body {
+    background: #F2F2F4;
+}
+
+.container {
+    width: 90%;
+    height: 100%;
+    margin: auto;
+}
+
+.stats-title {
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    font-size: 40px;
+    color: #6D6E72;
+}
+
+.grade-charts-wrapper {
+    /*background: #F2F2F4;*/
+    height: 300px;
+}
+
+.test-grade {
+    background: #fff;
+    width: 30%;
+    float: left;
+}
+
+.grade-title {
+    height: 100px;
+}
+
+#grade-pie-chart {
+    height: 200px;
+}
+
+#test-charts {
+    background: #fff;
+    float:right;
+    width: 69%;
+    height: 100%;
+}
+
+#toggle-container {
+    height: 100px;
+    position: relative;
+}
+
+#test-toggle {
+    background: #fff;
+    height: 30px;
+    width: 200px;
+    float: right;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.thirds-container {
+}
+
+.third {
+    height: 100px;
+    background: #fff;
+    margin-bottom: 10px;
+}
+
+#first-third{
+}
+
+#second-third{
+}
+
+#third-third{
+}
+
+.tips-container {
+    height: 100px;
+    position: relative;
+}
+
+#tips{
+    background: #F5F3B6;
+    height: 60px;
+    width: 70%;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+    position: absolute;
 }

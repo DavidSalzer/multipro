@@ -31,7 +31,7 @@
                             <div class="circle settings-item"><div class="icon"></div><div class="question-settings-text">עיגול</div></div>
                         </div>
                         <div class="question-container">
-                            <div class="title"> <span class="number">1.</span><div class="text">שאלה ארוכה ממש....</div></div>
+                            <div class="title"> <span class="number">1.</span><div class="text">שאלה ראשונה....</div></div>
                             <div class="answers-container">
                                 <input type="radio" name="not-answer" value="male" class="not-answer-item"><input type="radio" name="answer" value="male" class="answer-item">Male<br>
                                 <input type="radio" name="not-answer" value="male" class="not-answer-item"><input type="radio" name="answer" value="female" class="answer-item">Female<br>
@@ -47,13 +47,13 @@
 
                             </div>
                             <div class="comment">
-                            כתוב ההערה..
+                           כתוב ההערה
                             </div>
                         </div>
                     </div>
                     <div class="swiper-slide blue-slide">
                         <div class="question-container">
-                            <div class="title">שאלה ארוכה ממש....</div>
+                            <div class="title">שאלה שניה....</div>
                             <div class="answers-container">
                                 <div class="answer-item">תשובה 1</div>
                                 <div class="answer-item">תשובה 1</div>
@@ -95,10 +95,12 @@
 
             $(".asterisk .icon").on("click", function () {
                 $(".swiper-slide-active .number").toggleClass("asterisk")
+                $(".swiper-slide-active .number").removeClass("circle")
             });
 
             $(".circle .icon").on("click", function () {
-                $(".swiper-slide-active .number").toggleClass("circle")
+                $(".swiper-slide-active .number").toggleClass("circle");
+                $(".swiper-slide-active .number").removeClass("asterisk")
             });
         </script>
     </body>
