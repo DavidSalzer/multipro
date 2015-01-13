@@ -1,40 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-        <link rel="stylesheet" type="text/css" href="css/StyleStatistics.css">
-        <link rel="stylesheet" type="text/css" href="css/czChart.css">
-        <link rel="stylesheet" type="text/css" href="css/reset.css">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+	    <title>Test chart</title>
+	    <style>
+    	    .chart-canvas {
+    	        border: black 1px solid;
+    	        
+    	    }
+    	    .testChart 
+    	    {
+    	        display: inline-block;
+    	        width: 400px;
+    	        height: 300px;
+    	        border: black 1px solid;    	        
+    	        margin-left: 100px;
+    	        margin-top: 20px;
+    	    }    	        	    
+    	</style>
+	    <link type="text/css" href="css/czchart.css" rel="stylesheet"/>
         <script type="text/javascript" src="js/excanvas.js"></script>
 	    <script type="text/javascript" src="js/jquery-1.9.1.js"></script>	            
 	    <script type="text/javascript" src="js/czGraphic.js"></script>
 	    <script type="text/javascript" src="js/czchart.js"></script>
    	    <script type="text/javascript" src="js/czPieChart.js"></script>
 		<script type="text/javascript" src="js/czBarChart.js"></script>
-    </head>
-    <body>
-        <div class="container">
-            <div class="stats-title">סיכום נתוני נבחן: מבחן גמר רפואה</div>
-            <div class="grade-charts-wrapper">
-                <div class="test-grade">
-                    <div class="grade-title"></div>
-                    <div id="piechart" class="testChart"></div>
-                </div>
-                <div id="test-charts"></div>
-            </div>
-            <div id="toggle-container">
-                <div id="test-toggle"></div>
-            </div>
-            <div class="thirds-container">
-                <div id="first-third" class="third"></div>
-                <div id="second-third" class="third"></div>
-                <div id="third-third" class="third"></div>
-            </div>
-            <div class="tips-container">
-                <div id="tips"></div>
-            </div>
-        </div>
+	</head>
+	<body>
+	    <h1>Testing bar chart</h1>	    	    
+	    <div id="barchart2" class="testChart"></div>        
+	    <div id="piechart" class="testChart"></div>
+        
+        
         <script type="text/javascript">
 
 	        var chart2 = $("#barchart2").czChart({	            
@@ -97,5 +93,5 @@
             });
             
     	</script>
-    </body>
+	</body>
 </html>
