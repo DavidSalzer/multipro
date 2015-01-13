@@ -1,23 +1,105 @@
 <!DOCTYPE html>
-
 <html lang="en">
     <head>
         <meta charset="utf-8" />
         <title></title>
+        <link rel="stylesheet" href="css/idangerous.swiper.css">
+
+        <link rel="stylesheet" type="text/css" href="css/StyleMain.css">
     </head>
     <body>
-        <div class="container">
-            <div class="stats-title"></div>
-            <div class="test-grade">
-                <div class="grade-title"></div>
-                <div id="grade-pie-chart"></div>
-            </div>
-            <div id="test-charts">
+        <header>
 
+            <div id="user-container">
+                <div id="user-image"></div>
+                <div id="user-name">ישראל ישראלי</div>
             </div>
-            <div id="test-display-toggle">
-                <div id=""
+            <div id="menu-button">
             </div>
+
+        </header>
+        <div id="test-container">
+            <div id="test-settings">
+                <div id="marker"></div>
+            </div>
+
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide red-slide">
+                        <div class="question-status">
+                            <div class="asterisk settings-item"><div class="icon"></div><div class="question-settings-text">כוכבית</div></div>
+                            <div class="circle settings-item"><div class="icon"></div><div class="question-settings-text">עיגול</div></div>
+                        </div>
+                        <div class="question-container">
+                            <div class="title"> <span class="number">1.</span><div class="text">שאלה ארוכה ממש....</div></div>
+                            <div class="answers-container">
+                                <input type="radio" name="not-answer" value="male" class="not-answer-item"><input type="radio" name="answer" value="male" class="answer-item">Male<br>
+                                <input type="radio" name="not-answer" value="male" class="not-answer-item"><input type="radio" name="answer" value="female" class="answer-item">Female<br>
+                                <input type="radio" name="not-answer" value="male" class="not-answer-item"><input type="radio" name="answer" value="female" class="answer-item">Female<br>
+                                <input type="radio" name="not-answer" value="male" class="not-answer-item"><input type="radio" name="answer" value="female" class="answer-item">Female<br>
+                            </div>
+                        </div>
+                        <div class="question-feature">
+                            <div class="question-settings">
+                                <div class="guess settings-item"><div class="icon"></div><div class="question-settings-text">ניחוש</div></div>
+                                <div class="timer settings-item"><div class="icon"></div><div class="question-settings-text">טיימר</div></div>
+                                <div class="clear settings-item"><div class="icon"></div><div class="question-settings-text">נקה</div></div>
+
+                            </div>
+                            <div class="comment">
+                            כתוב ההערה..
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide blue-slide">
+                        <div class="question-container">
+                            <div class="title">שאלה ארוכה ממש....</div>
+                            <div class="answers-container">
+                                <div class="answer-item">תשובה 1</div>
+                                <div class="answer-item">תשובה 1</div>
+                                <div class="answer-item">תשובה 1</div>
+                                <div class="answer-item">תשובה 1</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide orange-slide">
+                        <div class="title">Slide 3</div>
+                    </div>
+                    <div class="swiper-slide blue-slide">
+                        <div class="title">Slide 4</div>
+                    </div>
+                    <div class="swiper-slide red-slide">
+                        <div class="title">Slide 5</div>
+                    </div>
+                    <div class="swiper-slide green-slide">
+                        <div class="title">Slide 6</div>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination"></div>
         </div>
+
+        <script src="js/jquery.js"></script>
+        <script src="js/idangerous.swiper.js"></script>
+        <script>
+            var mySwiper = new Swiper('.swiper-container', {
+                pagination: '.pagination',
+                mode: 'vertical',
+                paginationClickable: true,
+                centeredSlides: true,
+                mousewheelControlForceToAxis: true,
+                mousewheelControl: true,
+                slidesPerView: 3,
+                watchActiveIndex: true
+            })
+
+            $(".asterisk .icon").on("click", function () {
+                $(".swiper-slide-active .number").toggleClass("asterisk")
+            });
+
+            $(".circle .icon").on("click", function () {
+                $(".swiper-slide-active .number").toggleClass("circle")
+            });
+        </script>
     </body>
 </html>
