@@ -12,22 +12,33 @@
         
     </head>
     <body>
-        
-        <div class="container">
-            <div class="stats-title">סיכום נתוני נבחן: מבחן גמר רפואה</div>
-            <div class="pie-chart-text""> ציון מבחן</div>
-            <div id="chart_div_pie" style="display: inline-block;"></div>
-            <div id="chart_div_bar" style="width: 700px; height: 300px; display: inline-block;"></div>
-            <div id="" style="width: 700px; height: 100px;"></div>
-            <div class="tips-container"  align="center">
-                 <div style="display: table;">
-                    <div id="tips" style="display: table-cell; vertical-align: middle; text-align: center;"></div>
-                 </div>
-                <!--<div id="tips" align="center" ></div>-->
+        <div id="reportPage">
+            <div style="background-color: #808080; width: 100%; height: 80px;">
+                <img src="./img/sidebar.png" style="display: inline-block; padding-left: 20px; padding-top: 24px;">
+                <img src="./img/userImage.png" style="display: inline-block; padding-right: 20px; padding-top: 24px; float: right;">
+                <div id="userName"style="display: inline-block; float: right; padding-top: 30px; color: #ffffff; font-size: 20px; padding-right: 10px;"> </div>
             </div>
+            <div class="container">
+                <div class="stats-title">סיכום נתוני נבחן: מבחן גמר רפואה</div>
+                <div class="pie-chart-text"> 
+                    <img src="./img/win.png" style="display: inline-block;">
+                    <div style="display: inline-block;">  ציון מבחן </div>
+                </div>
+                <div id="chart_div_pie" style="display: inline-block;"></div>
+                <div id="chart_div_bar" style="width: 700px; height: 300px; display: inline-block;"></div>
+                <div style="background-color: #ffffff; height: 100px; width: 1105px; margin-top: 70px;">
+                    <div id="questionsTime" style="background-color: #cec6c6 ; display: inline-block;"></div>
+                </div>
+                
+                <div class="tips-container"  align="center"  style="margin-top: 70px;">
+                     <div style="display: table;">
+                        <div id="tips" style="display: table-cell; vertical-align: middle; text-align: center;"></div>
+                     </div>
+                    <!--<div id="tips" align="center" ></div>-->
+                </div>
             
+            </div>
         </div>
-
         <script src="js/report.js"></script>
         <script src="js/timer.js"></script>
         <script src="js/init.js"></script>

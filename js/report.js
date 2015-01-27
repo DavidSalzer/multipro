@@ -5,12 +5,16 @@ function ReportController() {
     }
 
     this.initChart = function () {
-        
+
         self.tips = ['אחוז השינויים הגבוה שאתה מבצע בסוף המבחן פוגע בציונך'];
         self.setTipIndex(0);
 
-        self.results = [100, 117, 66, 103, 127, 98, 100, 73, 60];//temp
+        self.results = [100, 117, 66, 103, 127, 98, 100, 73, 60]; //temp
         self.setResults(self.results);
+
+        self.questionsTime = [{time:5,corectAns:true},{time:5,corectAns:true},{time:1,corectAns:true},{time:3,corectAns:true},{time:3,corectAns:true},{time:2,corectAns:true},{time:7,corectAns:true},{time:5,corectAns:true},{time:4,corectAns:true},{time:1,corectAns:true},{time:1,corectAns:true},{time:3,corectAns:true},{time:9,corectAns:true},{time:13,corectAns:true},{time:3,corectAns:true},{time:5,corectAns:true}];
+
+        self.setUser({ firstName: "ישראל", lastName: "ישראלי" });
         // Load the Visualization API and the piechart package.
         google.load('visualization', '1.0', { 'packages': ['corechart'] });
 
@@ -78,7 +82,7 @@ function ReportController() {
                         2]);
         var options_bar = {
             'legend': { position: "none" },
-            'chartArea': { left: 300, top: 50, width: '50%', height: '75%' },
+            'chartArea': { left: 300, top: '12%', width: '50%', height: '75%' },
             'width': 700,
             'tooltip': { 'trigger': "none" },
             'fontName': 'Open Sans Hebrew'
@@ -92,9 +96,30 @@ function ReportController() {
     this.setResults = function (results) {
         self.results = results;
     }
+    this.setQuestionsTime = function (questionsTime) {
+        var time;
+        for (quest in questionsTime) {
+            time = time + questionsTime[quest].time;
+        }
+        for (quest in questionsTime) {
+            self.questionsTime[quest].time = Math.round((self.questionsTime[quest].time / time) * 1110);
+            self.questionsTime[quest].questNum = quest;
+            self.questionsTime[quest].corectAns = questionsTime[quest].corectAns;
+        }
+        //self.questionsTime = questionsTime;
+        $('#questionsTime').html();
+        <div id="questionsTime" style="background-color: #cec6c6 ; display: inline-block;"></div>
+    }
+    this.getQuestionsTime = function () {
+        return self.questionsTime;
+    }
+    this.setUser = function (user) {
+        self.user = user;
+        $('#userName').html(self.user.firstName + " " + self.user.lastName);
+    }
     this.setTipIndex = function (index) {
-        self.tipIndex = index;
-        $('#tips').html(self.tips[self.tipIndex] +" : " + self.tipIndex + " טיפ  ");
+        self.tipIndex = index +1 ;
+        $('#tips').html( " טיפ  " + self.tipIndex+" : " + self.tips[index]);
     }
     this.drawChart = function () {
         self.drawChartPie();
