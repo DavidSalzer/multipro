@@ -216,6 +216,7 @@ vertical-align: top;
 
      height: 40px;
      line-height: 40px;
+     cursor: pointer;
 }
 
 .question-feature-item.comment {
@@ -260,8 +261,18 @@ vertical-align: middle;
 .question-settings-text{
     width: 100%;
 }
+
+.guess.selected{
+    background-color: #f37936;
+color: #fff;
+}
+
 .guess .icon{
      background-image: url("../img/guess.png"); 
+}
+
+.guess.selected .icon{
+     background-position: -24px 0; 
 }
 
 .settings-item.asterisk{

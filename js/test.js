@@ -21,6 +21,8 @@ function TestController() {
 
         $(".swiper-wrapper").on("click", ".clear", self.clear);
 
+        $(".swiper-wrapper").on("click", ".guess", self.guess);
+
         $("#user-container").on("click", function () {
             window.location = "indexStatistics.html";
         });
@@ -47,9 +49,9 @@ function TestController() {
                 html += '             <div class="answer-item"><span class="not-answer-icon"></span><span class="answer-icon"></span><span class="number">' + self.alphabets[j] + '.</span><span class="text">' + self.questions[i].answers[j] + '</span></div>';
             }
             html += '           </div>';
-            html += '           <div class="question-feature">';
-            html += '               <div class="clear question-feature-item"><div class="icon"></div><div class="question-feature-text">נקה</div></div>';
+            html += '           <div class="question-feature">';            
             html += '               <div class="guess question-feature-item"><div class="icon"></div><div class="question-feature-text">ניחוש</div></div>';
+            html += '               <div class="clear question-feature-item"><div class="icon"></div><div class="question-feature-text">נקה</div></div>';
             html += '               <div class="comment question-feature-item"><div class="icon"></div>    <div class="question-feature-text"><input type="text" placeholder="כתוב הערה"></div> </div>';
             html += '           </div>';
             html += '     </div>';
@@ -89,27 +91,29 @@ function TestController() {
 
     //save a asterisk for this question
     this.asterisk = function () {
-        $this = $(this);
+        var $this = $(this);
         $this.toggleClass("selected");
-
-        var asterisk = self.testResult[$this.parents(".question-container").attr("data-question-num") - 1].asterisk = !self.testResult[$this.parents(".question-container").attr("data-question-num") - 1].asterisk;
+        var questionNum = $this.parents(".question-container").attr("data-question-num");
+        var asterisk = self.testResult[questionNum - 1].asterisk = !self.testResult[questionNum - 1].asterisk;
 
         //if selected
         if (asterisk) {
             $this.parents(".question-status").find(".circle.selected").removeClass("selected");
+            self.testResult[questionNum - 1].circle = 0;
         }
     }
 
     //save a circle for this question
     this.circle = function () {
-        $this = $(this);
+        var $this = $(this);
         $this.toggleClass("selected");
-
-        var circle = self.testResult[$this.parents(".question-container").attr("data-question-num") - 1].circle = !self.testResult[$this.parents(".question-container").attr("data-question-num") - 1].circle;
+        var questionNum = $this.parents(".question-container").attr("data-question-num");
+        var circle = self.testResult[questionNum - 1].circle = !self.testResult[questionNum - 1].circle;
 
         //if selected
         if (circle) {
             $this.parents(".question-status").find(".asterisk.selected").removeClass("selected");
+             self.testResult[questionNum - 1].asterisk = 0;
         }
 
     }
@@ -143,8 +147,9 @@ function TestController() {
     }
 
     //user click on guess -> push to question guess 
-    this.toggleGuess = function () {
-
+    this.guess = function () {
+       $this = $(this);
+        $this.toggleClass("selected");
     }
 
     this.alphabets = ["א", "ב", "ג", "ד", "ה", "ו"];
