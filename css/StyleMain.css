@@ -1,12 +1,15 @@
 /******************** General **********************/
+@import url(https://fonts.googleapis.com/earlyaccess/opensanshebrew.css);
+
+
 body, html {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 13px;
+    font-family: "Open Sans Hebrew","Open Sans","Arial",sans-serif;
+    font-size: 15px;
     height: 100%;
     width: 100%;
     direction: rtl;
-    background-color: #f2f2f4;
+    /*background-color: #f2f2f4;*/
 }
 
 header {
@@ -45,6 +48,11 @@ header {
 #test-settings{
     
 }
+
+/******************** timer **********************/
+.timeTo{
+    direction: ltr;
+}
 /******************** swiper **********************/
 .swiper-container {
     /*color: #000;*/
@@ -69,14 +77,15 @@ header {
 
 .swiper-slide-visible {
     opacity: 0.5;
-    -webkit-transform: scale(0.8);
-    -moz-transform: scale(0.8);
-    -ms-transform: scale(0.8);
-    -o-transform: scale(0.8);
-    transform: scale(0.8);
+    -webkit-transform: scale(0.9);
+    -moz-transform: scale(0.9);
+    -ms-transform:  scale(0.9);
+    -o-transform:  scale(0.9);
+    transform:  scale(0.9);
 }
 
 .swiper-slide-active {
+    font-size: 18px;
     top: 0;
     opacity: 1;
     -webkit-transform: scale(1);
@@ -84,15 +93,14 @@ header {
     -ms-transform: scale(1);
     -o-transform: scale(1);
     transform: scale(1);
-    -webkit-box-shadow: inset 0px 0px 0px 3px rgba(0,0,0,0.71);
+    /*-webkit-box-shadow: inset 0px 0px 0px 3px rgba(0,0,0,0.71);
     -moz-box-shadow: inset 0px 0px 0px 3px rgba(0,0,0,0.71);
-    box-shadow: inset 0px 0px 0px 3px rgba(0,0,0,0.71);
+    box-shadow: inset 0px 0px 0px 3px rgba(0,0,0,0.71);*/
 }
 
 .question-status{
-    display: inline-block;
-    width: 10%;
-    vertical-align: top;
+    float: right;
+margin-left: 15px;
 }
 
 .question-container {
@@ -100,18 +108,21 @@ header {
     display: inline-block;
     vertical-align: top;
     width: 70%;
-    background-color: #0ff;
+    /*background-color: #0ff;*/
 }
 
 .swiper-slide .title {
     font-style: italic;
-    font-size: 25px;
+    /*font-size: 25px;*/
     line-height: 20px;
 }
 
-.swiper-slide .title .text{
-    display: inline-block;
+.swiper-slide .question-title{
+    
 }
+/*.swiper-slide .title .text{
+    display: inline-block;
+}*/
 
 .swiper-slide .title .number{
     display: inline-block;
@@ -130,6 +141,7 @@ header {
 }
 
 .answers-container {
+    margin: 20px 0;
 }
 
 .answer-item {
@@ -141,9 +153,44 @@ header {
 }
 
 .question-feature{
-    width: 16%;
-display: inline-block;
+    opacity: 0;
+    /*-webkit-transition: 1s opacity;    
+    -moz-transition:  1s opacity;
+    -ms-transition: 1s opacity;
+    transition: 1s opacity;*/
+    /*width: 16%;
+display: inline-block;*/
 }
+
+.swiper-slide-active .question-feature{
+   opacity: 1;
+}
+
+.question-feature-item{
+     background-color: #e7e8ea;
+display: inline-block;
+vertical-align: top;
+
+     width: 90px;
+
+     height: 40px;
+     line-height: 40px;
+}
+
+.question-feature-item.comment {
+    width: 240px;
+}
+
+.question-feature-item.comment input{
+    height: 20px;
+display: inline-block;
+background-color: #f5f6f8;
+width: 190px;
+}
+.question-feature-text{
+    display: inline-block;
+}
+
 .question-settings{
     background-color: red;
 width: 100%;
@@ -151,42 +198,47 @@ width: 100%;
 }
 
 .settings-item{
-    width: 28%;
-    display: inline-block;
-    margin: 0 2px;
-    vertical-align: top;
+   width: 21px;
+   height: 21px;
+display: inline-block;
+vertical-align: top;
+
 }
 
 .icon{
-    width: 100%;
-    height: 30px;
+    width: 18px;
+
+    height: 100%;
+display: inline-block;
+vertical-align: middle;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0 5px;
 }
 .question-settings-text{
     width: 100%;
 }
 .guess .icon{
-    background-color: yellow;
+     background-image: url("../img/guess.png"); 
 }
 
-.asterisk .icon{
-    background-color: #4cff00;
+.settings-item.asterisk{
+   background-image: url("../img/asterisk.png");
 }
-.circle .icon{
-    background-color: #4800ff;
+.settings-item.circle{
+  background-image: url("../img/circle.png");
 }
 
 .timer .icon{
-    background-color: #0094ff;
+     background-image: url("../img/asterisk.png");
 }
 
 .clear .icon{
-    background-color: #5cc972;
+     background-image: url("../img/clear.png");
 }
 
-.comment{
-    width: 100%;
-    background-color: #ff00dc;    
-    height: 80px;
+.comment .icon{
+     background-image: url("../img/comment.png"); 
 }
 
 .pagination {
