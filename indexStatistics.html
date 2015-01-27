@@ -12,90 +12,97 @@
 	    <script type="text/javascript" src="js/czchart.js"></script>
    	    <script type="text/javascript" src="js/czPieChart.js"></script>
 		<script type="text/javascript" src="js/czBarChart.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+            // Load the Visualization API and the piechart package.
+            google.load('visualization', '1.0', { 'packages': ['corechart'] });
+
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.setOnLoadCallback(drawChart);
+
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
+            function drawChartPie() {
+
+                // Create the data table.
+                var data_pie = new google.visualization.DataTable();
+                data_pie.addColumn('string', 'Topping');
+                data_pie.addColumn('number', 'Slices');
+                data_pie.addRows([
+                ['תשובות נכונות', 3],
+                ['תשובות שגויות', 1]
+              ]);
+
+                // Set chart options
+                var options_pie = { 'title': 'ציון מבחן',
+                    'width': 400,
+                    'height': 300,
+                    'titleTextStyle': { 'fontSize': '20',
+                        'bold': true
+                    },
+                    'legend': { 'position': "none" }
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.PieChart(document.getElementById('chart_div_pie'));
+                chart.draw(data_pie, options_pie);
+            }
+            results = [100, 117, 66, 103, 127, 98, 100, 73, 60];
+            sum = 0;
+            annotation = [];
+            for (count in results) {
+                sum = sum + results[count];
+            }
+            for (count in results) {
+                annotation[count] = Math.round((results[count] / sum) * 100) + '%';
+            }
+            function drawChartBar() {
+                var data_bar = google.visualization.arrayToDataTable([
+                ['', '', { role: 'style' }, ''],
+                ['שאלות שחזרת עליהן', results[0], 'color: #09bef3', annotation[0]],
+                ['שאלות ששינית בהן תשובה', results[1], 'color: #f15c44', annotation[1]],
+                ['שאלות בהן שינית מטעות לתשובה נכונה', results[2], 'color: #f8f16c', annotation[2]],
+                ['שאלות בהן שינית מתשובה נכונה לטעות', results[3], 'color: #6cbf67', annotation[3]],
+                ['שאלות בהן שינית מטעות לטעות', results[4], 'color: #e3687d', annotation[4]],
+                ['ניחושים מסך השאלות', results[5], 'color: #a254a0', annotation[5]],
+                ['הצלחות בניחושים', results[6], 'color: #5588c7', annotation[6]],
+                ['שאלות עם זמן מענה ארוך', results[7], 'color: #f57b4c', annotation[7]]
+              ]);
+
+                var view = new google.visualization.DataView(data_bar);
+                view.setColumns([0, 1,
+                               { calc: "stringify",
+                                   sourceColumn: 3,
+                                   type: "string",
+                                   role: "annotation"
+                               },
+                               2]);
+                var options_bar = {
+                    'legend': { position: "none" },
+                    'chartArea': { left: 300, top: 50, width: '50%', height: '75%' },
+                    'width': 700
+                };
+
+                var chart = new google.visualization.BarChart(document.getElementById('chart_div_bar'));
+
+                chart.draw(view, options_bar);
+
+            }
+
+            function drawChart() {
+                drawChartPie();
+                drawChartBar();
+            }
+    </script>
     </head>
     <body>
+        
         <div class="container">
             <div class="stats-title">סיכום נתוני נבחן: מבחן גמר רפואה</div>
-            <div class="grade-charts-wrapper">
-                <div class="test-grade">
-                    <div class="grade-title"></div>
-                    <div id="piechart" class="testChart"></div>
-                </div>
-                <div id="test-charts"></div>
-            </div>
-            <div id="toggle-container">
-                <div id="test-toggle"></div>
-            </div>
-            <div class="thirds-container">
-                <div id="first-third" class="third"></div>
-                <div id="second-third" class="third"></div>
-                <div id="third-third" class="third"></div>
-            </div>
-            <div class="tips-container">
-                <div id="tips"></div>
-            </div>
+            <div id="chart_div_pie" style="display: inline-block;"></div>
+            <div id="chart_div_bar" style="width: 700px; height: 300px; display: inline-block;"></div>
         </div>
-        <script type="text/javascript">
 
-	        var chart2 = $("#barchart2").czChart({	            
-                data: [1,2,3],
-                metadata: ["x","y", "z"],
-                groupMetaData: [],
-                type:"hBar",
-                title: {
-	                label:"horizontal bar chart",
-	                position: "top"
-                },
-                axes: {				    
-				    padding:20,//space between the left most bar and the edge of the chart.				
-				    x2Axis: {
-					    show:true,
-					    showGrid:true,
-					    label:"xAxis"					
-				    },				    				    
-				    yAxis:{
-					    show:true,
-					    showGrid:true,
-					    label:"yAxis"
-				    }			
-                },
-                clickHandler: function (e) {
-                    var myObj = e.target;
-                    for (var i = 0; i < chart2.interactiveObjects.length; i++) {
-                        chart2.interactiveObjects[i].restore();
-                        /*This works because each bar represents a stack. If you are using a stacked
-                        * bar chart, switch the if statement to "if(myObj.stackIndex == chart5.interactiveObjects[i].stackIndex) continue;"
-                        * to highlight the entire stack if one piece of the stack is clicked. Likewise if you want a group to be highlighted
-                        * use the following if statement "if(myObj.groupIndex == chart5.interactiveObjects[i].groupIndex) continue;"*/
-                        if(myObj.index==i) continue;
-                        chart2.interactiveObjects[i].update({globalAlpha:.2});
-                    }
-                    /*Since restore works like a stack and the default functions have mouseover events that add a lighting
-                     * effect (and a mouseout to remove it) we need to call restore on just the originally clicked bar twice.
-                     * First to remove light effect added from the mouseover event and the second to actually remove the grey effect
-                     * rather than waiting for the mouseout event to trigger the second restore.  This essentially means the restore
-                     * from the mouseout event, in this case, does nothing.*/
-                    myObj.restore();
-                }
-	        });
-            var pieChart = $("#piechart").czChart({
-    			data:[115,120,14,50,60],
-    			dataLabels:["one","two","three","four","five"],
-    			type:'pieChart',
-    			title: {
-    				label:"pie chart",
-    				position:"bottom"
-    			},
-    			pieChart:{
-    				radius: 0,
-    				valuePosition:"inside",
-    				minAngleForValue:15    				
-    			},
-    			legend:{
-    				location:"ne"
-    			}
-            });
-            
-    	</script>
     </body>
 </html>
