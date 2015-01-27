@@ -11,15 +11,15 @@ function TestController() {
     }
 
     this.attachEvents = function () {
-        $(".asterisk .icon").on("click", function () {
-            $(".swiper-slide-active .number").toggleClass("asterisk")
-            $(".swiper-slide-active .number").removeClass("circle")
-        });
+        $(".swiper-wrapper").on("click", ".asterisk", self.asterisk);
 
-        $(".circle .icon").on("click", function () {
-            $(".swiper-slide-active .number").toggleClass("circle");
-            $(".swiper-slide-active .number").removeClass("asterisk")
-        });
+        $(".swiper-wrapper").on("click", ".circle", self.circle);
+
+        $(".swiper-wrapper").on("click", ".answer-icon", self.pushAnswer);
+
+        $(".swiper-wrapper").on("click", ".not-answer-icon", self.notAnswer);
+
+        $(".swiper-wrapper").on("click", ".clear", self.clear);
 
         $("#user-container").on("click", function () {
             window.location = "indexStatistics.html";
@@ -32,33 +32,39 @@ function TestController() {
         //loop on answers
         for (i = 0; i < self.questions.length; i++) {
             html += '<div class="swiper-slide">';
-            html += '     <div class="question-container">';
+            html += '     <div class="question-container" data-question-num=' + (i + 1) + '>';
             html += '         <div class="title">';
             html += '               <div class="question-status">';
             html += '                   <div class="asterisk settings-item"></div>';
             html += '                   <div class="circle settings-item"></div>';
             html += '               </div>';
             html += '               <span class="question-title">';
-            html += '                   <span class="number">' + (i+1) + '.</span><span class="text">' + self.questions[i].question + '</span></div>';
+            html += '                   <span class="number">' + (i + 1) + '.</span><span class="text">' + self.questions[i].question + '</span></div>';
             html += '               </span>';
             html += '           <div class="answers-container">';
             //loop on answers
             for (j = 0; j < self.questions[i].answers.length; j++) {
-                html += '             <div class="answer-item"><span class="number">' + self.alphabets[j] + '.</span><span class="text">' + self.questions[i].answers[j] + '</span></div>';
+                html += '             <div class="answer-item"><span class="not-answer-icon"></span><span class="answer-icon"></span><span class="number">' + self.alphabets[j] + '.</span><span class="text">' + self.questions[i].answers[j] + '</span></div>';
             }
             html += '           </div>';
             html += '           <div class="question-feature">';
             html += '               <div class="clear question-feature-item"><div class="icon"></div><div class="question-feature-text">נקה</div></div>';
             html += '               <div class="guess question-feature-item"><div class="icon"></div><div class="question-feature-text">ניחוש</div></div>';
             html += '               <div class="comment question-feature-item"><div class="icon"></div>    <div class="question-feature-text"><input type="text" placeholder="כתוב הערה"></div> </div>';
-            html += '           </div>';           
+            html += '           </div>';
             html += '     </div>';
             html += '</div>';
 
+            /////////////////////////////////////////////
+            self.testResult[i] = {
+                circle: 0,
+                asterisk: 0,
+                visited: 0
+            };
+
         }
 
-     
-                                 
+
         $(".swiper-wrapper").html(html);
 
         //init the swiper
@@ -83,17 +89,57 @@ function TestController() {
 
     //save a asterisk for this question
     this.asterisk = function () {
+        $this = $(this);
+        $this.toggleClass("selected");
 
+        var asterisk = self.testResult[$this.parents(".question-container").attr("data-question-num") - 1].asterisk = !self.testResult[$this.parents(".question-container").attr("data-question-num") - 1].asterisk;
+
+        //if selected
+        if (asterisk) {
+            $this.parents(".question-status").find(".circle.selected").removeClass("selected");
+        }
     }
 
     //save a circle for this question
     this.circle = function () {
+        $this = $(this);
+        $this.toggleClass("selected");
+
+        var circle = self.testResult[$this.parents(".question-container").attr("data-question-num") - 1].circle = !self.testResult[$this.parents(".question-container").attr("data-question-num") - 1].circle;
+
+        //if selected
+        if (circle) {
+            $this.parents(".question-status").find(".asterisk.selected").removeClass("selected");
+        }
 
     }
 
     //user click on answer -> push to question answers array the last answer 
     this.pushAnswer = function () {
+        var number = $(this).parent().find(".number");
+        var allNumber = $(this).parents(".answers-container").find(".number.answer").removeClass("answer");
+        if (!number.hasClass("answer")) {
+            number.removeClass("not-answer");
+            number.addClass("answer");
+        }
+    }
 
+    //set not user
+    this.notAnswer = function () {
+        var number = $(this).parent().find(".number");
+        if (!number.hasClass("not-answer")) {
+            number.removeClass("answer");
+            number.addClass("not-answer");
+        }
+    }
+
+    //clear all sign
+    this.clear = function () {
+        var question = $(this).parents(".question-container");
+        question.find(".number.answer").removeClass("answer");
+        question.find(".number.not-answer").removeClass("not-answer");
+        question.find(".circle.selected").removeClass("selected");
+        question.find(".asterisk.selected").removeClass("selected");
     }
 
     //user click on guess -> push to question guess 
