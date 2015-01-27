@@ -8,101 +8,28 @@
         <link rel="stylesheet" type="text/css" href="css/reset.css">
         <script type="text/javascript" src="js/excanvas.js"></script>
 	    <script type="text/javascript" src="js/jquery-1.9.1.js"></script>	            
-	    <script type="text/javascript" src="js/czGraphic.js"></script>
-	    <script type="text/javascript" src="js/czChart.js"></script>
-   	    <script type="text/javascript" src="js/czPieChart.js"></script>
-		<script type="text/javascript" src="js/czBarChart.js"></script>
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-        <script type="text/javascript">
-            // Load the Visualization API and the piechart package.
-            google.load('visualization', '1.0', { 'packages': ['corechart'] });
-
-            // Set a callback to run when the Google Visualization API is loaded.
-            google.setOnLoadCallback(drawChart);
-
-            // Callback that creates and populates a data table,
-            // instantiates the pie chart, passes in the data and
-            // draws it.
-            function drawChartPie() {
-
-                // Create the data table.
-                var data_pie = new google.visualization.DataTable();
-                data_pie.addColumn('string', 'Topping');
-                data_pie.addColumn('number', 'Slices');
-                data_pie.addRows([
-                ['תשובות נכונות', 3],
-                ['תשובות שגויות', 1]
-              ]);
-
-                // Set chart options
-                var options_pie = { 'title': 'ציון מבחן',
-                    'width': 400,
-                    'height': 300,
-                    'titleTextStyle': { 'fontSize': '20',
-                        'bold': true
-                    },
-                    'legend': { 'position': "none" }
-                };
-
-                // Instantiate and draw our chart, passing in some options.
-                var chart = new google.visualization.PieChart(document.getElementById('chart_div_pie'));
-                chart.draw(data_pie, options_pie);
-            }
-            results = [100, 117, 66, 103, 127, 98, 100, 73, 60];
-            sum = 0;
-            annotation = [];
-            for (count in results) {
-                sum = sum + results[count];
-            }
-            for (count in results) {
-                annotation[count] = Math.round((results[count] / sum) * 100) + '%';
-            }
-            function drawChartBar() {
-                var data_bar = google.visualization.arrayToDataTable([
-                ['', '', { role: 'style' }, ''],
-                ['שאלות שחזרת עליהן', results[0], 'color: #09bef3', annotation[0]],
-                ['שאלות ששינית בהן תשובה', results[1], 'color: #f15c44', annotation[1]],
-                ['שאלות בהן שינית מטעות לתשובה נכונה', results[2], 'color: #f8f16c', annotation[2]],
-                ['שאלות בהן שינית מתשובה נכונה לטעות', results[3], 'color: #6cbf67', annotation[3]],
-                ['שאלות בהן שינית מטעות לטעות', results[4], 'color: #e3687d', annotation[4]],
-                ['ניחושים מסך השאלות', results[5], 'color: #a254a0', annotation[5]],
-                ['הצלחות בניחושים', results[6], 'color: #5588c7', annotation[6]],
-                ['שאלות עם זמן מענה ארוך', results[7], 'color: #f57b4c', annotation[7]]
-              ]);
-
-                var view = new google.visualization.DataView(data_bar);
-                view.setColumns([0, 1,
-                               { calc: "stringify",
-                                   sourceColumn: 3,
-                                   type: "string",
-                                   role: "annotation"
-                               },
-                               2]);
-                var options_bar = {
-                    'legend': { position: "none" },
-                    'chartArea': { left: 300, top: 50, width: '50%', height: '75%' },
-                    'width': 700
-                };
-
-                var chart = new google.visualization.BarChart(document.getElementById('chart_div_bar'));
-
-                chart.draw(view, options_bar);
-
-            }
-
-            function drawChart() {
-                drawChartPie();
-                drawChartBar();
-            }
-    </script>
+        
     </head>
     <body>
         
         <div class="container">
             <div class="stats-title">סיכום נתוני נבחן: מבחן גמר רפואה</div>
+            <div class="pie-chart-text""> ציון מבחן</div>
             <div id="chart_div_pie" style="display: inline-block;"></div>
             <div id="chart_div_bar" style="width: 700px; height: 300px; display: inline-block;"></div>
+            <div id="" style="width: 700px; height: 100px;"></div>
+            <div class="tips-container"  align="center">
+                 <div style="display: table;">
+                    <div id="tips" style="display: table-cell; vertical-align: middle; text-align: center;"></div>
+                 </div>
+                <!--<div id="tips" align="center" ></div>-->
+            </div>
+            
         </div>
 
+        <script src="js/report.js"></script>
+        <script src="js/timer.js"></script>
+        <script src="js/init.js"></script>
     </body>
 </html>
