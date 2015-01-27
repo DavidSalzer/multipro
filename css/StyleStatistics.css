@@ -1,9 +1,12 @@
+@import url(https://fonts.googleapis.com/earlyaccess/opensanshebrew.css);
+
 body {
     background: #F2F2F4;
+    font-family: "Open Sans Hebrew","Open Sans","Arial",sans-serif;
 }
 
 .container {
-    width: 90%;
+    width: 85%;
     height: 100%;
     margin: auto;
 }
@@ -81,7 +84,13 @@ body {
     height: 100px;
     position: relative;
 }
-
+.pie-chart-text {
+    position: absolute;
+    z-index: 1;
+    padding-left: 140px;
+    font-size: 30px;
+    padding-top: 15px;
+}
 #tips{
     background: #F5F3B6;
     height: 60px;
@@ -91,5 +100,4 @@ body {
     bottom: 0;
     top: 0;
     margin: auto;
-    position: absolute;
 }

@@ -3,4 +3,101 @@ function ReportController() {
 
     this.attachEvents = function () {
     }
+
+    this.initChart = function () {
+        
+        self.tips = ['אחוז השינויים הגבוה שאתה מבצע בסוף המבחן פוגע בציונך'];
+        self.setTipIndex(0);
+
+        self.results = [100, 117, 66, 103, 127, 98, 100, 73, 60];//temp
+        self.setResults(self.results);
+        // Load the Visualization API and the piechart package.
+        google.load('visualization', '1.0', { 'packages': ['corechart'] });
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.setOnLoadCallback(self.drawChart);
+
+    }
+    
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
+    this.drawChartPie = function () {
+
+        // Create the data table.
+        var data_pie = new google.visualization.DataTable();
+        data_pie.addColumn('string', 'Topping');
+        data_pie.addColumn('number', 'Slices');
+        data_pie.addRows([
+        ['תשובות נכונות', 3],
+        ['תשובות שגויות', 1]
+        ]);
+
+        // Set chart options
+        var options_pie = {
+            'width': 400,
+            'height': 300,
+            'legend': { 'position': "none" },
+            'colors': ['#6cbf67', '#dbe8f0'],
+            'fontName': 'Open Sans Hebrew'
+        };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div_pie'));
+        chart.draw(data_pie, options_pie);
+    }
+    this.drawChartBar = function () {
+        
+        sum = 0;
+        annotation = [];
+        for (count in self.results) {
+            sum = sum + self.results[count];
+        }
+        for (count in self.results) {
+            annotation[count] = Math.round((self.results[count] / sum) * 100) + '%';
+        }
+        var data_bar = google.visualization.arrayToDataTable([
+        ['', '', { role: 'style' }, ''],
+        ['שאלות שחזרת עליהן', self.results[0], 'color: #09bef3', annotation[0]],
+        ['שאלות ששינית בהן תשובה', self.results[1], 'color: #f15c44', annotation[1]],
+        ['שאלות בהן שינית מטעות לתשובה נכונה', self.results[2], 'color: #f8f16c', annotation[2]],
+        ['שאלות בהן שינית מתשובה נכונה לטעות', self.results[3], 'color: #6cbf67', annotation[3]],
+        ['שאלות בהן שינית מטעות לטעות', self.results[4], 'color: #e3687d', annotation[4]],
+        ['ניחושים מסך השאלות', self.results[5], 'color: #a254a0', annotation[5]],
+        ['הצלחות בניחושים', self.results[6], 'color: #5588c7', annotation[6]],
+        ['שאלות עם זמן מענה ארוך', self.results[7], 'color: #f57b4c', annotation[7]]
+        ]);
+
+        var view = new google.visualization.DataView(data_bar);
+        view.setColumns([0, 1,
+                        { calc: "stringify",
+                            sourceColumn: 3,
+                            type: "string",
+                            role: "annotation"
+                        },
+                        2]);
+        var options_bar = {
+            'legend': { position: "none" },
+            'chartArea': { left: 300, top: 50, width: '50%', height: '75%' },
+            'width': 700,
+            'tooltip': { 'trigger': "none" },
+            'fontName': 'Open Sans Hebrew'
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div_bar'));
+
+        chart.draw(view, options_bar);
+
+    }
+    this.setResults = function (results) {
+        self.results = results;
+    }
+    this.setTipIndex = function (index) {
+        self.tipIndex = index;
+        $('#tips').html(self.tips[self.tipIndex] +" : " + self.tipIndex + " טיפ  ");
+    }
+    this.drawChart = function () {
+        self.drawChartPie();
+        self.drawChartBar();
+    }
 }
