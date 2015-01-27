@@ -108,7 +108,7 @@ function ReportController() {
         }
         //self.questionsTime = questionsTime;
         $('#questionsTime').html();
-        <div id="questionsTime" style="background-color: #cec6c6 ; display: inline-block;"></div>
+        //<div id="questionsTime" style="background-color: #cec6c6 ; display: inline-block;"></div>
     }
     this.getQuestionsTime = function () {
         return self.questionsTime;

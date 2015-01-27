@@ -73,6 +73,7 @@ function TestController() {
         var mySwiper = new Swiper('.swiper-container', {
             pagination: '.pagination',
             mode: 'vertical',
+            //createPagination:false,
             paginationClickable: true,
             centeredSlides: true,
             mousewheelControlForceToAxis: true,
@@ -144,6 +145,8 @@ function TestController() {
         question.find(".number.not-answer").removeClass("not-answer");
         question.find(".circle.selected").removeClass("selected");
         question.find(".asterisk.selected").removeClass("selected");
+        question.find(".guess.selected").removeClass("selected");
+         
     }
 
     //user click on guess -> push to question guess 

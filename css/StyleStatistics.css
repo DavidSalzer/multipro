@@ -5,6 +5,10 @@ body {
     font-family: "Open Sans Hebrew","Open Sans","Arial",sans-serif;
 }
 
+#reportPage{
+    display: none;
+    direction: ltr;
+}
 .container {
     width: 85%;
     height: 100%;

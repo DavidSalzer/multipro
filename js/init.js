@@ -1,5 +1,5 @@
 var reportController = new ReportController();
-//reportController.initChart();
+reportController.initChart();
 
 var timerController = new TimerController();
 timerController.attachEvents();
