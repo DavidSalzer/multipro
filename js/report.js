@@ -1,7 +1,9 @@
 function ReportController() {
     var self = this;
+    this.data_pie;
 
     this.attachEvents = function () {
+
     }
 
     this.initChart = function () {
@@ -12,46 +14,53 @@ function ReportController() {
         self.results = [100, 117, 66, 103, 127, 98, 100, 73, 60]; //temp
         self.setResults(self.results);
 
-        self.questionsTime = [{time:5,corectAns:true},{time:5,corectAns:true},{time:1,corectAns:true},{time:3,corectAns:true},{time:3,corectAns:true},{time:2,corectAns:true},{time:7,corectAns:true},{time:5,corectAns:true},{time:4,corectAns:true},{time:1,corectAns:true},{time:1,corectAns:true},{time:3,corectAns:true},{time:9,corectAns:true},{time:13,corectAns:true},{time:3,corectAns:true},{time:5,corectAns:true}];
+        self.questionsTime = [{ time: 5, corectAns: true }, { time: 5, corectAns: true }, { time: 1, corectAns: true }, { time: 3, corectAns: true }, { time: 3, corectAns: true }, { time: 2, corectAns: true }, { time: 7, corectAns: true }, { time: 5, corectAns: true }, { time: 4, corectAns: true }, { time: 1, corectAns: true }, { time: 1, corectAns: true }, { time: 3, corectAns: true }, { time: 9, corectAns: true }, { time: 13, corectAns: true }, { time: 3, corectAns: true }, { time: 5, corectAns: true}];
 
         self.setUser({ firstName: "ישראל", lastName: "ישראלי" });
+
         // Load the Visualization API and the piechart package.
         google.load('visualization', '1.0', { 'packages': ['corechart'] });
 
         // Set a callback to run when the Google Visualization API is loaded.
         google.setOnLoadCallback(self.drawChart);
-
     }
-    
+
+    this.initChartPie = function (correct, notCorrect) {
+        // Create the data table.
+        self.data_pie = new google.visualization.DataTable();
+        self.data_pie.addColumn('string', 'Topping');
+        self.data_pie.addColumn('number', 'Slices');
+        self.data_pie.addRows([
+        ['תשובות נכונות', correct],
+        ['תשובות שגויות', notCorrect]
+        ]);
+
+        // Set chart options
+        self.options_pie = {
+            'width': 400,
+            'height': 300,
+            'legend': { 'position': "none" },
+            'colors': ['#6cbf67', '#dbe8f0'],
+            'pieSliceTextStyle': {
+                'color': 'black'
+            },
+             'pieSliceText': 'label',
+            'fontName': 'Open Sans Hebrew'
+        };
+    }
     // Callback that creates and populates a data table,
     // instantiates the pie chart, passes in the data and
     // draws it.
     this.drawChartPie = function () {
 
-        // Create the data table.
-        var data_pie = new google.visualization.DataTable();
-        data_pie.addColumn('string', 'Topping');
-        data_pie.addColumn('number', 'Slices');
-        data_pie.addRows([
-        ['תשובות נכונות', 3],
-        ['תשובות שגויות', 1]
-        ]);
 
-        // Set chart options
-        var options_pie = {
-            'width': 400,
-            'height': 300,
-            'legend': { 'position': "none" },
-            'colors': ['#6cbf67', '#dbe8f0'],
-            'fontName': 'Open Sans Hebrew'
-        };
 
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.PieChart(document.getElementById('chart_div_pie'));
-        chart.draw(data_pie, options_pie);
+        chart.draw(self.data_pie, self.options_pie);
     }
     this.drawChartBar = function () {
-        
+
         sum = 0;
         annotation = [];
         for (count in self.results) {
@@ -118,11 +127,13 @@ function ReportController() {
         $('#userName').html(self.user.firstName + " " + self.user.lastName);
     }
     this.setTipIndex = function (index) {
-        self.tipIndex = index +1 ;
-        $('#tips').html( " טיפ  " + self.tipIndex+" : " + self.tips[index]);
+        self.tipIndex = index + 1;
+        $('#tips').html(" טיפ  " + self.tipIndex + " : " + self.tips[index]);
     }
     this.drawChart = function () {
-        self.drawChartPie();
-        self.drawChartBar();
+        if ($("#reportPage").is(':visible')) {
+            self.drawChartPie();
+            self.drawChartBar();
+        }
     }
 }

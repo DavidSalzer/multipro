@@ -8,62 +8,87 @@ body, html {
     font-size: 15px;
     height: 100%;
     width: 100%;
-    direction: rtl;
+    direction: ltr;
     /*background-color: #f2f2f4;*/
 }
 
 header {
+    direction: rtl;
     height: 70px;
     background-color: #c6c6c6;
+    position: relative;
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
 }
 
 #user-container {
-    float: right;
+    position: absolute;
     background-color: #f89921;
+    right: 0;
+    width: 180px;
+    height: 100%;
+    border-left: 2px solid #fff;
 }
 
 #user-image {
     width: 40px;
     height: 40px;
     background-repeat: no-repeat;
-    vertical-align: middle;
+    position: absolute;
     
-    display: inline-block; 
-    padding-right: 20px; 
+    right: 10px;  
     background-image: url("../img/userImage.png");
+    top: 18px;
 }
 
 #user-name {
-    height: 40px;
     
-    display: inline-block;  padding-top: 30px;  font-size: 20px; 
-    margin: 0 10px;
+    right: 60px;  
+    position: absolute;  font-size: 20px; 
+    top: 26px;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #test-title{
+    position: absolute;
     
+    width: 100%;
+    height: 100%;
+    padding-right: 180px;
+    box-sizing: border-box;
+    padding-left: 366px;
+    line-height: 70px;
+    font-size: 22px;
+    text-indent: 20px;
 }
 
 #general-timer{
-    background-color: #6d6e72;
-    
-    color: #fff;
-    border-left: 1px solid #fff;
-    border-right: 1px solid #fff;
-    width: 120px;
-    height: 100%;
+ background-color: #6d6e72;
+color: #fff;
+border-left: 2px solid #fff;
+border-right: 2px solid #fff;
+width: 170px;
+height: 100%;
+position: absolute;
+left: 191px;
+font-size: 22px;
+text-align: center;
+line-height: 70px;
 }
 
 
-#logo{
-    display: inline-block; 
-    width: 160px; 
-    height: 100%; 
-    float: left;
-     
-    background-image: url("../img/logo.png"); 
-    background-repeat: no-repeat;
+#logo{ 
+   width: 190px;
+height: 100%;
+position: absolute;
+left: 0;
+top: 0;
 }
+
 /******************** test **********************/
 #test-container {
     width: 80%;
@@ -71,6 +96,7 @@ header {
     margin: 10px auto;
     height: 80%;
     color: #000;
+    direction: rtl;
 }
 
 #test-settings{
@@ -89,7 +115,8 @@ header {
 }
 
 .swiper-slide {
-    height: 100%;
+    height: auto;
+    width: 100%;
     opacity: 0.4;
     -webkit-transition: 300ms;
     -moz-transition: 300ms;
@@ -186,6 +213,10 @@ text-align: center;
 margin-left: 5px;
 }
 
+.answer-item .number{
+cursor: pointer;    
+}
+
 .number.answer{
     border: 1px solid;
 }
@@ -242,13 +273,18 @@ vertical-align: top;
 
      width: 90px;
 
-     height: 40px;
-     line-height: 40px;
+     height: 30px;
+line-height: 30px;
      cursor: pointer;
 }
 
 .question-feature-item.comment {
     width: 240px;
+}
+
+.question-feature-item.timer {
+   background-color: #6d6e72;
+   width: 100px;
 }
 
 .question-feature-item.comment input{
@@ -261,6 +297,9 @@ width: 190px;
     display: inline-block;
 }
 
+.timer .question-feature-text {
+    color: #fff;
+}
 .question-settings{
     background-color: red;
 width: 100%;
@@ -297,10 +336,22 @@ color: #fff;
 
 .guess .icon{
      background-image: url("../img/guess.png"); 
+     background-position: -18px;
 }
 
 .guess.selected .icon{
-     background-position: -24px 0; 
+     background-position: 0px;
+}
+
+#logo .icon{
+    width: 150px;
+height: 100%;
+background-image: url("../img/logo.png");
+background-repeat: no-repeat;
+background-size: contain;
+background-position: center;
+margin: auto;
+display: block;
 }
 
 .settings-item.asterisk{
@@ -329,6 +380,11 @@ color: #fff;
 
 .comment .icon{
      background-image: url("../img/comment.png"); 
+}
+
+.timer .icon{
+     background-image: url("../img/clock_small.png"); 
+     background-position: 0px 5px;
 }
 
 .pagination {
@@ -366,4 +422,20 @@ color: #fff;
 
 .swiper-active-switch {
     background: #fff;
+}
+
+#finish {
+    position: fixed;
+bottom: 20px;
+left: 20px;
+font-size: 20px;
+line-height: 49px;
+    
+}
+
+#finish .icon {
+    background-image: url("../img/finish.png");
+    width: 49px;
+    height: 49px;
+    margin-right: 10px;
 }

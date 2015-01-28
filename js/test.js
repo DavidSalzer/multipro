@@ -17,11 +17,15 @@ function TestController() {
 
         $(".swiper-wrapper").on("click", ".answer-icon", self.pushAnswer);
 
+        $(".swiper-wrapper").on("click", ".answer-item .number", self.pushAnswer);
+
         $(".swiper-wrapper").on("click", ".not-answer-icon", self.notAnswer);
 
         $(".swiper-wrapper").on("click", ".clear", self.clear);
 
         $(".swiper-wrapper").on("click", ".guess", self.guess);
+
+        $("#finish").on("click", self.finishTest);
 
         $("#user-container").on("click", function () {
             window.location = "indexStatistics.html";
@@ -46,13 +50,15 @@ function TestController() {
             html += '           <div class="answers-container">';
             //loop on answers
             for (j = 0; j < self.questions[i].answers.length; j++) {
-                html += '             <div class="answer-item"><span class="not-answer-icon"></span><span class="answer-icon"></span><span class="number">' + self.alphabets[j] + '.</span><span class="text">' + self.questions[i].answers[j] + '</span></div>';
+                html += '             <div class="answer-item" data-answer-num=' + (j + 1) + '><span class="not-answer-icon"></span><span class="answer-icon"></span><span class="number">' + self.alphabets[j] + '.</span><span class="text">' + self.questions[i].answers[j] + '</span></div>';
             }
             html += '           </div>';
-            html += '           <div class="question-feature">';            
+            html += '           <div class="question-feature">';
             html += '               <div class="guess question-feature-item"><div class="icon"></div><div class="question-feature-text">ניחוש</div></div>';
             html += '               <div class="clear question-feature-item"><div class="icon"></div><div class="question-feature-text">נקה</div></div>';
             html += '               <div class="comment question-feature-item"><div class="icon"></div>    <div class="question-feature-text"><input type="text" placeholder="כתוב הערה"></div> </div>';
+
+            html += '              <div class="timer question-feature-item"><div class="icon"></div><div class="question-feature-text">12:00</div></div>';
             html += '           </div>';
             html += '     </div>';
             html += '</div>';
@@ -61,7 +67,8 @@ function TestController() {
             self.testResult[i] = {
                 circle: 0,
                 asterisk: 0,
-                visited: 0
+                visited: 0,
+                guess:0
             };
 
         }
@@ -78,7 +85,7 @@ function TestController() {
             centeredSlides: true,
             mousewheelControlForceToAxis: true,
             mousewheelControl: true,
-            slidesPerView: 3,
+            slidesPerView: 'auto',
             watchActiveIndex: true
         });
 
@@ -114,15 +121,28 @@ function TestController() {
         //if selected
         if (circle) {
             $this.parents(".question-status").find(".asterisk.selected").removeClass("selected");
-             self.testResult[questionNum - 1].asterisk = 0;
+            self.testResult[questionNum - 1].asterisk = 0;
         }
 
     }
 
-    //user click on answer -> push to question answers array the last answer 
+    //user click on answer -> push to question answers array the last answer
     this.pushAnswer = function () {
-        var number = $(this).parent().find(".number");
-        var allNumber = $(this).parents(".answers-container").find(".number.answer").removeClass("answer");
+        var $this = $(this);
+        var questionNum = $this.parents(".question-container").attr("data-question-num");
+        var number = $this.parent().find(".number");
+        var val = $this.parents(".answer-item").attr("data-answer-num");
+        self.testResult[questionNum - 1].chooseAnswer = val;
+        //if the correct answer
+        if (val == self.questions[questionNum - 1].correctAns) {
+            self.testResult[questionNum - 1].correct = true;
+        }
+        else {
+            self.testResult[questionNum - 1].correct = false;
+        }
+
+        //displaying
+        var allNumber = $this.parents(".answers-container").find(".number.answer").removeClass("answer");
         if (!number.hasClass("answer")) {
             number.removeClass("not-answer");
             number.addClass("answer");
@@ -146,13 +166,47 @@ function TestController() {
         question.find(".circle.selected").removeClass("selected");
         question.find(".asterisk.selected").removeClass("selected");
         question.find(".guess.selected").removeClass("selected");
-         
+
     }
 
     //user click on guess -> push to question guess 
-    this.guess = function () {
-       $this = $(this);
+    this.guess = function () {      
+        var $this = $(this);
         $this.toggleClass("selected");
+        var questionNum = $this.parents(".question-container").attr("data-question-num");
+        var guess = self.testResult[questionNum - 1].guess = !self.testResult[questionNum - 1].guess;
+    }
+
+
+    this.finishTest = function () {
+        timerController.resetGeneralTimers();
+        self.checkAnswers();
+        $("#test-container").hide();
+        $("#reportPage").show();
+        $("body").css({ "background-color": "#f2f2f4", "direction": "ltr" });
+
+        reportController.drawChart();
+
+    }
+
+    this.checkAnswers = function () {
+        var correct = 0;
+        var notCorrect = 0;
+        var guess = 0;
+        for (var i = 0; i < self.testResult.length; i++) {
+            if (self.testResult[i].correct) {
+                correct++;
+            }
+            else {
+                notCorrect++;
+            }
+
+            if (self.testResult[i].guess) {
+                guess++;
+            }
+        }
+        reportController.initChartPie(correct, notCorrect);
+        //reportController.initChartPie(10, 4);
     }
 
     this.alphabets = ["א", "ב", "ג", "ד", "ה", "ו"];

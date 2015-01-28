@@ -1,16 +1,17 @@
-@import url(https://fonts.googleapis.com/earlyaccess/opensanshebrew.css);
+/*@import url(https://fonts.googleapis.com/earlyaccess/opensanshebrew.css);
 
 body {
     background: #F2F2F4;
     font-family: "Open Sans Hebrew","Open Sans","Arial",sans-serif;
-}
+}*/
 
 #reportPage{
     display: none;
     direction: ltr;
 }
 .container {
-    width: 85%;
+    /*width: 85%;*/
+    width: 1104px;
     height: 100%;
     margin: auto;
 }
@@ -104,4 +105,13 @@ body {
     bottom: 0;
     top: 0;
     margin: auto;
+}
+
+#questionsTime{
+   background-image: url("../img/TIMELINE.jpg");
+width: 100%;
+height: 100%;
+background-size: contain;
+background-repeat: no-repeat;
+background-position: center;
 }
