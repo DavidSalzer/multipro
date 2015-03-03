@@ -115,6 +115,7 @@ top: 0;
 }
 
 .swiper-slide {
+   font-size: 18px;
     height: auto;
     width: 100%;
     opacity: 0.4;
@@ -131,6 +132,7 @@ top: 0;
 }
 
 .swiper-slide-visible {
+     
     opacity: 0.5;
     -webkit-transform: scale(0.9);
     -moz-transform: scale(0.9);
@@ -140,7 +142,7 @@ top: 0;
 }
 
 .swiper-slide-active {
-    font-size: 18px;
+    /*font-size: 18px;*/
     top: 0;
     opacity: 1;
     -webkit-transform: scale(1);
