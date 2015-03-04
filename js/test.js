@@ -119,7 +119,7 @@ function TestController() {
             self.questions[current].handler.visit(function (data) {
                     $(mySwiper.slides[current]).find('.timer .question-feature-text').html(data);
             }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
-        
+            self.swiper=mySwiper;        
     }
     //check visited for this question
     this.visited = function () {
@@ -298,8 +298,11 @@ function TestController() {
 
 
     this.finishTest = function () {
+        //if finsh test but still on question so we need to "leave that question"
+        self.questions[self.swiper.activeIndex].handler.leave();
+        console.log(self.questions[self.swiper.activeIndex].handler);
         timerController.resetGeneralTimers();
-       // var reportController = new ReportController();
+        // var reportController = new ReportController();
         report = new Report(self.questions);
         reportController.insertData(report);
         //self.checkAnswers();
@@ -335,8 +338,9 @@ function TestController() {
     }
 
     this.alphabets = ["א", "ב", "ג", "ד", "ה", "ו"];
-    this.questions = [
-    {
+    this.questions = [];
+    
+    var givenq=[{
         "question": "מי מהבאים אינו מהווה התוויית נגד מוחלטת לשימוש בגלולה למניעת הריון ?",
         "answers": ["אם שעברה אירוע מוחי בגיל 40", "אנמיה", "בת 37 מעשנת", "כאבים ברגל ללא בירור"],
         "correctAns": 2,
@@ -495,6 +499,9 @@ function TestController() {
         }
 
     ]
+    for(var i=0;i<givenq.length;i++){
+         self.questions.push(new Question(givenq[i]));
+    }
 
 
 }

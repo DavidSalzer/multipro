@@ -11,8 +11,8 @@ function ReportController() {
     }
     this.insertData = function (report) {
         this.chartResults = report.getBarChart();
-        this.correctAnswers = 0;
-        this.nonCorrectAnswers =100;
+        this.correctAnswers = report.correctAnswers;
+        this.nonCorrectAnswers =report.wrongAnswers;
         this.numberOfQuestions = report.numOfQuestions();
     }
     this.initChart = function () {

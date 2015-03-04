@@ -5,7 +5,7 @@ function Question(obj){
     this.answers = obj.answers;//an array of answers
     this.correctAns = obj.correctAns;//the correct answer
     this.handler = new QuestionHandler();//the handler of the behavior of the question
-    this.handler.correctAnswer = this.correctAns;//sets the correct answer at the handler
+    this.handler.correctAnswer = obj.correctAns;//sets the correct answer at the handler
 }
 //A handler for the questions
 function QuestionHandler(){  
@@ -41,7 +41,6 @@ function QuestionHandler(){
         this.timer.stopTimer();
         if (tempAnswer != null) {
             self.givenAnswers[stage].push(tempAnswer);
-            tempAnswer = null;
         }
     }
     var timeForAnswer=null;//timeout for answer
@@ -79,7 +78,13 @@ function QuestionHandler(){
         var arr= self.givenAnswers.firstStage.concat(self.givenAnswers.secondStage.concat(self.givenAnswers.thirdStage));
         return arr;
     }
-   
+    //returns if the answer was answered correctly
+    this.answerdCorrectly = function () {
+        if (tempAnswer != null)
+            return tempAnswer == self.correctAnswer;
+        else
+            return false;
+    }   
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function Timer(){
@@ -131,6 +136,8 @@ function Report(givenQuestions) {
     var numberOfquestions=givenQuestions.length;
     var questions=givenQuestions;//an array of all the question that holds all the data on the question the questions would be QuestionHandler
     var qchart =[0,0,0,0,0,0,0,0];//array that holds all data on questions 1:questions that returned, 2: questions that were changed answer 3: changed from mistake to correct 4: changed from correct to mistake 5: changed from mistake to mistake 6: num of guesses 7: coreect guesses 8:long time questions
+    this.correctAnswers = 0;
+    this.wrongAnswers = 0;
     this.initReport = function (givenQuestions) {
         questions = givenQuestions;
         numberOfquestions = givenQuestions.length;
@@ -138,19 +145,34 @@ function Report(givenQuestions) {
     this.setChartStats = function () {
         //set the questions that were rreturnde so go through all questions and find all of them that hold number of times visited greater than 1
         for (var i = 0; i < questions.length; i++) {
+            //if correct answer count and also if worng
+            if (questions[i].handler.answerdCorrectly())
+                this.correctAnswers++;
+            else
+                this.wrongAnswers++;
             //count number of questions that were returned to them
             if (questions[i].handler.timesvisited > 1)
                 qchart[0]++;
             //count number of question that were answered more than once(that have more than one answer)
-            if (questions[i].handler.getGivenAnswersAll().length > 0)
+            if (questions[i].handler.getGivenAnswersAll().length > 1)
                 qchart[1]++;
+            //count number of question that were answered correctly but were answered preiviously wrong
+            if (questions[i].handler.answerdCorrectly() && checkIfChangedFromWrong(questions[i].handler))
+                qchart[2]++;
+            //count number of questions that were answered wrong but were answered preiviously
+            if (!questions[i].handler.answerdCorrectly() && checkIfChangedFromCorrect(questions[i].handler))
+                qchart[3]++;
+            //count number of questions that were answered wrong but also were changed from wrong
+            if (!questions[i].handler.answerdCorrectly() && checkIfChangedFromWrong(questions[i].handler))
+                qchart[4]++;
             //count number of guesses
-           if (questions[i].handler.guess== 1)
+            if (questions[i].handler.guess == 1)
                 qchart[5]++;
-            //count number of question that were answered correctly but were answered preiviously wong
-            
-            
+            //count guesss that were correct
+            if (questions[i].handler.guess == 1 && questions[i].handler.answerdCorrectly())
+                qchart[6]++;
         }
+
     }
     this.numOfQuestions = function () {
         return numberOfquestions;
@@ -159,12 +181,27 @@ function Report(givenQuestions) {
         return qchart;
     }
     self.setChartStats();
-    function checkIfChangedFromWrongToCorrect(queestion) {
-        var allAns = Question.handler.getGivenAnswersAll();//get the array with all the array of answers
-        for(var i=0;i<allAns.length;i++){
-                
+    // check if there were answers before that were mistakes 
+    function checkIfChangedFromWrong(question) {
+        var allAns = question.getGivenAnswersAll();//get the array with all the array of answers
+        var foundMistake=false;
+        for(var i=0;i<allAns.length-1&&!foundMistake;i++){
+            
+            if (allAns[i] != question.correctAnswer)
+                foundMistake = true;
             }
-        }
+        return foundMistake;
+     }
+     //a check if there was an a erliar change that was correct
+     function checkIfChangedFromCorrect(question) {
+        var allAns = question.getGivenAnswersAll();//get the array with all the array of answers
+        var foundCorrect=false;
+        for(var i=0;i<allAns.length-1&&!foundCorrect;i++){
+            if (allAns[i] == question.correctAnswer)
+                foundCorrect = true;
+            }
+        return foundCorrect;
+     }
     
 }
 ///////////////////////////////////////////////////////////////////////////////     
