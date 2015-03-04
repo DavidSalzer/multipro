@@ -1,8 +1,14 @@
 var stages=[0,'firstStage','secondStage','thirdStage']//stages that are in the test
+//holds a question of test
+function Question(obj){
+    this.question=obj.question;//the question itself
+    this.answers = obj.answers;//an array of answers
+    this.correctAns = obj.correctAns;//the correct answer
+    this.handler = new QuestionHandler();//the handler of the behavior of the question
+}
 //A handler for the questions
 function QuestionHandler(){  
     var delayTimeBetweenQuestion=5;//number of seconds of delay that are for saying if the user is at the question or just passing by.
-    var delayTimeBeforeShowTimer;
     var self = this;
     var checkIfStay;//the timeout for time of delay for focus on question
     var tempAnswer=null;//initiliazes as null for no answer
@@ -67,6 +73,10 @@ function QuestionHandler(){
         tempAnswer = null;
         self.givenNonAnswers = [];
     }
+    this.getGivenAnswersAll=function(){
+        var arr= self.givenAnswers.firstStage.concat(self.givenAnswers.secondStage.concat(self.givenAnswers.thirdStage));
+        return arr;
+    }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function Timer(){
@@ -112,3 +122,39 @@ function Timer(){
         return ((new Date()).getTime());
     }
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function Report(givenQuestions) {
+    var numberOfquestions=givenQuestions.length;
+    var questions=givenQuestions;//an array of all the question that holds all the data on the question the questions would be QuestionHandler
+    var qchart =[0,0,0,0,0,0,0,0];//array that holds all data on questions 1:questions that returned, 2: questions that were changed answer 3: changed from mistake to correct 4: changed from correct to mistake 5: changed from mistake to mistake 6: num of guesses 7: coreect guesses 8:long time questions
+    this.initReport = function (givenQuestions) {
+        questions = givenQuestions;
+        numberOfquestions = givenQuestions.length;
+    }
+    this.setChartStats = function () {
+        //set the questions that were rreturnde so go through all questions and find all of them that hold number of times visited greater than 1
+        for (var i = 0; i < questions.length; i++) {
+            //count number of questions that were returned to them
+            if (questions[i].handler.timesvisited > 1)
+                qchart[0]++;
+            //count number of question that were answered more than once(that have more than one answer)
+            if (questions[i].handler.getGivenAnswersAll().length > 0)
+                qchart[1]++;
+            
+        }
+    }
+    this.numOfQuestions = function () {
+        return numberOfquestions;
+    }
+    this.getBarChart=function(){
+        return qchart;
+    }
+
+    
+}
+///////////////////////////////////////////////////////////////////////////////     
+function AnswerChart() {        
+        this.correct;
+        this.wrong;    
+}
+

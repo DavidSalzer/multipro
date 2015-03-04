@@ -1,11 +1,20 @@
 function ReportController() {
     var self = this;
+    //var handler = new Report();
     this.data_pie;
-
+    this.chartResults= [100, 117, 66, 103, 127, 98, 100, 73, 60]; //temp;
+    this.correctAnswers=0;
+    this.nonCorrectAnswers = 100;
+    this.numberOfQuestions=200;
     this.attachEvents = function () {
 
     }
-
+    this.insertData = function (report) {
+        this.chartResults = report.getBarChart();
+        this.correctAnswers = 0;
+        this.nonCorrectAnswers =100;
+        this.numberOfQuestions = report.numOfQuestions();
+    }
     this.initChart = function () {
 
         self.tips = ['אחוז השינויים הגבוה שאתה מבצע בסוף המבחן פוגע בציונך'];
@@ -14,7 +23,7 @@ function ReportController() {
         self.results = [100, 117, 66, 103, 127, 98, 100, 73, 60]; //temp
         self.setResults(self.results);
 
-        self.questionsTime = [{ time: 5, corectAns: true }, { time: 5, corectAns: true }, { time: 1, corectAns: true }, { time: 3, corectAns: true }, { time: 3, corectAns: true }, { time: 2, corectAns: true }, { time: 7, corectAns: true }, { time: 5, corectAns: true }, { time: 4, corectAns: true }, { time: 1, corectAns: true }, { time: 1, corectAns: true }, { time: 3, corectAns: true }, { time: 9, corectAns: true }, { time: 13, corectAns: true }, { time: 3, corectAns: true }, { time: 5, corectAns: true}];
+        //self.questionsTime = [{ time: 5, corectAns: true }, { time: 5, corectAns: true }, { time: 1, corectAns: true }, { time: 3, corectAns: true }, { time: 3, corectAns: true }, { time: 2, corectAns: true }, { time: 7, corectAns: true }, { time: 5, corectAns: true }, { time: 4, corectAns: true }, { time: 1, corectAns: true }, { time: 1, corectAns: true }, { time: 3, corectAns: true }, { time: 9, corectAns: true }, { time: 13, corectAns: true }, { time: 3, corectAns: true }, { time: 5, corectAns: true}];
 
         self.setUser({ firstName: "ישראל", lastName: "ישראלי" });
 
@@ -23,16 +32,19 @@ function ReportController() {
 
         // Set a callback to run when the Google Visualization API is loaded.
         google.setOnLoadCallback(self.drawChart);
+        
     }
-
-    this.initChartPie = function (correct, notCorrect) {
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
+    this.drawChartPie = function () {
         // Create the data table.
         self.data_pie = new google.visualization.DataTable();
         self.data_pie.addColumn('string', 'Topping');
         self.data_pie.addColumn('number', 'Slices');
         self.data_pie.addRows([
-        ['תשובות נכונות', correct],
-        ['תשובות שגויות', notCorrect]
+        ['תשובות נכונות', self.correctAnswers],
+        ['תשובות שגויות', self.nonCorrectAnswers]
         ]);
 
         // Set chart options
@@ -47,38 +59,30 @@ function ReportController() {
              'pieSliceText': 'label',
             'fontName': 'Open Sans Hebrew'
         };
-    }
-    // Callback that creates and populates a data table,
-    // instantiates the pie chart, passes in the data and
-    // draws it.
-    this.drawChartPie = function () {
-
-
-
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.PieChart(document.getElementById('chart_div_pie'));
         chart.draw(self.data_pie, self.options_pie);
     }
     this.drawChartBar = function () {
 
-        sum = 0;
+        sum = this.numberOfQuestions;
         annotation = [];
+        //for (count in self.results) {
+        //    sum = sum + self.results[count];
+        //}
         for (count in self.results) {
-            sum = sum + self.results[count];
-        }
-        for (count in self.results) {
-            annotation[count] = Math.round((self.results[count] / sum) * 100) + '%';
+            annotation[count] = Math.round((self.chartResults[count] / sum) * 100) + '%';
         }
         var data_bar = google.visualization.arrayToDataTable([
         ['', '', { role: 'style' }, ''],
-        ['שאלות שחזרת עליהן', self.results[0], 'color: #09bef3', annotation[0]],
-        ['שאלות ששינית בהן תשובה', self.results[1], 'color: #f15c44', annotation[1]],
-        ['שאלות בהן שינית מטעות לתשובה נכונה', self.results[2], 'color: #f8f16c', annotation[2]],
-        ['שאלות בהן שינית מתשובה נכונה לטעות', self.results[3], 'color: #6cbf67', annotation[3]],
-        ['שאלות בהן שינית מטעות לטעות', self.results[4], 'color: #e3687d', annotation[4]],
-        ['ניחושים מסך השאלות', self.results[5], 'color: #a254a0', annotation[5]],
-        ['הצלחות בניחושים', self.results[6], 'color: #5588c7', annotation[6]],
-        ['שאלות עם זמן מענה ארוך', self.results[7], 'color: #f57b4c', annotation[7]]
+        ['שאלות שחזרת עליהן', self.chartResults[0], 'color: #09bef3', annotation[0]],
+        ['שאלות ששינית בהן תשובה', self.chartResults[1], 'color: #f15c44', annotation[1]],
+        ['שאלות בהן שינית מטעות לתשובה נכונה', self.chartResults[2], 'color: #f8f16c', annotation[2]],
+        ['שאלות בהן שינית מתשובה נכונה לטעות', self.chartResults[3], 'color: #6cbf67', annotation[3]],
+        ['שאלות בהן שינית מטעות לטעות', self.chartResults[4], 'color: #e3687d', annotation[4]],
+        ['ניחושים מסך השאלות', self.chartResults[5], 'color: #a254a0', annotation[5]],
+        ['הצלחות בניחושים', self.chartResults[6], 'color: #5588c7', annotation[6]],
+        ['שאלות עם זמן מענה ארוך', self.chartResults[7], 'color: #f57b4c', annotation[7]]
         ]);
 
         var view = new google.visualization.DataView(data_bar);

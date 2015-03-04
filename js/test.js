@@ -105,7 +105,6 @@ function TestController() {
                 self.questions[current].handler.visit(function (data) {
                     $(swiper.slides[current]).find('.timer .question-feature-text').html(data);
                 }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
-                console.log(self.questions[current]);
             }
         });
         //initialized slider for the first slide
@@ -300,7 +299,11 @@ function TestController() {
 
     this.finishTest = function () {
         timerController.resetGeneralTimers();
-        self.checkAnswers();
+        report = new Report(self.questions);
+        reportController.insertData(report);
+        //self.checkAnswers();
+        //var reportController = new ReportController();
+        //reportController.initChart();
         $("#test-container").hide();
         $("#reportPage").show();
         $("body").css({ "background-color": "#f2f2f4", "direction": "ltr" });
@@ -325,7 +328,7 @@ function TestController() {
                 guess++;
             }
         }
-        reportController.initChartPie(correct, notCorrect);
+        reportController.initChartPie();
         //reportController.initChartPie(10, 4);
     }
 
