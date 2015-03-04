@@ -299,6 +299,7 @@ function TestController() {
 
     this.finishTest = function () {
         timerController.resetGeneralTimers();
+        var reportController = new ReportController();
         report = new Report(self.questions);
         reportController.insertData(report);
         //self.checkAnswers();
@@ -308,6 +309,7 @@ function TestController() {
         $("#reportPage").show();
         $("body").css({ "background-color": "#f2f2f4", "direction": "ltr" });
 
+        reportController.initChart();
         reportController.drawChart();
 
     }

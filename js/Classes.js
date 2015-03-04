@@ -124,6 +124,7 @@ function Timer(){
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function Report(givenQuestions) {
+    var self = this;
     var numberOfquestions=givenQuestions.length;
     var questions=givenQuestions;//an array of all the question that holds all the data on the question the questions would be QuestionHandler
     var qchart =[0,0,0,0,0,0,0,0];//array that holds all data on questions 1:questions that returned, 2: questions that were changed answer 3: changed from mistake to correct 4: changed from correct to mistake 5: changed from mistake to mistake 6: num of guesses 7: coreect guesses 8:long time questions
@@ -149,6 +150,7 @@ function Report(givenQuestions) {
     this.getBarChart=function(){
         return qchart;
     }
+    self.setChartStats();
 
     
 }
