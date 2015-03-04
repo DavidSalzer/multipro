@@ -5,6 +5,7 @@ function Question(obj){
     this.answers = obj.answers;//an array of answers
     this.correctAns = obj.correctAns;//the correct answer
     this.handler = new QuestionHandler();//the handler of the behavior of the question
+    this.handler.correctAnswer = this.correctAns;//sets the correct answer at the handler
 }
 //A handler for the questions
 function QuestionHandler(){  
@@ -13,6 +14,7 @@ function QuestionHandler(){
     var checkIfStay;//the timeout for time of delay for focus on question
     var tempAnswer=null;//initiliazes as null for no answer
     var stage = stages[1];//initilize as firststage of test
+    this.correctAnswer = 0;
     this.guess=0;//initilize as non guess
     this.timer = new Timer();
     this.givenAnswers = {firstStage:[],
@@ -77,6 +79,7 @@ function QuestionHandler(){
         var arr= self.givenAnswers.firstStage.concat(self.givenAnswers.secondStage.concat(self.givenAnswers.thirdStage));
         return arr;
     }
+   
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function Timer(){
@@ -141,6 +144,11 @@ function Report(givenQuestions) {
             //count number of question that were answered more than once(that have more than one answer)
             if (questions[i].handler.getGivenAnswersAll().length > 0)
                 qchart[1]++;
+            //count number of guesses
+           if (questions[i].handler.guess== 1)
+                qchart[5]++;
+            //count number of question that were answered correctly but were answered preiviously wong
+            
             
         }
     }
@@ -151,7 +159,12 @@ function Report(givenQuestions) {
         return qchart;
     }
     self.setChartStats();
-
+    function checkIfChangedFromWrongToCorrect(queestion) {
+        var allAns = Question.handler.getGivenAnswersAll();//get the array with all the array of answers
+        for(var i=0;i<allAns.length;i++){
+                
+            }
+        }
     
 }
 ///////////////////////////////////////////////////////////////////////////////     

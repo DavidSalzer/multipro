@@ -1,5 +1,6 @@
 
-    
+    var reportController = new ReportController();
+        reportController.initChart();
 
     var timerController = new TimerController();
     timerController.initGeneralTimer(78);
