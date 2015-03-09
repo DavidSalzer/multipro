@@ -4,7 +4,12 @@ function TimerController() {
     this.generalTimer; //the test timer
     this.generalTimerRun;
     this.generalTimerSeconds;
-
+    this.timer = new Timer(); 
+    
+    //returns the amount of time in seconds from start until urrent
+    this.getOverAllTime = function () {
+        return (self.timer.seconds + (self.timer.minutes * 60));
+    }
     this.questionTimer; //save timer for current question
 
     //this.timeline=[{questionNumber,time}];
@@ -16,10 +21,11 @@ function TimerController() {
         self.generalTimerSeconds = minutes;
         self.updateGeneralTimerDisplay();
         self.startGeneralTimer();
+        self.timer.startTimer();
         self.generalTimer = setTimeout(
            function () {
-                $("#general-timer").html("00:00:00");
-                 alert("המבחן נגמר!");
+               $("#general-timer").html("00:00:00");
+               alert("המבחן נגמר!");
                testController.finishTest(); //finish test               
            }, minutes * 60 * 1000);
 
@@ -58,10 +64,12 @@ function TimerController() {
 
     this.resetGeneralTimers=function(){
         clearInterval(self.generalTimerRun);
-         clearTimeout(self.generalTimer);
+        clearTimeout(self.generalTimer);
+        self.timer.stopTimer();
     }
     this.stopGeneralTimer = function () {
         clearTimeout(self.generalTimer);
+        self.timer.stopTimer();
     }
 
     this.startQuestionTimer = function () {

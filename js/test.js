@@ -300,7 +300,6 @@ function TestController() {
     this.finishTest = function () {
         //if finsh test but still on question so we need to "leave that question"
         self.questions[self.swiper.activeIndex].handler.leave();
-        console.log(self.questions[self.swiper.activeIndex].handler);
         timerController.resetGeneralTimers();
         // var reportController = new ReportController();
         report = new Report(self.questions);

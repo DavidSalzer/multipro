@@ -108,7 +108,7 @@ body {
 }
 
 #questionsTime{
-   background-image: url("../img/TIMELINE.jpg");
+   /*background-image: url("../img/TIMELINE.jpg");*/
 width: 100%;
 height: 100%;
 background-size: contain;

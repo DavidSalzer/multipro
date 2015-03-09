@@ -84,6 +84,16 @@ function QuestionHandler(){
             return tempAnswer == self.correctAnswer;
         else
             return false;
+    }
+    this.getOverAllTimeInQuestion = function () {
+        var sum = 0;
+        for (var stage in self.timeInVisit) {
+            var tempArr = self.timeInVisit[stage];
+            for (var i = 0; i < tempArr.length; i++) {
+                sum += new Timer().convertFromFormat(tempArr[i]);
+            }
+        }
+        return sum;
     }   
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,8 +110,13 @@ function Timer(){
      this.showmseconds=function(){
          return ((this.mseconds < 10 ? "0" : "" )+this.mseconds)
      }
-
-
+     //for given format from timer as time="mm:ss" would get number of seconds
+     this.convertFromFormat = function (time) {
+         var parsed = time.split(":");
+         var minutes = Number.parseInt(parsed[0]);
+         var seconds= Number.parseInt(parsed[1]);
+         return minutes*60+seconds
+     }
      function tick() {
         var self=this;
          var elapsed = now() - self.startTime;
@@ -180,6 +195,14 @@ function Report(givenQuestions) {
     this.getBarChart=function(){
         return qchart;
     }
+   //returns an array of an objects that give data for dtime line time,correct and if answered at all
+    this.getDataForQuestions = function () {
+        var arr = []
+        for (var i = 0; i < questions.length; i++) {
+            arr.push({time:questions[i].handler.getOverAllTimeInQuestion(),correct:questions[i].handler.answerdCorrectly(),answered:questions[i].handler.nowAnswer()!=null});
+        }
+        return arr;
+    }
     self.setChartStats();
     // check if there were answers before that were mistakes 
     function checkIfChangedFromWrong(question) {
@@ -193,7 +216,7 @@ function Report(givenQuestions) {
         return foundMistake;
      }
      //a check if there was an a erliar change that was correct
-     function checkIfChangedFromCorrect(question) {
+    function checkIfChangedFromCorrect(question) {
         var allAns = question.getGivenAnswersAll();//get the array with all the array of answers
         var foundCorrect=false;
         for(var i=0;i<allAns.length-1&&!foundCorrect;i++){
@@ -202,6 +225,7 @@ function Report(givenQuestions) {
             }
         return foundCorrect;
      }
+    //returns a array with all the time lengths of the questions
     
 }
 ///////////////////////////////////////////////////////////////////////////////     

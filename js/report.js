@@ -6,14 +6,25 @@ function ReportController() {
     this.correctAnswers=0;
     this.nonCorrectAnswers = 100;
     this.numberOfQuestions=200;
+    this.timeLine;
     this.attachEvents = function () {
 
     }
     this.insertData = function (report) {
         this.chartResults = report.getBarChart();
         this.correctAnswers = report.correctAnswers;
-        this.nonCorrectAnswers =report.wrongAnswers;
+        this.nonCorrectAnswers = report.wrongAnswers;
         this.numberOfQuestions = report.numOfQuestions();
+        this.timeLine = new TimeLineView('mainTimeLine', 50, '#questionsTime');
+        var timelineData = report.getDataForQuestions();
+        for (var i = 0; i < timelineData.length; i++) {
+            if (timelineData[i].answered)
+                this.timeLine.addToTimeLine(timelineData[i].time, timelineData[i].correct);
+            else
+                this.timeLine.addToTimeLineNotAnswered(timelineData[i].time);
+        }
+        this.timeLine.addToView();
+
     }
     this.initChart = function () {
 
@@ -141,3 +152,146 @@ function ReportController() {
         }
     }
 }
+ //for a given time line elemnts controlls the scrolling of the time line
+function TimeLineScroller(element) {
+                var self = this;
+                var position = 0; //the position anchor for scrolling
+                var $elem = $(element); //jquery elemnt that would be scrolled
+                this.attachEvents = function () {
+                    $(window).resize(function () {
+                        whenResize(); //on resize--check if arrows would be needed
+                    });
+                }
+                //on call for scroll scrolls right
+                this.scrollRight = function () {
+                    var mostRight = getMostRight();
+                    position += $elem.width() * (75 / 100);
+                    //check if we are not at the the right most edge if yes fix position that wont run out of bounds
+                    if (position >= mostRight - $elem.width()) {
+                        position = mostRight - $elem.width();
+                    }
+                    goTo(); //activate scroll
+                    checkArrows();
+                }
+                //on call for scroll scrolls left
+                this.scrollLeft = function () {
+                    position -= $elem.width() * (75 / 100);
+                    //check if we are not at the the left most edge if yes fix position that wont run out of bounds
+                    if (position <= 0) {
+                        position = 0;
+                    }
+                    goTo(); //activate scroll
+                    checkArrows();
+                }
+                //checks globally mostly after create if needs scroll and disables the arrows if needed
+                this.chekIfNeedScroll = function () {
+                    checkArrows();
+                }
+                //activation of scroll
+                function goTo() {
+                    $($elem).animate({
+                        //move to position set by the scroll
+                        scrollLeft: position
+                    }, {
+                        duration: 600, //the speed 
+                        specialEasing: {
+                            width: "linear",
+                            height: "easeOutBounce"
+                        },
+                        complete: function () {
+                        }
+                    });
+                }
+                //get the right most edge
+                function getMostRight() {
+                    return $elem.find($('.timelinewrapper')).width();
+                }
+                function whenResize() {
+                    checkArrows();
+                }
+
+                //checks if arrows are needed for scroll add and removes the according to need
+                function checkArrows() {
+                    if ((position + $elem.width()) < getMostRight())
+                        $elem.parent().find('.arrowHolderRight').show();
+                    else
+                        $elem.parent().find('.arrowHolderRight').hide();
+                    if ((position > 0))
+                        $elem.parent().find('.arrowHolderLeft').show();
+                    else
+                        $elem.parent().find('.arrowHolderLeft').hide();
+                }
+                self.attachEvents();
+            }
+            //represents a time line in html, name-must-a name given for the time line would be its id, overAllTime-must,toElem-optional
+function TimeLineView(name, overAllTime, toElem) {
+                var self = this;
+                var questionNum = 0; //a runner for which question we are in
+                var elemName = name; //the name of the parent of the timeline
+                var attachToElem; //if wanted the name of the element that the time line would be attached to
+                var overAllTime = overAllTime; //the over all time of the time line that according to it the pieces of the questions would be set
+                var width = 1600; //thw shown width of the time line that according to it the proportion of the timeline elemnts would be- its not dynmic according to change of view
+                var timelineList = ''; //the holder of the list of the elemnts to be inserted to the timeline
+                var scroll; //scroller controll for the time line would be created at creation of timeline
+                //check if wanted to attach the time line to specific element, if not the to be attahed to element would just be body
+                if (toElem)
+                    attachToElem = toElem;
+                else
+                    attachToElem = 'body';
+
+                this.attachEvents = function () {
+                    $(document).on('click', "#" + name + " .arrowHolderLeft", function () {
+                        scroll.scrollLeft(); //attach scroll
+                    });
+                    $(document).on('click', "#" + name + " .arrowHolderRight", function () {
+                        scroll.scrollRight(); //attach scroll
+                    });
+                }
+                //an adder of elemnts to the time line - doesnt actually add to view, after adding elemnts still needed to activate setToView()
+                //adds a reular elemnts depens on time and if correct or not correct
+                this.addToTimeLine = function (time, correct) {
+                    questionNum++;
+                    var correctClass = (correct == true) ? "correct" : "notCorrect";
+                    var elemWidth = (width / overAllTime) * time;
+                    var elem = '<div class="timeLineQuestion answered ' + correctClass + '" id="questionNum' + questionNum + '" style="width:' + elemWidth + 'px">' +
+                                    '<div class="top">' + questionNum + '</div>' +
+                                     '<div class="bottom"></div>' +
+                                '</div>';
+                    //only if the time is more then 0 so then the question is added to time line
+                    if (time > 0) {
+                        timelineList += elem;
+                    }
+                }
+                //as above but an a elemnt of question that was not answered
+                this.addToTimeLineNotAnswered = function (time) {
+                    questionNum++;
+                    var elemWidth = (width / overAllTime) * time;
+                    var elem = '<div class="timeLineQuestion notAnswered" id="questionNum' + questionNum + '" style="width:' + elemWidth + 'px">' +
+                                    '<div class="top">' + questionNum + '</div>' +
+                                     '<div class="bottom"></div>' +
+                                '</div>';
+                    //only if the time is more then 0 so then the question is added to time line
+                    if (time > 0) {
+                        timelineList += elem;
+                    }
+                }
+                //Add the created time line to the page(DOM)
+                this.addToView = function () {
+                    $('#' + name + ' .timelinewrapper').append(timelineList).trigger('create');
+                    timelineList = '';//reset for if wanted to add more
+                    scroll.chekIfNeedScroll();//check if scroll is needed would check for arrows
+                }
+                //Add to DOM the wrapper of the timeline - adds name according to wanted name
+                function createThis() {
+                    $(attachToElem).append('<div class="timelineHolder" id=' + name + '>' +
+                                       '<div class="arrowHolderLeft" id="leftArrow"><img src="img/arrow2.png"></div>' +
+                                        '<div class="timeline">' +
+                                       '<div class="timelinewrapper"></div>' +
+                                       '</div>' +
+                                       '<div class="arrowHolderRight" id="rightArrow"><img src="img/arrow1.png" ></div>' +
+                                       '</div>').trigger('create');
+                    scroll = new TimeLineScroller('#' + name + ' .timeline');//connects controller to created timeline
+                }
+                createThis();//create 
+                self.attachEvents();//attach events
+            }

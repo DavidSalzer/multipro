@@ -441,3 +441,73 @@ line-height: 49px;
     height: 49px;
     margin-right: 10px;
 }
+
+/******************** TimeLine **********************/
+.timeline {
+    overflow-x: hidden;
+    white-space:nowrap;
+    position: absolute;
+    right: 25px;
+    left: 25px;
+    
+}
+.timelinewrapper {
+    display: inline;
+    width: auto;
+}
+.timelineHolder{
+    position: relative;
+    height: 70px;
+}
+.arrowHolderLeft{
+    position: absolute;
+    left: 5px;
+    display: inline-block;
+    line-height:  69px;
+}
+.arrowHolderRight{
+    position: absolute;
+    right: 5px;
+    display: inline-block;
+     line-height:  69px;
+}
+.timeLineQuestion{
+    display: inline-block;
+    width: 50px;
+    margin-left: 2px;
+    margin-right: 2px;
+    vertical-align: top;
+}
+.timeLineQuestion .top {
+    height: 51px;     
+    border-radius: 5px;
+    color: #ffffff;
+    text-align: center;
+    font-size: 26px;
+    line-height:  51px;
+    margin-bottom: 3px;
+    
+}
+.timeLineQuestion .bottom {
+    height: 15px;
+}
+.timeLineQuestion.answered .top{
+   background-color: #cdddd2;
+}
+.timeLineQuestion.answered.notCorrect .bottom{
+    background: #ed2124;
+}
+
+.timeLineQuestion.answered.correct .bottom{
+    background: #9fd297;
+}
+.timeLineQuestion.notAnswered .top{
+   border-color:#b9bec1;
+   height: 47px;  
+   border: solid;
+   border-width: 2px;
+   color:#6b6d6c;
+}
+.timeLineQuestion.notAnswered .bottom{
+   visibility: hidden;
+}
