@@ -8,23 +8,71 @@ function ReportController() {
     this.numberOfQuestions=200;
     this.timeLine;
     this.attachEvents = function () {
-
+        $(document).on('click', '#chooseGuess', function () {
+            guessClick();
+        });
+        $(document).on('click', '#viewTimeTest', function () {
+            timeLineTestClick();
+        });
+        $(document).on('click', '#changed-Timeline-button', function () {
+            changedTimelineClick();
+        });
+        $(document).on('click', '#stages-Timeline-button', function () {
+            stagesTimeLineClick();
+        });
+        $(document).on('click', '.drop-box-header', function () {
+           dropboxHeaderButtonClick.call(this);
+       });
+       $(document).on('click', '.drop-box-button', function () {
+           dropboxInsideButtonClick.call(this);
+       });
     }
+    //inserts data in to the report page uses report object to hold and maintain the data
     this.insertData = function (report) {
         this.chartResults = report.getBarChart();
         this.correctAnswers = report.correctAnswers;
         this.nonCorrectAnswers = report.wrongAnswers;
         this.numberOfQuestions = report.numOfQuestions();
-        this.timeLine = new TimeLineView('mainTimeLine', 50, '#questionsTime');
+        //run the timeline controller
+        this.timeLine = new TimeLineView('mainTimeLine', timerController.getOverAllTime(), report.getNumOfVisitedQuestions(), '#questionsTime');
+        var guesTimeLine = new TimeLineView('guessTimeLinea', 1, 1, '#guessTimeLine');
+        var changedTimeLine = new TimeLineView('changed-time-line', 1, 1, '#changedTimeLine');
+        var stagesTimeLine = {};
+        for (i = 1; i <= 3; i++) {
+            stagesTimeLine[stages[i]] = new TimeLineView(stages[i] + '-time-line', report.getTimeInStage(stages[i]), report.getNumOfQuestionsForStage(stages[i]), '#' + stages[i] + 'TimeLine');
+        }
         var timelineData = report.getDataForQuestions();
+        var stagestimelineData = report.getDataForStages();
+        console.log(stagestimelineData);
+        for (var stage in stagestimelineData) {
+            for (var i = 0; i < stagestimelineData[stage].length; i++) {
+                if (stagestimelineData[stage][i].answered) {                    
+                    stagesTimeLine[stage].addToTimeLine(stagestimelineData[stage][i].questionNum, stagestimelineData[stage][i].timeInQuestion, stagestimelineData[stage][i].correct);
+                }
+                else {
+              
+                    stagesTimeLine[stage].addToTimeLineNotAnswered(stagestimelineData[stage][i].questionNum, stagestimelineData[stage][i].timeInQuestion);
+                }
+            }
+        }
         for (var i = 0; i < timelineData.length; i++) {
             if (timelineData[i].answered)
-                this.timeLine.addToTimeLine(timelineData[i].time, timelineData[i].correct);
+                this.timeLine.addToTimeLine(i + 1, timelineData[i].time, timelineData[i].correct);
             else
-                this.timeLine.addToTimeLineNotAnswered(timelineData[i].time);
+                this.timeLine.addToTimeLineNotAnswered(i + 1, timelineData[i].time);
+            if (timelineData[i].answered && timelineData[i].guess) {
+                guesTimeLine.addToTimeLine(i + 1, 1, timelineData[i].correct);
+            }
+            if (timelineData[i].changed) {
+                changedTimeLine.addToTimeLine(i + 1, 1, timelineData[i].correct);
+            }
         }
+        for (var stage in stagestimelineData)
+            stagesTimeLine[stage].addToView();
+            console.log(stagesTimeLine);
+        guesTimeLine.addToView();
+        changedTimeLine.addToView();
         this.timeLine.addToView();
-
     }
     this.initChart = function () {
 
@@ -82,18 +130,19 @@ function ReportController() {
         //    sum = sum + self.results[count];
         //}
         for (count in self.results) {
-            annotation[count] = Math.round((self.chartResults[count] / sum) * 100) + '%';
+            annotation[count] = Math.round((self.chartResults[count] / sum) * 100);
         }
+       
         var data_bar = google.visualization.arrayToDataTable([
         ['', '', { role: 'style' }, ''],
-        ['שאלות שחזרת עליהן', self.chartResults[0], 'color: #09bef3', annotation[0]],
-        ['שאלות ששינית בהן תשובה', self.chartResults[1], 'color: #f15c44', annotation[1]],
-        ['שאלות בהן שינית מטעות לתשובה נכונה', self.chartResults[2], 'color: #f8f16c', annotation[2]],
-        ['שאלות בהן שינית מתשובה נכונה לטעות', self.chartResults[3], 'color: #6cbf67', annotation[3]],
-        ['שאלות בהן שינית מטעות לטעות', self.chartResults[4], 'color: #e3687d', annotation[4]],
-        ['ניחושים מסך השאלות', self.chartResults[5], 'color: #a254a0', annotation[5]],
-        ['הצלחות בניחושים', self.chartResults[6], 'color: #5588c7', annotation[6]],
-        ['שאלות עם זמן מענה ארוך', self.chartResults[7], 'color: #f57b4c', annotation[7]]
+        ['שאלות שחזרת עליהן', annotation[0], 'color: #09bef3', annotation[0]+'%'],
+        ['שאלות ששינית בהן תשובה', annotation[1], 'color: #f15c44', annotation[1]+'%'],
+        ['שאלות בהן שינית מטעות לתשובה נכונה', annotation[2], 'color: #f8f16c', annotation[2]+'%'],
+        ['שאלות בהן שינית מתשובה נכונה לטעות', annotation[3], 'color: #6cbf67', annotation[3]+'%'],
+        ['שאלות בהן שינית מטעות לטעות', annotation[4], 'color: #e3687d', annotation[4]+'%'],
+        ['ניחושים מסך השאלות', annotation[5], 'color: #a254a0', annotation[5]+'%'],
+        ['הצלחות בניחושים', annotation[6], 'color: #5588c7', annotation[6]+'%'],
+        ['שאלות עם זמן מענה ארוך', annotation[7], 'color: #f57b4c', annotation[7]+'%']
         ]);
 
         var view = new google.visualization.DataView(data_bar);
@@ -106,10 +155,11 @@ function ReportController() {
                         2]);
         var options_bar = {
             'legend': { position: "none" },
-            'chartArea': { left: 300, top: '12%', width: '50%', height: '75%' },
+            'chartArea': { left: 250, top: '12%', width: '60%', height: '75%' },
             'width': 700,
             'tooltip': { 'trigger': "none" },
-            'fontName': 'Open Sans Hebrew'
+            'fontName': 'Open Sans Hebrew',
+             'hAxis': { ticks: [{v:10, f:'10%'},{v:20, f:'20%'},{v:30, f:'30%'},{v:40, f:'40%'},{v:50, f:'50%'},{v:60, f:'60%'}, {v:70, f:'70%'},{v:80, f:'80%'},{v:90, f:'90%'},{v:100, f:'100%'}],textStyle:{fontSize:11} }
         };
 
         var chart = new google.visualization.BarChart(document.getElementById('chart_div_bar'));
@@ -151,6 +201,43 @@ function ReportController() {
             self.drawChartBar();
         }
     }
+    function timeLineTestClick(){
+        $('.nonStageTimeLine-Holder').show();
+        $('.stageTimeLine-Holder').hide();
+        $('#changedTimeLine').hide();
+        $('#questionsTime').show();
+        $('#guessTimeLine').hide();
+    }
+    function guessClick() {
+        $('.nonStageTimeLine-Holder').show();
+        $('.stageTimeLine-Holder').hide();
+        $('#changedTimeLine').hide();
+        $('#questionsTime').hide();
+        $('#guessTimeLine').show();     
+    }
+    function changedTimelineClick() {
+        $('.nonStageTimeLine-Holder').show();
+        $('.stageTimeLine-Holder').hide();
+        $('#questionsTime').hide();
+        $('#guessTimeLine').hide();
+        $('#changedTimeLine').show();
+           
+    }
+    function stagesTimeLineClick(){
+        $('.nonStageTimeLine-Holder').hide();
+        $('.stageTimeLine-Holder').show();
+    }
+    function dropboxInsideButtonClick() {
+           $(this).parents('.drop-box').find('.drop-box-header').text($(this).text());
+           $(this).parents('.drop-box-inside').hide();
+       }
+       function dropboxHeaderButtonClick() {
+           if($(this).parent().parent().find('.drop-box-inside').is(':hidden'))
+                $(this).parent().parent().find('.drop-box-inside').show();
+            else   
+                 $(this).parent().parent().find('.drop-box-inside').hide();
+       }
+    self.attachEvents();
 }
  //for a given time line elemnts controlls the scrolling of the time line
 function TimeLineScroller(element) {
@@ -204,15 +291,37 @@ function TimeLineScroller(element) {
                 }
                 //get the right most edge
                 function getMostRight() {
-                    return $elem.find($('.timelinewrapper')).width();
+                    //clone the main wrapper of the time line so we can get the exact width of the time line even when is hidden
+                    var copied_elem = $elem.parent().parent().parent().clone()
+                      .attr("id", false)
+                      .css({visibility:"hidden", display:"block", 
+                               position:"absolute"});
+                        copied_elem.find('.time-line-holder').css({  display:"inline-block" });
+                        $("body").append(copied_elem);
+                        var scroller_height = copied_elem.height();
+                        var scroller_width = copied_elem.find('#'+$elem.parent().attr('id')+' .timelinewrapper').width();
+                        
+                        copied_elem.remove();
+                    return scroller_width;
                 }
                 function whenResize() {
                     checkArrows();
                 }
 
-                //checks if arrows are needed for scroll add and removes the according to need
+                //checks if arrows are needed for scroll add and removes them according to need
                 function checkArrows() {
-                    if ((position + $elem.width()) < getMostRight())
+                    //clone the main wrapper of the time line so we can get the exact width of the time line even when is hidden
+                    var copied_elem = $elem.parent().parent().parent().clone()
+                      .attr("id", false)
+                      .css({visibility:"hidden", display:"block", 
+                               position:"absolute"});
+                        copied_elem.find('.time-line-holder').css({  display:"inline-block" });
+                        $("body").append(copied_elem);
+                        var scroller_height = copied_elem.height();
+                        var scroller_width = copied_elem.find('#'+$elem.parent().attr('id')+' .timeline').width();
+                        copied_elem.remove();
+                   
+                    if ((position + scroller_width) < getMostRight())
                         $elem.parent().find('.arrowHolderRight').show();
                     else
                         $elem.parent().find('.arrowHolderRight').hide();
@@ -224,13 +333,15 @@ function TimeLineScroller(element) {
                 self.attachEvents();
             }
             //represents a time line in html, name-must-a name given for the time line would be its id, overAllTime-must,toElem-optional
-function TimeLineView(name, overAllTime, toElem) {
+function TimeLineView(name, overAllTime,numOfQuestions, toElem) {
                 var self = this;
+                var nOfQuestions = numOfQuestions;
                 var questionNum = 0; //a runner for which question we are in
                 var elemName = name; //the name of the parent of the timeline
                 var attachToElem; //if wanted the name of the element that the time line would be attached to
                 var overAllTime = overAllTime; //the over all time of the time line that according to it the pieces of the questions would be set
-                var width = 1600; //thw shown width of the time line that according to it the proportion of the timeline elemnts would be- its not dynmic according to change of view
+                var averageTimePerQuestion=(overAllTime/numOfQuestions); //the average time that is given for each question would be used to calculate the width of elements
+                var width = 100; //thw shown width of the time line that according to it the proportion of the timeline elemnts would be- its not dynmic according to change of view
                 var timelineList = ''; //the holder of the list of the elemnts to be inserted to the timeline
                 var scroll; //scroller controll for the time line would be created at creation of timeline
                 //check if wanted to attach the time line to specific element, if not the to be attahed to element would just be body
@@ -249,23 +360,31 @@ function TimeLineView(name, overAllTime, toElem) {
                 }
                 //an adder of elemnts to the time line - doesnt actually add to view, after adding elemnts still needed to activate setToView()
                 //adds a reular elemnts depens on time and if correct or not correct
-                this.addToTimeLine = function (time, correct) {
-                    questionNum++;
+                this.addToTimeLine = function (questionNum,time, correct) {
+                    
                     var correctClass = (correct == true) ? "correct" : "notCorrect";
-                    var elemWidth = (width / overAllTime) * time;
+                    var elemWidth =  (time/averageTimePerQuestion)*(width);
+                    //check that wont be to small
+                    if (elemWidth < 50) {
+                        elemWidth = 50;
+                    }
                     var elem = '<div class="timeLineQuestion answered ' + correctClass + '" id="questionNum' + questionNum + '" style="width:' + elemWidth + 'px">' +
                                     '<div class="top">' + questionNum + '</div>' +
                                      '<div class="bottom"></div>' +
                                 '</div>';
-                    //only if the time is more then 0 so then the question is added to time line
-                    if (time > 0) {
-                        timelineList += elem;
-                    }
+                    
+                    
+                    timelineList += elem;//question is added to time line
+                   
                 }
                 //as above but an a elemnt of question that was not answered
-                this.addToTimeLineNotAnswered = function (time) {
-                    questionNum++;
-                    var elemWidth = (width / overAllTime) * time;
+                this.addToTimeLineNotAnswered = function (questionNum,time) {
+                    
+                    var elemWidth = (time/averageTimePerQuestion)*(width);
+                    //check that wont be to small
+                    if (elemWidth < 50) {
+                        elemWidth = 50;
+                    }
                     var elem = '<div class="timeLineQuestion notAnswered" id="questionNum' + questionNum + '" style="width:' + elemWidth + 'px">' +
                                     '<div class="top">' + questionNum + '</div>' +
                                      '<div class="bottom"></div>' +
@@ -274,6 +393,11 @@ function TimeLineView(name, overAllTime, toElem) {
                     if (time > 0) {
                         timelineList += elem;
                     }
+                }
+                function addTo(callback) {
+                    $('#' + name + ' .timelinewrapper').append(timelineList).trigger('create');
+                    timelineList = '';
+                    callback();
                 }
                 //Add the created time line to the page(DOM)
                 this.addToView = function () {
