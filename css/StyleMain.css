@@ -512,3 +512,12 @@ line-height: 49px;
 .timeLineQuestion.notAnswered .bottom{
    visibility: hidden;
 }
+.timeLineQuestion.notChanged .bottom{
+   visibility: hidden;
+}
+.timeLineQuestion.notChanged .top{
+   border-color:#b9bec1;
+   background-color: #000; 
+   border-width: 2px;
+   color:#6b6d6c;
+}

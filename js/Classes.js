@@ -31,11 +31,12 @@ function QuestionHandler(){
    //when visit a question it might be only to scroll on, so check time for considiring if called for visit, saves the times the question was focused on and,  and how much time was focused in question
    //the callback would return with astring of the time and would be given only after delaytime for show timer
     this.visit = function (callback) {
-        self.timer.startTimer(function () { 
-                if(callback)//set to view to user     
-                    callback(self.timer.setToView())           
-        });
-    }
+                            tempAnswer = self.currentAnswer;
+                            self.timer.startTimer(function () {
+                                if (callback)//set to view to user     
+                                    callback(self.timer.setToView())
+                            });
+                        }
     this.leave = function (callback) {//once there is a focus out of a question then it might have been early so stop the timer so the number of visits wouldnt update, furthermore if there was an answer or it was changed so add the given answer
         if (self.timer.minutes > 0 || self.timer.seconds > delayTimeBetweenQuestion || tempAnswer != null) {
             self.currentAnswer = tempAnswer;
@@ -93,7 +94,10 @@ function QuestionHandler(){
     }
     //returns the tempAnswer which is the current answer
     this.nowAnswer = function () {
-        return self.currentAnswer;
+        if (tempAnswer!=null&& tempAnswer != self.currentAnswer)
+            return tempAnswer;
+        else
+            return self.currentAnswer;
     }
     //clears the answer and the non answers and resets guess
     this.clear = function () {
@@ -244,7 +248,29 @@ function Report(givenQuestions,stagesHolder) {
         }
         return arr;
     }
-
+    this.getDataForChangedQuestions = function () {
+        var arr = [];
+        var numberOFChanges = findMostChanged();
+        for (var i = 0; i < numberOFChanges; i++) {
+            arr.push(new Array());
+        }
+        for (var j = 0; j < questions.length; j++) {
+            var qarr = questions[j].handler.getGivenAnswersAll();
+            if (qarr.length > 1) {
+                for (var i = 0; i < numberOFChanges; i++) {
+                    if (qarr.length - 1 >= i) {
+                        var correct = (qarr[i] == questions[j].correctAns)
+                        arr[i].push({ qNumber: j + 1, correct: correct, changed: true });
+                    }
+                    else
+                        arr[i].push({ qNumber: j + 1, changed: false });
+                }
+                //for
+            }
+        }
+        return arr;
+    }
+    
     //get num of questions that were visited
     this.getNumOfVisitedQuestions = function () {
         //run through questions and find all the question that the times visited by them were more than 0
@@ -281,7 +307,18 @@ function Report(givenQuestions,stagesHolder) {
             }
         return foundMistake;
      }
-     //a check if there was an a erliar change that was correct
+     //runs through all questions and finds the number of most changed question answeres
+    function findMostChanged(){
+        var most=0;
+        for (var i = 0; i < questions.length; i++){
+            var numOfAnswersAtQuestion=questions[i].handler.getGivenAnswersAll().length;
+            if( numOfAnswersAtQuestion>most){
+                most=numOfAnswersAtQuestion;
+            }
+        }
+        return most;
+    }
+    //a check if there was an a erliar change that was correct
     function checkIfChangedFromCorrect(question) {
         var allAns = question.getGivenAnswersAll();//get the array with all the array of answers
         var foundCorrect=false;
