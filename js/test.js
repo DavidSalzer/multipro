@@ -1,6 +1,11 @@
 function TestController() {
     var self = this;
 
+    var stage = stages[1];
+    //holds questions for each visit according to stage in test
+    var stagesHolder = {firstStage:[],
+                         secondStage:[],
+                         thirdStage:[]   };//holds the option of answers that were given, for further process- mistakes,changes, changes from mistakes and correct. according to each stage
     this.testResult = []; //save all user behavior about the questions
 
     question = {
@@ -94,6 +99,7 @@ function TestController() {
                 //so when a question is focused the given question statrs a timer and the prev question is stopped the timer (if relevent)
                 var current = swiper.activeIndex;
                 var last = swiper.previousIndex;
+
                 $(swiper.slides[current]).find('.timer').hide();
                 //check if timeout was set at all
                 if (fadetimer != null)
@@ -101,25 +107,29 @@ function TestController() {
                 fadetimer = setTimeout(function () {//timeout for showing timer
                     $(swiper.slides[current]).find('.timer').show();
                 }, 60000);
-                self.questions[last].handler.leave(); //stops the previous question
+                self.questions[last].handler.leave(function () {
+                    //check if got to last question if yes and still in stage 1 so move to stage 2
+                    checkStage(last);
+                    stagesHolder[stage].push(new timeLineObject(self.questions[last]));
+                }); //stops the previous question and check if it was considedrd a visit to add to stage holder
                 self.questions[current].handler.visit(function (data) {
                     $(swiper.slides[current]).find('.timer .question-feature-text').html(data);
                 }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
             }
         });
         //initialized slider for the first slide
-        
-            var current = mySwiper.activeIndex;
-            $(mySwiper.slides[current]).find('.timer').hide();
-            if (fadetimer != null)
-                clearTimeout(fadetimer);
-            fadetimer = setTimeout(function () {//timeout for showing timer
-                $(mySwiper.slides[current]).find('.timer').show();
-            }, 60000);
-            self.questions[current].handler.visit(function (data) {
-                    $(mySwiper.slides[current]).find('.timer .question-feature-text').html(data);
-            }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
-            self.swiper=mySwiper;        
+
+        var current = mySwiper.activeIndex;
+        $(mySwiper.slides[current]).find('.timer').hide();
+        if (fadetimer != null)
+            clearTimeout(fadetimer);
+        fadetimer = setTimeout(function () {//timeout for showing timer
+            $(mySwiper.slides[current]).find('.timer').show();
+        }, 60000);
+        self.questions[current].handler.visit(function (data) {
+            $(mySwiper.slides[current]).find('.timer .question-feature-text').html(data);
+        }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
+        self.swiper = mySwiper;
     }
     //check visited for this question
     this.visited = function () {
@@ -176,7 +186,6 @@ function TestController() {
              number.removeClass("answer");
              self.questions[questionNum - 1].handler.eraseAnswer(val);
         }
-        console.log(self.questions[questionNum - 1].handler);
         /*//check if val was chosen as a not answer before if yes remove data
         var checkNotAnswer = self.testResult[questionNum - 1].chooseNotAnswer.indexOf(val);
         if (checkNotAnswer != -1) {
@@ -244,7 +253,7 @@ function TestController() {
                 number.addClass("not-answer");
             }
         } 
-      console.log(self.questions[questionNum - 1]);
+      
     }
     //user clicks on not answer second time  ->remove not answear from array and from view
      function check_if_remove_notAnswear($this){
@@ -288,29 +297,33 @@ function TestController() {
         self.questions[questionNum - 1].handler.clear();   
     }
 
-    //user click on guess -> push to question guess 
-    this.guess = function () {      
+    //user click on guess -> push to question guess
+    this.guess = function () {
         var $this = $(this);
         $this.toggleClass("selected");
         var questionNum = $this.parents(".question-container").attr("data-question-num");
-        var guess = self.questions[questionNum - 1].handler.guess= self.testResult[questionNum - 1].guess = !self.testResult[questionNum - 1].guess;
+        var guess = self.questions[questionNum - 1].handler.guess = self.testResult[questionNum - 1].guess = !self.testResult[questionNum - 1].guess;
+        
     }
 
 
     this.finishTest = function () {
         //if finsh test but still on question so we need to "leave that question"
-        self.questions[self.swiper.activeIndex].handler.leave();
+        self.questions[self.swiper.activeIndex].handler.leave(function () {
+              stagesHolder[stage].push(new timeLineObject(self.questions[self.swiper.activeIndex]));
+        }); //stops the previous question and check if it was considedrd a visit to add to stage holder
         timerController.resetGeneralTimers();
         // var reportController = new ReportController();
-        report = new Report(self.questions);
+        
+        $("#test-container").hide();
+        $("#reportPage").show();
+        $("body").css({ "background-color": "#f2f2f4", "direction": "ltr" });
+        report = new Report(self.questions,stagesHolder);
         reportController.insertData(report);
         //self.checkAnswers();
         //var reportController = new ReportController();
         //reportController.initChart();
-        $("#test-container").hide();
-        $("#reportPage").show();
-        $("body").css({ "background-color": "#f2f2f4", "direction": "ltr" });
-
+       
         //reportController.initChart();
         reportController.drawChart();
 
@@ -338,7 +351,25 @@ function TestController() {
 
     this.alphabets = ["א", "ב", "ג", "ד", "ה", "ו"];
     this.questions = [];
-    
+    //checks If all questions were answerd to see if need to move to third Stage
+    function checkStage(qNumber) {
+        if (qNumber + 1 == self.questions.length && stage == stages[1])
+                       stage = stages[2];
+         //check If all questions were answerd to see if need to move to third Stage
+        if(stage!=stages[3]&&!findNotAnswered()){
+            stage = stages[3];
+        }
+        
+    }
+    //checks if there is a question not answered
+    function findNotAnswered(){
+        var found = false;
+        for(var i=0;i<self.questions.length;i++){
+            if (self.questions[i].handler.nowAnswer() == null)
+                found = true;
+        }
+        return found;            
+    }
     var givenq=[{
         "question": "מי מהבאים אינו מהווה התוויית נגד מוחלטת לשימוש בגלולה למניעת הריון ?",
         "answers": ["אם שעברה אירוע מוחי בגיל 40", "אנמיה", "בת 37 מעשנת", "כאבים ברגל ללא בירור"],
@@ -499,7 +530,7 @@ function TestController() {
 
     ]
     for(var i=0;i<givenq.length;i++){
-         self.questions.push(new Question(givenq[i]));
+         self.questions.push(new Question(i+1,givenq[i]));
     }
 
 

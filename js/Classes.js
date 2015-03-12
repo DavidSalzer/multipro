@@ -1,9 +1,10 @@
-var stages=[0,'firstStage','secondStage','thirdStage']//stages that are in the test
+var stages=[0,'firstStage','secondStage','thirdStage']//stages that are in the test- constant variable
 //holds a question of test
-function Question(obj){
+function Question(qnumber,obj){
     this.question=obj.question;//the question itself
     this.answers = obj.answers;//an array of answers
     this.correctAns = obj.correctAns;//the correct answer
+    this.questionNumber = qnumber;//the number of question in test
     this.handler = new QuestionHandler();//the handler of the behavior of the question
     this.handler.correctAnswer = obj.correctAns;//sets the correct answer at the handler
 }
@@ -11,9 +12,11 @@ function Question(obj){
 function QuestionHandler(){  
     var delayTimeBetweenQuestion=5;//number of seconds of delay that are for saying if the user is at the question or just passing by.
     var self = this;
-    var checkIfStay;//the timeout for time of delay for focus on question
+    var timeForAnswer=null;//timeout for answer the timeout for time of delay for focus on question
     var tempAnswer=null;//initiliazes as null for no answer
-    var stage = stages[1];//initilize as firststage of test
+    QuestionHandler.stage = stages[1];//initilize as firststage of test- static field not depended by object - to be able to be changed for all questions
+    
+    this.currentAnswer = null;//the actual answer of the question initiliazed as null for no answer
     this.correctAnswer = 0;
     this.guess=0;//initilize as non guess
     this.timer = new Timer();
@@ -33,30 +36,53 @@ function QuestionHandler(){
                     callback(self.timer.setToView())           
         });
     }
-    this.leave = function () {//once there is a focus out of a question then it might have been early so stop the timer so the number of visits wouldnt update, furthermore if there was an answer or it was changed so add the given answer
-        if (self.timer.seconds > delayTimeBetweenQuestion) {
+    this.leave = function (callback) {//once there is a focus out of a question then it might have been early so stop the timer so the number of visits wouldnt update, furthermore if there was an answer or it was changed so add the given answer
+        if (self.timer.minutes > 0 || self.timer.seconds > delayTimeBetweenQuestion || tempAnswer != null) {
+            self.currentAnswer = tempAnswer;
             self.timesvisited++;
-            self.timeInVisit[stage].push(self.timer.setToView());
+            self.timeInVisit[QuestionHandler.stage].push(self.timer.setToView());
+            if (callback)
+                callback();
+        }
+        if (timeForAnswer != null) {//stop the delay for adding answer as given answer
+            clearTimeout(timeForAnswer);
+            timeForAnswer = null;
         }
         this.timer.stopTimer();
+        //if there is a given answer so add the answer to memory
         if (tempAnswer != null) {
-            self.givenAnswers[stage].push(tempAnswer);
+            self.currentAnswer = tempAnswer;
+            self.givenAnswers[QuestionHandler.stage].push(tempAnswer);
+            tempAnswer = null;
         }
     }
-    var timeForAnswer=null;//timeout for answer
-    this.addAnswer = function (answer) {//once given answer add to given answers for further processing, concept- if change while in question not consdiered a change and only the last answer would be considered, chnage is called for when user leffed a question and returend and only then would save question 
-        self.eraseNonAnswer(answer);//check if in non answers array and erase if overthere
-        tempAnswer = answer;//the answer for while on focus on question
+
+    this.addAnswer = function (answer) {//once given answer add to given answers for further processing, concept- if change while in question not consdiered a change and only the last answer would be considered, chnage is called for when user leffed a question and returend and only then would save question or changed after 60 seconds
+        self.eraseNonAnswer(answer); //check if in non answers array and erase if overthere
+        if (timeForAnswer != null) {//stop the delay for adding answer as given answer
+            clearTimeout(timeForAnswer);
+            timeForAnswer = null;
+        }
+        timeForAnswer = setTimeout(function () { self.givenAnswers[QuestionHandler.stage].push(answer) }, 60000); //after 60 seconds save the answer() if wont be changed would be added the leave of question
+        tempAnswer = answer; //the answer for while on focus on question
     }
     this.eraseAnswer = function (answer) {
+        if (this.currentAnswer == answer)
+            self.currentAnswer = null;
         if (tempAnswer == answer)
             tempAnswer = null;
-    } //erases the given answer
+        if (timeForAnswer != null) {//stop the delay for adding answer as given answer
+            clearTimeout(timeForAnswer);
+            timeForAnswer = null;
+        }
+    }  //erases the given answer
     //for given non-correct answer add to givenNonAnswers array, holds only one value for each choice
     this.addNonAnswer = function (answer) {
         //if the given non answer was an answer so erase ita. 
         if (tempAnswer == answer)
             tempAnswer = null;
+        if (currentAnswer == answer)
+            self.currentAnswer = null;
         if (self.givenNonAnswers.indexOf(answer) == -1)//only if not in array allready
             self.givenNonAnswers.push(answer);
     }
@@ -65,14 +91,16 @@ function QuestionHandler(){
           if(place!=-1)//if in array erase
                self.givenNonAnswers.splice(place,1);
     }
-    //returns the tempAnswer which is the corrent answer
+    //returns the tempAnswer which is the current answer
     this.nowAnswer = function () {
-        return tempAnswer;
+        return self.currentAnswer;
     }
-    //clears the answer and the non answers
+    //clears the answer and the non answers and resets guess
     this.clear = function () {
         tempAnswer = null;
+        self.currentAnswer = null;
         self.givenNonAnswers = [];
+        self.guess = 0;
     }
     this.getGivenAnswersAll=function(){
         var arr= self.givenAnswers.firstStage.concat(self.givenAnswers.secondStage.concat(self.givenAnswers.thirdStage));
@@ -80,21 +108,30 @@ function QuestionHandler(){
     }
     //returns if the answer was answered correctly
     this.answerdCorrectly = function () {
-        if (tempAnswer != null)
-            return tempAnswer == self.correctAnswer;
+        if (self.currentAnswer != null)
+            return self.currentAnswer == self.correctAnswer;
         else
             return false;
     }
+    //gets the over all time that was in question in  all stages
     this.getOverAllTimeInQuestion = function () {
         var sum = 0;
         for (var stage in self.timeInVisit) {
-            var tempArr = self.timeInVisit[stage];
+            var tempArr = self.timeInVisit[QuestionHandler.stage];
             for (var i = 0; i < tempArr.length; i++) {
-                sum += new Timer().convertFromFormat(tempArr[i]);
+                sum += Timer.convertFromFormat(tempArr[i]);//converts the given time to seconds
             }
         }
         return sum;
-    }   
+    }
+       
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function timeLineObject(question) {
+    this.questionNum = question.questionNumber;
+    this.timeInQuestion = Timer.convertFromFormat(question.handler.timer.setToView());//the number of seconds in current time in question
+    this.correct=question.handler.answerdCorrectly();
+    this.answered = question.handler.nowAnswer() != null;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function Timer(){
@@ -111,7 +148,7 @@ function Timer(){
          return ((this.mseconds < 10 ? "0" : "" )+this.mseconds)
      }
      //for given format from timer as time="mm:ss" would get number of seconds
-     this.convertFromFormat = function (time) {
+     Timer.convertFromFormat = function (time) {
          var parsed = time.split(":");
          var minutes = Number.parseInt(parsed[0]);
          var seconds= Number.parseInt(parsed[1]);
@@ -146,11 +183,12 @@ function Timer(){
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function Report(givenQuestions) {
+function Report(givenQuestions,stagesHolder) {
     var self = this;
     var numberOfquestions=givenQuestions.length;
     var questions=givenQuestions;//an array of all the question that holds all the data on the question the questions would be QuestionHandler
     var qchart =[0,0,0,0,0,0,0,0];//array that holds all data on questions 1:questions that returned, 2: questions that were changed answer 3: changed from mistake to correct 4: changed from correct to mistake 5: changed from mistake to mistake 6: num of guesses 7: coreect guesses 8:long time questions
+    var stagesArrays = stagesHolder;
     this.correctAnswers = 0;
     this.wrongAnswers = 0;
     this.initReport = function (givenQuestions) {
@@ -181,11 +219,14 @@ function Report(givenQuestions) {
             if (!questions[i].handler.answerdCorrectly() && checkIfChangedFromWrong(questions[i].handler))
                 qchart[4]++;
             //count number of guesses
-            if (questions[i].handler.guess == 1)
-                qchart[5]++;
+            if (questions[i].handler.guess == 1) 
+                qchart[5]++;            
             //count guesss that were correct
             if (questions[i].handler.guess == 1 && questions[i].handler.answerdCorrectly())
                 qchart[6]++;
+             //count the questions that were in over all time more than 3 minutes
+            if (questions[i].handler.getOverAllTimeInQuestion() >= 180)
+                qchart[7]++;
         }
 
     }
@@ -199,9 +240,34 @@ function Report(givenQuestions) {
     this.getDataForQuestions = function () {
         var arr = []
         for (var i = 0; i < questions.length; i++) {
-            arr.push({time:questions[i].handler.getOverAllTimeInQuestion(),correct:questions[i].handler.answerdCorrectly(),answered:questions[i].handler.nowAnswer()!=null});
+            arr.push({ time: questions[i].handler.getOverAllTimeInQuestion(), correct: questions[i].handler.answerdCorrectly(), answered: questions[i].handler.nowAnswer() != null, guess: questions[i].handler.guess == 1,changed:questions[i].handler.getGivenAnswersAll().length>1 });            
         }
         return arr;
+    }
+
+    //get num of questions that were visited
+    this.getNumOfVisitedQuestions = function () {
+        //run through questions and find all the question that the times visited by them were more than 0
+        var overall = 0; //initiliaze as none of the questions were visited
+        for (var i = 0; i < questions.length; i++) {
+            if (questions[i].handler.timesvisited > 0)
+                overall++;
+        }
+        return overall;
+    }
+    //returns for a given stage the number of questions visited by that stage
+    this.getNumOfQuestionsForStage=function(stage){
+        return(stagesArrays[stage].length)
+    }
+    this.getDataForStages = function () {
+        return stagesArrays;
+    }
+    //for a given stage retuns the over all time in stage
+    this.getTimeInStage = function (stage) {
+        var sum = 0;
+        for (var i = 0; i < stagesArrays[stage].length; i++)//run through stage and sum time in each question
+            sum += stagesArrays[stage][i].timeInQuestion;
+        return sum;
     }
     self.setChartStats();
     // check if there were answers before that were mistakes 
@@ -226,7 +292,6 @@ function Report(givenQuestions) {
         return foundCorrect;
      }
     //returns a array with all the time lengths of the questions
-    
 }
 ///////////////////////////////////////////////////////////////////////////////     
 function AnswerChart() {        

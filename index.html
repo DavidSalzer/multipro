@@ -112,8 +112,33 @@
                 </div>
                 <div id="chart_div_pie" style="display: inline-block;"></div>
                 <div id="chart_div_bar" style="width: 700px; height: 300px; display: inline-block;"></div>
-                <div style="background-color: #ffffff; height: 100px; width: 1105px; margin: 70px auto 0;">
-                    <div id="questionsTime" style=" display: inline-block;"></div>
+               <div id="drop-box-holder" dir="rtl">
+                    <div class="drop-box" id="report-chooser" dir="rtl">
+                        <div class="drop-box-button-holder"><button class="drop-box-header" >תצוגה לפי מהלך המבחן</button></div>
+                        <div class="drop-box-arrow-holder"><img src="img/arrowdown.png"></div>
+                            <div class="drop-box-inside">
+                              <div>
+                                  <div class="drop-box-button-holder"><button id="viewTimeTest" class="drop-box-button" >תצוגה לפי מהלך המבחן</button></div>
+                                  <div class="drop-box-button-holder"><button id="stages-Timeline-button" class="drop-box-button" >חלוקה לשלישים</button></div>
+                                  <div class="drop-box-button-holder"><button id="chooseGuess" class="drop-box-button" >שאלות שניחשתי</button></div>
+                                  <div class="drop-box-button-holder"><button id="changed-Timeline-button" class="drop-box-button" >שאלות ששיניתי</button></div> 
+                              </div>           
+                            </div>         
+                    </div>
+                </div>
+                <div class="nonStageTimeLine-Holder time-line-grandfather" style="background-color: #ffffff; height: 100px; width: 1105px; margin: 35px auto 0;">
+                    <div class="time-line-holder" id="questionsTime" style="display: inline-block;"></div>
+                    <div class="time-line-holder" id="guessTimeLine" style="display: none"></div>
+                    <div class="time-line-holder" id="changedTimeLine" style="display: none"></div>
+                </div>
+                <div class="stageTimeLine-Holder time-line-grandfather" style="background-color: #ffffff; height: 100px; width: 1105px; margin: 35px auto 0; display: none">
+                    <div class="time-line-holder" id="firstStageTimeLine" style="display: inline-block;"></div>
+                </div>
+                <div class="stageTimeLine-Holder time-line-grandfather" style="background-color: #ffffff; height: 100px; width: 1105px; margin: 35px auto 0; display: none">
+                    <div class="time-line-holder" id="secondStageTimeLine" style="display: inline-block;"></div>
+                </div>
+                <div class="stageTimeLine-Holder time-line-grandfather" style="background-color: #ffffff; height: 100px; width: 1105px; margin: 35px auto 0; display: none">
+                    <div class="time-line-holder" id="thirdStageTimeLine" style="display: inline-block;"></div>
                 </div>
                 
                 <div class="tips-container"  align="center"  style="margin-top: 70px;">

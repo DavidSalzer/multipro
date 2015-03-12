@@ -458,6 +458,7 @@ line-height: 49px;
 .timelineHolder{
     position: relative;
     height: 70px;
+    z-index: 1;
 }
 .arrowHolderLeft{
     position: absolute;
