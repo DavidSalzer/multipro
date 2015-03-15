@@ -1,7 +1,7 @@
 function TestController() {
     var self = this;
 
-    var stage = stages[1];
+    var stage = stages[1];//initilizes as firstStage
     //holds questions for each visit according to stage in test
     var stagesHolder = {firstStage:[],
                          secondStage:[],

@@ -521,3 +521,7 @@ line-height: 49px;
    border-width: 2px;
    color:#6b6d6c;
 }
+.timeLine-label {
+    background-color: #F2F2F4;
+    padding-bottom: 5px;
+}

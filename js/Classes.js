@@ -31,7 +31,7 @@ function QuestionHandler(){
    //when visit a question it might be only to scroll on, so check time for considiring if called for visit, saves the times the question was focused on and,  and how much time was focused in question
    //the callback would return with astring of the time and would be given only after delaytime for show timer
     this.visit = function (callback) {
-                            tempAnswer = self.currentAnswer;
+                            //tempAnswer = self.currentAnswer;
                             self.timer.startTimer(function () {
                                 if (callback)//set to view to user     
                                     callback(self.timer.setToView())
@@ -64,8 +64,9 @@ function QuestionHandler(){
             clearTimeout(timeForAnswer);
             timeForAnswer = null;
         }
-        timeForAnswer = setTimeout(function () { self.givenAnswers[QuestionHandler.stage].push(answer) }, 60000); //after 60 seconds save the answer() if wont be changed would be added the leave of question
+        timeForAnswer = setTimeout(function () { self.givenAnswers[QuestionHandler.stage].push(answer) }, 180000); //after 3 minutes save the answer() if wont be changed would be added the leave of question
         tempAnswer = answer; //the answer for while on focus on question
+        console.log(self.getGivenAnswersAll());
     }
     this.eraseAnswer = function (answer) {
         if (this.currentAnswer == answer)
@@ -94,6 +95,7 @@ function QuestionHandler(){
     }
     //returns the tempAnswer which is the current answer
     this.nowAnswer = function () {
+        //checks if the temp is the actual now answer because it might still be in the time that the answer wasnt added yet as for entering or exiting question
         if (tempAnswer!=null&& tempAnswer != self.currentAnswer)
             return tempAnswer;
         else
