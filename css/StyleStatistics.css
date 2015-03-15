@@ -169,6 +169,10 @@ body{
      background-color: white;
     border-bottom: 2px groove #F2F2F4;
 }
+#report-chooser .drop-box-button-holder:hover{
+    background-color:#a3a0a0;
+    
+}
 #report-chooser button{
     color: #6c6d71;
     background: none;
@@ -178,5 +182,6 @@ body{
     width: inherit;
     text-align: right;
     font-family: "Open Sans Hebrew","Open Sans","Arial",sans-serif;
+    cursor:pointer;
     
 }

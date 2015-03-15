@@ -1,7 +1,7 @@
 function TestController() {
     var self = this;
 
-    var stage = stages[1];
+    var stage = stages[1];//initilizes as firstStage
     //holds questions for each visit according to stage in test
     var stagesHolder = {firstStage:[],
                          secondStage:[],
@@ -94,6 +94,11 @@ function TestController() {
             mousewheelControl: true,
             slidesPerView: 'auto',
             watchActiveIndex: true,
+            scrollbar:'.swiper-scrollbar',
+            scrollbarHide:false,
+            paginationBulletRender: function (index, className) {
+                                          return '<span class="' + className + '">' + (index + 1) + '</span>';
+                                      },
             onSlideChangeStart: function (swiper) {
                 //each time focused on question a timer is set to check if question is centered if less then given time so its not considered that the user is in the question, 
                 //so when a question is focused the given question statrs a timer and the prev question is stopped the timer (if relevent)
@@ -183,101 +188,35 @@ function TestController() {
            
         }
         else{//if double clicked to erase answer  
-             number.removeClass("answer");
-             self.questions[questionNum - 1].handler.eraseAnswer(val);
+             number.removeClass("answer");//display
+             self.questions[questionNum - 1].handler.eraseAnswer(val);//data
         }
-        /*//check if val was chosen as a not answer before if yes remove data
-        var checkNotAnswer = self.testResult[questionNum - 1].chooseNotAnswer.indexOf(val);
-        if (checkNotAnswer != -1) {
-        self.testResult[questionNum - 1].chooseNotAnswer.splice(checkNotAnswer, 1); //remove from not answeard array the value of the chosen twice not answer
-        self.questions[questionNum - 1].handler.eraseNonAnswer(val);
-        }
-        //check if question was answerd allready
-        if (!check_if_remove_answer($this)) {
-        self.testResult[questionNum - 1].chooseAnswer = val;
-        self.questions[questionNum - 1].handler.addAnswer(val); //save given answer even if changes
-
-        //if the correct answer
-        if (val == self.questions[questionNum - 1].correctAns) {
-        self.testResult[questionNum - 1].correct = true;
-        }
-        else {
-        self.testResult[questionNum - 1].correct = false;
-        }
-
-        //displaying
-        var allNumber = $this.parents(".answers-container").find(".number.answer").removeClass("answer");
-        if (!number.hasClass("answer")) {
-        number.removeClass("not-answer");
-        number.addClass("answer");
-        }
-        }*/
-
-    }
-    //user clicks on answer second time  ->remove answear from array and from view
-     function check_if_remove_answer($this){
-         var hasBeenAnswered = false;
-         var questionNum = $this.parents(".question-container").attr("data-question-num");
-         var number = $this.parent().find(".number");
-          var val = $this.parents(".answer-item").attr("data-answer-num");
-         //check if there is allready a chosen answear and if there is delete it
-         if (self.testResult[questionNum - 1].chooseAnswer && self.testResult[questionNum - 1].chooseAnswer==val ) {
-             hasBeenAnswered = true;
-                delete self.testResult[questionNum - 1].chooseAnswer;
-                delete self.testResult[questionNum - 1].correct;
-                //remove from display
-               if (number.hasClass("answer")) {
-                     number.removeClass("answer");
-               }//if
-        }//if
-        return hasBeenAnswered;
-    }//function check_if_remove_answear
+        
+     }
+    
 
     //set not user
     this.notAnswer = function () {
         var $this = $(this);
         var questionNum = $this.parents(".question-container").attr("data-question-num");
         var val = $this.parents(".answer-item").attr("data-answer-num");
-        var number = $(this).parent().find(".number");  
-        //if the chosen not answer was chosen as answer before f\so erase the data    
-        if (self.testResult[questionNum - 1].chooseAnswer)//check if at all is there a chosen answer
-            if(self.testResult[questionNum - 1].chooseAnswer==val)
-                delete self.testResult[questionNum - 1].chooseAnswer;
-        //if chosen not answear so add to array chosen not answear
-        if(!check_if_remove_notAnswear($this)){
-            self.testResult[questionNum - 1].chooseNotAnswer.push(val);
+        var number = $(this).parent().find(".number");
+        //if allready has class so double clicked so remove the non answer
+        if (number.hasClass("not-answer")) {
+            number.removeClass("not-answer");
+            self.questions[questionNum - 1].handler.eraseNonAnswer(val);
+        }
+        else {//if clicked and is not a double clicked so add as non answer and erase answer
+            //dispaly
+            number.removeClass("answer");
+            number.addClass("not-answer");
+            //data
             self.questions[questionNum - 1].handler.addNonAnswer(val);
-            //add to display
-            if (!number.hasClass("not-answer")) {
-                number.removeClass("answer");
-                number.addClass("not-answer");
-            }
-        } 
-      
+            self.questions[questionNum - 1].handler.eraseAnswer(val);
+        }
+
     }
-    //user clicks on not answer second time  ->remove not answear from array and from view
-     function check_if_remove_notAnswear($this){
-       
-         var hasBeenAnswered = false;
-         var questionNum = $this.parents(".question-container").attr("data-question-num");
-         var val = $this.parents(".answer-item").attr("data-answer-num");
-         var number = $this.parent().find(".number");
-         
-         //check if there is allready a chosen answear and if there is delete it
-         var chosenNotAnswer = self.testResult[questionNum - 1].chooseNotAnswer.indexOf(val);
-          
-         if (chosenNotAnswer != -1) {
-                 hasBeenAnswered = true;
-                 self.testResult[questionNum - 1].chooseNotAnswer.splice(chosenNotAnswer,1);//remove from not answeard array the value of the chosen twice not answer
-                 self.questions[questionNum - 1].handler.eraseNonAnswer(val);
-                 //remove from display
-                 if (number.hasClass("not-answer")) {
-                     number.removeClass("not-answer");
-                 } //if             
-        }//if
-         
-        return hasBeenAnswered;
-    }//function check_if_remove_notAnswear
+   
 
     //clear all sign
     this.clear = function () {
