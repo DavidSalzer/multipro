@@ -170,7 +170,7 @@ margin-left: 15px;
 }
 
 .swiper-slide .title {
-    font-style: italic;
+    /*font-style: italic;*/
     /*font-size: 25px;*/
     line-height: 20px;
 }
@@ -271,12 +271,12 @@ display: inline-block;*/
 .question-feature-item{
      background-color: #e7e8ea;
 display: inline-block;
-vertical-align: top;
+/*vertical-align: top;*/
 
      width: 90px;
 
      height: 30px;
-line-height: 30px;
+/*line-height: 30px;*/
      cursor: pointer;
 }
 
@@ -297,6 +297,9 @@ width: 190px;
 }
 .question-feature-text{
     display: inline-block;
+    height: inherit;
+    vertical-align: middle;
+    line-height: 30px;
 }
 
 .timer .question-feature-text {
@@ -320,8 +323,8 @@ vertical-align: top;
     width: 18px;
 
     height: 100%;
-display: inline-block;
-vertical-align: middle;
+    display: inline-block;
+    vertical-align: middle;
     background-repeat: no-repeat;
     background-position: center;
     margin: 0 5px;
@@ -382,11 +385,12 @@ display: block;
 
 .comment .icon{
      background-image: url("../img/comment.png"); 
+     background-size: 110%;
 }
 
 .timer .icon{
      background-image: url("../img/clock_small.png"); 
-     background-position: 0px 5px;
+     background-position: 0px 50%;
 }
 
 .pagination {
@@ -396,13 +400,24 @@ display: block;
     width: 100%;
     text-align: center;
     bottom: 5px;
+    height: 45px;
+  white-space: nowrap;
+    
 }
+/*.swiper-scroll{
+    position: absolute;
+    z-index: 20;
+    left: 0px;
+    width: 100%;
+    text-align: center;
+    bottom: 5px;
+}*/
 
 .swiper-pagination-switch {
     display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
     background: #aaa;
     margin-right: 8px;
     cursor: pointer;
@@ -414,6 +429,9 @@ display: block;
     opacity: 0;
     position: relative;
     top: -50px;
+    font-size: x-small;
+    line-height: 19px;
+    text-align: center; 
 }
 
 .swiper-visible-switch {
@@ -421,17 +439,21 @@ display: block;
     top: 0;
     background: #aaa;
 }
+.swiper-hidden-switch {
+    display: none;
+}
 
 .swiper-active-switch {
     background: #fff;
 }
 
+
 #finish {
     position: fixed;
-bottom: 20px;
-left: 20px;
-font-size: 20px;
-line-height: 49px;
+    bottom: 20px;
+    left: 20px;
+    font-size: 20px;
+    line-height: 49px;
     
 }
 
@@ -445,6 +467,7 @@ line-height: 49px;
 /******************** TimeLine **********************/
 .timeline {
     overflow-x: hidden;
+    overflow: hidden;
     white-space:nowrap;
     position: absolute;
     right: 25px;
@@ -457,27 +480,28 @@ line-height: 49px;
 }
 .timelineHolder{
     position: relative;
-    height: 70px;
+    height: 109px;
     z-index: 1;
 }
 .arrowHolderLeft{
     position: absolute;
     left: 5px;
     display: inline-block;
-    line-height:  69px;
+    line-height:  135px;
 }
 .arrowHolderRight{
     position: absolute;
     right: 5px;
     display: inline-block;
-     line-height:  69px;
+     line-height:  135px;
 }
 .timeLineQuestion{
     display: inline-block;
     width: 50px;
     margin-left: 2px;
     margin-right: 2px;
-    vertical-align: top;
+    vertical-align: bottom;
+    
 }
 .timeLineQuestion .top {
     height: 51px;     
@@ -524,4 +548,42 @@ line-height: 49px;
 .timeLine-label {
     background-color: #F2F2F4;
     padding-bottom: 5px;
+}
+.yellowTop {
+   font-family: Helvetica;
+        background: #f3eb1a;
+        display: inline-block;
+        height: 23px;
+          margin-left: 5px;
+          margin-bottom: 15px;
+        position: relative;
+        width: 36px;
+        z-index: 1;
+        text-align: center;
+        line-height: 23px;
+        font-size: 20px;
+        color: #999999;
+}
+.yellowTop:after {
+  border-top: 24px solid #f3eb1a;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  content: "";
+  height: 0;
+  left: 0;
+  position: absolute;
+  bottom: -24px;
+  width: 0;
+}
+.yellowTop.hasContent {
+visibility: visible;
+}
+.yellowTop.noContent {
+visibility: hidden;
+}
+.time-line-grandfather{
+    background-color: #ffffff; 
+    /*height: 175px; */
+    width: 1105px; 
+    margin: 35px auto 0;
 }

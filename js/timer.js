@@ -3,6 +3,7 @@ function TimerController() {
 
     this.generalTimer; //the test timer
     this.generalTimerRun;
+    this.generalTimerMinutes;
     this.generalTimerSeconds;
     this.timer = new Timer(); 
     
@@ -18,7 +19,8 @@ function TimerController() {
     }
 
     this.initGeneralTimer = function (minutes) {
-        self.generalTimerSeconds = minutes;
+        self.generalTimerMinutes = minutes;
+        self.generalTimerSeconds = minutes * 60;
         self.updateGeneralTimerDisplay();
         self.startGeneralTimer();
         self.timer.startTimer();
@@ -31,28 +33,23 @@ function TimerController() {
 
     }
 
-    this.startGeneralTimer = function () {      
+    this.startGeneralTimer = function () {
 
         self.generalTimerRun = setInterval(
            function () {
                self.generalTimerSeconds--;
                self.updateGeneralTimerDisplay();
-           }, 60000);
+           }, 1000);
 
     }
 
     this.updateGeneralTimerDisplay = function () {
-        //if (self.generalTimerSeconds != 0) {
-            var h = parseInt(self.generalTimerSeconds / 60);
-            var m = self.generalTimerSeconds - h * 60;
-            if (parseInt(h / 10) == 0) {
-                h = "0" + h;
-            }
-            if (parseInt(m / 10) == 0) {
-                m = "0" + m;
-            }
+        //if (self.generalTimerMinutes != 0) {
+        var minutes = (Math.floor(self.generalTimerSeconds / 60))%60;
+        var hours = (Math.floor(self.generalTimerSeconds / (60*60)));
+        var seconds = self.generalTimerSeconds%60;       
 
-            $("#general-timer").html(h + ":" + m + ":00");
+        $("#general-timer").html((hours < 10 ? "0" : "" ) + hours+ ":" +(minutes < 10 ? "0" : "" ) + minutes+ ":" + (seconds < 10 ? "0" : "" ) + seconds);
         //}
         //else {
         //    $("#general-timer").html("00:00:00");

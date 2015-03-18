@@ -8,14 +8,15 @@ function Question(qnumber,obj){
     this.handler = new QuestionHandler();//the handler of the behavior of the question
     this.handler.correctAnswer = obj.correctAns;//sets the correct answer at the handler
 }
-//A handler for the questions
+//A handler for the questions comment the question handler doesnt handle stages- it was a mistake but could still work as regular with taking all answers
 function QuestionHandler(){  
     var delayTimeBetweenQuestion=5;//number of seconds of delay that are for saying if the user is at the question or just passing by.
     var self = this;
     var timeForAnswer=null;//timeout for answer the timeout for time of delay for focus on question
     var tempAnswer=null;//initiliazes as null for no answer
     QuestionHandler.stage = stages[1];//initilize as firststage of test- static field not depended by object - to be able to be changed for all questions
-    
+    this.asterisk = false;
+    this.questionMark = false;
     this.currentAnswer = null;//the actual answer of the question initiliazed as null for no answer
     this.correctAnswer = 0;
     this.guess=0;//initilize as non guess
@@ -83,7 +84,7 @@ function QuestionHandler(){
         //if the given non answer was an answer so erase ita. 
         if (tempAnswer == answer)
             tempAnswer = null;
-        if (currentAnswer == answer)
+        if (self.currentAnswer && self.currentAnswer == answer)
             self.currentAnswer = null;
         if (self.givenNonAnswers.indexOf(answer) == -1)//only if not in array allready
             self.givenNonAnswers.push(answer);
@@ -138,6 +139,8 @@ function timeLineObject(question) {
     this.timeInQuestion = Timer.convertFromFormat(question.handler.timer.setToView());//the number of seconds in current time in question
     this.correct=question.handler.answerdCorrectly();
     this.answered = question.handler.nowAnswer() != null;
+    this.asterisk = question.handler.asterisk;
+    this.questionMark=question.handler.questionMark;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function Timer(){
@@ -246,7 +249,7 @@ function Report(givenQuestions,stagesHolder) {
     this.getDataForQuestions = function () {
         var arr = []
         for (var i = 0; i < questions.length; i++) {
-            arr.push({ time: questions[i].handler.getOverAllTimeInQuestion(), correct: questions[i].handler.answerdCorrectly(), answered: questions[i].handler.nowAnswer() != null, guess: questions[i].handler.guess == 1,changed:questions[i].handler.getGivenAnswersAll().length>1 });            
+            arr.push({ time: questions[i].handler.getOverAllTimeInQuestion(), correct: questions[i].handler.answerdCorrectly(), answered: questions[i].handler.nowAnswer() != null, guess: questions[i].handler.guess == 1,changed:questions[i].handler.getGivenAnswersAll().length>1,asterisk:questions[i].handler.asterisk,questionMark :questions[i].handler.questionMark  });            
         }
         return arr;
     }
@@ -262,10 +265,10 @@ function Report(givenQuestions,stagesHolder) {
                 for (var i = 0; i < numberOFChanges; i++) {
                     if (qarr.length - 1 >= i) {
                         var correct = (qarr[i] == questions[j].correctAns)
-                        arr[i].push({ qNumber: j + 1, correct: correct, changed: true });
+                        arr[i].push({ qNumber: j + 1, correct: correct, changed: true,asterisk:questions[j].handler.asterisk,questionMark :questions[j].handler.questionMark });
                     }
                     else
-                        arr[i].push({ qNumber: j + 1, changed: false });
+                        arr[i].push({ qNumber: j + 1, changed: false,asterisk:questions[j].handler.asterisk,questionMark :questions[j].handler.questionMark });
                 }
                 //for
             }
@@ -336,5 +339,48 @@ function Report(givenQuestions,stagesHolder) {
 function AnswerChart() {        
         this.correct;
         this.wrong;    
+}
+//for given elemnt knows how to print it.
+function Printer(elem){
+    var $toPrint = $(elem).clone();//clones the div to be printed
+    
+    var win = null;
+        
+   this.swiperToVisible=function(){
+       $toPrint.find('.swiper-slide').toggleClass('swiper-slide-active',true);
+   }
+   this.clearClass=function(removeClass){
+       $toPrint.find('.'+removeClass).remove();
+   }  
+   this.print=function()
+    {
+        Popup($toPrint.html());
+    }
+
+    function Popup(data) 
+    {
+        win = window.open();
+        self.focus();
+        win.document.open();
+        win.document.write('<'+'html'+'><'+'head'+'>');
+        win.document.write('<link rel="stylesheet" type="text/css" href="css/reset.css">'+
+                                                      '<link rel="stylesheet" href="css/idangerous.swiper.css">'+
+                                                      '<link rel="stylesheet" href="css/jquery-ui.css">'+
+                                                       '<link rel="stylesheet" href="css/timeTo.css">'+
+                                                      '<link rel="stylesheet" type="text/css" href="css/StyleMain.css">'+
+                                                   '<link rel="stylesheet" type="text/css" href="css/StyleStatistics.css">'+
+                                                      '<link rel="stylesheet" type="text/css" href="css/czChart.css">'+
+                                                      '<script src="js/jquery.js"></script>');
+        win.document.write('<'+'/'+'head'+'"><'+'body'+' dir="rtl"><div dir="rtl">');
+        win.document.write(data);
+        
+        win.document.write('</div><'+'/'+'body'+'><'+'/'+'html'+'>');      
+        //$(win.document).find('.swiper-slide').toggleClass('swiper-slide-active',true);
+        
+       // win.document.close();
+        win.print();
+        win.close();        
+        return true;
+    }
 }
 

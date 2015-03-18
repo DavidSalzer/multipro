@@ -55,7 +55,7 @@ function TestController() {
             html += '           <div class="answers-container">';
             //loop on answers
             for (j = 0; j < self.questions[i].answers.length; j++) {
-                html += '             <div class="answer-item" data-answer-num=' + (j + 1) + '><span class="not-answer-icon" title="פסילת תשובה"></span><span class="answer-icon" title="סימון תשובה"></span><span class="number">' + self.alphabets[j] + '.</span><span class="text">' + self.questions[i].answers[j] + '</span></div>';
+                html += '             <div class="answer-item" data-answer-num=' + (j + 1) + '><span class="not-answer-icon" title="פסילת תשובה"></span><!--<span class="answer-icon" title="סימון תשובה">--></span><span class="number" title="סימון תשובה">' + self.alphabets[j] + '.</span><span class="text">' + self.questions[i].answers[j] + '</span></div>';
             }
             html += '           </div>';
             html += '           <div class="question-feature">';
@@ -94,12 +94,36 @@ function TestController() {
             mousewheelControl: true,
             slidesPerView: 'auto',
             watchActiveIndex: true,
-            scrollbar:'.swiper-scrollbar',
-            scrollbarHide:false,
-            paginationBulletRender: function (index, className) {
-                                          return '<span class="' + className + '">' + (index + 1) + '</span>';
-                                      },
+            onSwiperCreated: function (mySwiper) {
+                //initialized slider for the first slide
+                setJumpBar()
+                var current = mySwiper.activeIndex;
+                $(mySwiper.slides[current]).find('.timer').hide();
+                if (fadetimer != null)
+                    clearTimeout(fadetimer);
+                fadetimer = setTimeout(function () {//timeout for showing timer
+                    $(mySwiper.slides[current]).find('.timer').show();
+                }, 60000);
+                self.questions[current].handler.visit(function (data) {
+                    $(mySwiper.slides[current]).find('.timer .question-feature-text').html(data);
+                }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
+                self.swiper = mySwiper;
+                //set jumper bar- that would have question numbers
+                $('.swiper-pagination-switch').each(function (key) {
+                    $(this).html(key + 1);
+                });
+                //updates the pagination to current paginatuon- fast jumper
+                mySwiper.updatePagination = function () {
+                    var current = mySwiper.activeIndex;
+                    var last = mySwiper.previousIndex;
+                    $($('.swiper-pagination-switch')[current]).addClass('swiper-active-switch');
+                    $($('.swiper-pagination-switch')[last]).removeClass('swiper-active-switch');
+
+                }; //stop the update of pagination but set that would set the activated slider
+
+            },
             onSlideChangeStart: function (swiper) {
+                //setJumpBar()
                 //each time focused on question a timer is set to check if question is centered if less then given time so its not considered that the user is in the question, 
                 //so when a question is focused the given question statrs a timer and the prev question is stopped the timer (if relevent)
                 var current = swiper.activeIndex;
@@ -122,19 +146,18 @@ function TestController() {
                 }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
             }
         });
-        //initialized slider for the first slide
 
-        var current = mySwiper.activeIndex;
-        $(mySwiper.slides[current]).find('.timer').hide();
-        if (fadetimer != null)
-            clearTimeout(fadetimer);
-        fadetimer = setTimeout(function () {//timeout for showing timer
-            $(mySwiper.slides[current]).find('.timer').show();
-        }, 60000);
-        self.questions[current].handler.visit(function (data) {
-            $(mySwiper.slides[current]).find('.timer .question-feature-text').html(data);
-        }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
-        self.swiper = mySwiper;
+
+
+    }
+    function setJumpBar() {
+        
+                    $elemArr = $('.swiper-pagination-switch');
+                    $elemArr.toggleClass('swiper-visible-switch', false);
+                    for (var i = 0; i < $elemArr.length; i++) {
+                        //$($elemArr[i]).toggleClass('swiper-hidden-switch', i % 5 !== 0);
+                        $($elemArr[i]).toggleClass('swiper-visible-switch');
+                    }
     }
     //check visited for this question
     this.visited = function () {
@@ -146,13 +169,8 @@ function TestController() {
         var $this = $(this);
         $this.toggleClass("selected");
         var questionNum = $this.parents(".question-container").attr("data-question-num");
-        var asterisk = self.testResult[questionNum - 1].asterisk = !self.testResult[questionNum - 1].asterisk;
-
-        //if selected
-        if (asterisk) {
-            $this.parents(".question-status").find(".circle.selected").removeClass("selected");
-            self.testResult[questionNum - 1].circle = 0;
-        }
+        self.questions[questionNum - 1].handler.asterisk = $this.hasClass("selected");
+        
     }
 
     //save a circle for this question
@@ -160,14 +178,8 @@ function TestController() {
         var $this = $(this);
         $this.toggleClass("selected");
         var questionNum = $this.parents(".question-container").attr("data-question-num");
-        var circle = self.testResult[questionNum - 1].circle = !self.testResult[questionNum - 1].circle;
-
-        //if selected
-        if (circle) {
-            $this.parents(".question-status").find(".asterisk.selected").removeClass("selected");
-            self.testResult[questionNum - 1].asterisk = 0;
-        }
-
+        self.questions[questionNum - 1].handler.questionMark = $this.hasClass("selected");
+        
     }
 
     //user click on answer -> push to question answers array the last answer
@@ -309,17 +321,18 @@ function TestController() {
         }
         return found;            
     }
-    var givenq=[{
-        "question": "מי מהבאים אינו מהווה התוויית נגד מוחלטת לשימוש בגלולה למניעת הריון ?",
-        "answers": ["אם שעברה אירוע מוחי בגיל 40", "אנמיה", "בת 37 מעשנת", "כאבים ברגל ללא בירור"],
-        "correctAns": 2,
-        "handler":new QuestionHandler()
-    },
+        {
+        var givenq = [{
+            "question": "מי מהבאים אינו מהווה התוויית נגד מוחלטת לשימוש בגלולה למניעת הריון ?",
+            "answers": ["אם שעברה אירוע מוחי בגיל 40", "אנמיה", "בת 37 מעשנת", "כאבים ברגל ללא בירור"],
+            "correctAns": 2,
+            "handler": new QuestionHandler()
+        },
     {
         "question": "הגורם היחיד שיכול להשפיע על הופעה מוקדמת יותר של גיל המעבר הינו:  ",
         "answers": ["גזע", "צבע עור", "עישון ", "מספר ההריונות בעבר"],
         "correctAns": 3,
-        "handler":new QuestionHandler()
+        "handler": new QuestionHandler()
     },
         {
             "question": "לאחר חריגת ביצית בשלה בביוץ:   ",
@@ -330,7 +343,7 @@ function TestController() {
 "רק אם ביצית תופרה על ידי זרע יופרש פרוגסטרון מהגופיף הצהוב"
         ],
             "correctAns": 1,
-            "handler":new QuestionHandler()
+            "handler": new QuestionHandler()
         },
 
         {
@@ -342,7 +355,7 @@ function TestController() {
 "התקן תוך רחמי מוריד את הסיכוי למחלה  "
         ],
             "correctAns": 3,
-            "handler":new QuestionHandler()
+            "handler": new QuestionHandler()
         },
 
         {
@@ -354,7 +367,7 @@ function TestController() {
 "אפשרי בנשים עד 12 חודשים לאחר הלידה המשתמשות בהנקה כאמצעי תזונה יחיד לתינוק"
         ],
             "correctAns": 3,
-            "handler":new QuestionHandler()
+            "handler": new QuestionHandler()
         },
 
         {
@@ -366,7 +379,7 @@ function TestController() {
 "כל התשובות נכונות"
         ],
             "correctAns": 4,
-            "handler":new QuestionHandler()
+            "handler": new QuestionHandler()
         },
 
         {
@@ -378,7 +391,7 @@ function TestController() {
 "בהתקן הורמונאלי על בסיס נחושת נוצרת דלקת מקומית",
         ],
             "correctAns": 4,
-            "handler":new QuestionHandler()
+            "handler": new QuestionHandler()
         },
 
         {
@@ -390,7 +403,7 @@ function TestController() {
 "ברקסטון-היקס מתחילים בשליש השני"
         ],
             "correctAns": 2,
-            "handler":new QuestionHandler()
+            "handler": new QuestionHandler()
         },
 
         {
@@ -403,7 +416,7 @@ function TestController() {
 
         ],
             "correctAns": 2,
-            "handler":new QuestionHandler()
+            "handler": new QuestionHandler()
         },
 
         {
@@ -415,7 +428,7 @@ function TestController() {
 "נפח בית החזה קטן"
         ],
             "correctAns": 4,
-            "handler":new QuestionHandler()
+            "handler": new QuestionHandler()
         },
 
         {
@@ -427,7 +440,7 @@ function TestController() {
 "העלייה בנפח הדם נגרמת בעיקר מעלייה במספר התאים האדומים"
         ],
             "correctAns": 3,
-            "handler":new QuestionHandler()
+            "handler": new QuestionHandler()
         },
 
         {
@@ -439,7 +452,7 @@ function TestController() {
 "ירידה בהפרשת גלוקוז וחלבון בשתן"
         ],
             "correctAns": 1,
-            "handler":new QuestionHandler()
+            "handler": new QuestionHandler()
         },
 
         {
@@ -451,7 +464,7 @@ function TestController() {
 "עלייה בניע הוושט ועלייה בהתרוקנות הקיבה"
         ],
             "correctAns": 4,
-            "handler":new QuestionHandler()
+            "handler": new QuestionHandler()
         },
 
         {
@@ -464,12 +477,13 @@ function TestController() {
 
         ],
             "correctAns": 2,
-            "handler":new QuestionHandler()
+            "handler": new QuestionHandler()
         }
 
     ]
-    for(var i=0;i<givenq.length;i++){
-         self.questions.push(new Question(i+1,givenq[i]));
+        for (var i = 0; i < givenq.length; i++) {
+            self.questions.push(new Question(i + 1, givenq[i]));
+        }
     }
 
 

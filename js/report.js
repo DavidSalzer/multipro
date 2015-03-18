@@ -48,21 +48,21 @@ function ReportController() {
         for (var stage in stagestimelineData) {
             for (var i = 0; i < stagestimelineData[stage].length; i++) {
                 if (stagestimelineData[stage][i].answered) {
-                    stagesTimeLine[stage].addToTimeLine(stagestimelineData[stage][i].questionNum, stagestimelineData[stage][i].timeInQuestion, stagestimelineData[stage][i].correct);
+                    stagesTimeLine[stage].addToTimeLine(stagestimelineData[stage][i].questionNum, stagestimelineData[stage][i].timeInQuestion, stagestimelineData[stage][i].correct,stagestimelineData[stage][i].asterisk,stagestimelineData[stage][i].questionMark);
                 }
                 else {
 
-                    stagesTimeLine[stage].addToTimeLineNotAnswered(stagestimelineData[stage][i].questionNum, stagestimelineData[stage][i].timeInQuestion);
+                    stagesTimeLine[stage].addToTimeLineNotAnswered(stagestimelineData[stage][i].questionNum, stagestimelineData[stage][i].timeInQuestion,stagestimelineData[stage][i].asterisk,stagestimelineData[stage][i].questionMark);
                 }
             }
         }
         for (var i = 0; i < timelineData.length; i++) {
             if (timelineData[i].answered)
-                this.timeLine.addToTimeLine(i + 1, timelineData[i].time, timelineData[i].correct);
+                this.timeLine.addToTimeLine(i + 1, timelineData[i].time, timelineData[i].correct,timelineData[i].asterisk,timelineData[i].questionMark);
             else
-                this.timeLine.addToTimeLineNotAnswered(i + 1, timelineData[i].time);
+                this.timeLine.addToTimeLineNotAnswered(i + 1, timelineData[i].time,timelineData[i].asterisk,timelineData[i].questionMark);
             if (timelineData[i].answered && timelineData[i].guess) {
-                guesTimeLine.addToTimeLine(i + 1, 1, timelineData[i].correct);
+                guesTimeLine.addToTimeLine(i + 1, 1, timelineData[i].correct,timelineData[i].asterisk,timelineData[i].questionMark);
             }
         }
         createChangedTimeLine(report);
@@ -72,11 +72,12 @@ function ReportController() {
         guesTimeLine.addToView();
         this.timeLine.addToView();
     }
+    //adds time lines for changed questions number of timelines depends on the number of changes done the number is according to maximum changes in a specific question in all questions
     function createChangedTimeLine(report){
-        var html = '<div class="change-TimeLine-Holder time-line-grandfather" style="background-color: #ffffff; height: 100px; width: 1105px; margin: 35px auto 0;">'
+        var html = '<div class="change-TimeLine-Holder time-line-grandfather">'
        '</div>'
        var a = report.getDataForChangedQuestions();
-       console.log(a);                                                                            
+                                                                                 
        var timeLine = [];
        for (var i = 0; i < a.length; i++) {
            elem = $(html);
@@ -87,11 +88,12 @@ function ReportController() {
        for (var i = 0; i < a.length; i++) {
            for (var j = 0; j < a[i].length; j++) {
                if (a[i][j].changed)
-                   timeLine[i].addToTimeLine(a[i][j].qNumber, 1, a[i][j].correct);
+                   timeLine[i].addToTimeLine(a[i][j].qNumber, 1, a[i][j].correct,a[i][j].asterisk,a[i][j].questionMark);
                else
-                   timeLine[i].addToTimeLineNotChanged(a[i][j].qNumber);
+                   timeLine[i].addToTimeLineNotChanged(a[i][j].qNumber,a[i][j].asterisk,a[i][j].questionMark);
            }
        }
+       //to set the scrolling to be together we need to cinnect the scrollers
        for (var i = 0; i < a.length; i++) {
           timeLine[i].addToView();
            timeLine[i].conncetScrollers('changedTimeLineParent');
@@ -346,7 +348,7 @@ function ReportController() {
                var scroller_height = copied_elem.height();
                var scroller_width = copied_elem.find('#' + $elem.parent().attr('id') + ' .timeline').width();
                copied_elem.remove();
-
+               console.log(scroller_width);
                if ((position + scroller_width) < getMostRight())
                    $elem.parent().find('.arrowHolderRight').show();
                else
@@ -367,7 +369,7 @@ function ReportController() {
            var attachToElem; //if wanted the name of the element that the time line would be attached to
            var overAllTime = overAllTime; //the over all time of the time line that according to it the pieces of the questions would be set
            var averageTimePerQuestion = (overAllTime / numOfQuestions); //the average time that is given for each question would be used to calculate the width of elements
-           var width = 100; //thw shown width of the time line that according to it the proportion of the timeline elemnts would be- its not dynmic according to change of view
+           var width = 70; //thw shown width of the time line that according to it the proportion of the timeline elemnts would be- its not dynmic according to change of view
            var timelineList = ''; //the holder of the list of the elemnts to be inserted to the timeline
            var scroll; //scroller controll for the time line would be created at creation of timeline
            //check if wanted to attach the time line to specific element, if not the to be attahed to element would just be body
@@ -385,14 +387,14 @@ function ReportController() {
                });
            }
            //connects the events of scrolling of two time lines together
-           this.conncetScrollers = function (parentToAll) {             
-              //$(document).off('click', "#" + name + " .arrowHolderLeft");
-              //$(document).off('click', "#" + name + " .arrowHolderRight");
-              $(document).off('click', "#" +name + " .arrowHolderLeft");
-              $(document).off('click', "#" + name + " .arrowHolderRight");
-              $(document).on('click', "#" + parentToAll + " .arrowHolderLeft", function () {
+           this.conncetScrollers = function (parentToAll) {
+               //$(document).off('click', "#" + name + " .arrowHolderLeft");
+               //$(document).off('click', "#" + name + " .arrowHolderRight");
+               $(document).off('click', "#" + name + " .arrowHolderLeft");
+               $(document).off('click', "#" + name + " .arrowHolderRight");
+               $(document).on('click', "#" + parentToAll + " .arrowHolderLeft", function () {
                    //scroll.scrollLeft(); 
-                   scroll.scrollLeft();//attach scroll
+                   scroll.scrollLeft(); //attach scroll
                });
                $(document).on('click', "#" + parentToAll + " .arrowHolderRight", function () {
                    //scroll.scrollRight(); 
@@ -415,15 +417,18 @@ function ReportController() {
            }
            //an adder of elemnts to the time line - doesnt actually add to view, after adding elemnts still needed to activate setToView()
            //adds a reular elemnts depens on time and if correct or not correct
-           this.addToTimeLine = function (questionNum, time, correct) {
-
+           this.addToTimeLine = function (questionNum, time, correct, asterisk, questionMark) {
+               var _asterisk = (asterisk) ? "<img src='img/baloonasterisk.png'></img>" : "";//add asterisk as img if true
+               var _questionMArk = (questionMark) ? "?" : "";
+               var hidden = (asterisk || questionMark) ? "hasContent" : "noContent"; //variable that holds the class of the yellow part if to be shown or hidden - if no content so hide   
                var correctClass = (correct == true) ? "correct" : "notCorrect";
                var elemWidth = (time / averageTimePerQuestion) * (width);
                //check that wont be to small
-               if (elemWidth < 50) {
-                   elemWidth = 50;
+               if (elemWidth < 45) {
+                   elemWidth = 45;
                }
                var elem = '<div class="timeLineQuestion answered ' + correctClass + '" id="questionNum' + questionNum + '" style="width:' + elemWidth + 'px">' +
+                                            '<div class="yellowTop ' + hidden + '">' + _questionMArk + '' + _asterisk + '</div>' +
                                             '<div class="top">' + questionNum + '</div>' +
                                              '<div class="bottom"></div>' +
                                         '</div>';
@@ -433,14 +438,17 @@ function ReportController() {
 
            }
            //as above but an a elemnt of question that was not answered
-           this.addToTimeLineNotAnswered = function (questionNum, time) {
-
+           this.addToTimeLineNotAnswered = function (questionNum, time, asterisk, questionMark) {
+                var _asterisk = (asterisk) ? "<img src='img/baloonasterisk.png'></img>" : "";//add asterisk as img
+               var _questionMArk = (questionMark) ? "?" : "";
+               var hidden = (asterisk || questionMark) ? "hasContent" : "noContent"; //variable that holds the class of the yellow part if to be shown or hidden - if no content so hide   
                var elemWidth = (time / averageTimePerQuestion) * (width);
                //check that wont be to small
-               if (elemWidth < 50) {
-                   elemWidth = 50;
+               if (elemWidth < 45) {
+                   elemWidth = 45;
                }
                var elem = '<div class="timeLineQuestion notAnswered" id="questionNum' + questionNum + '" style="width:' + elemWidth + 'px">' +
+                                            '<div class="yellowTop ' + hidden + '">' + _questionMArk + '' + _asterisk + '</div>' +
                                             '<div class="top">' + questionNum + '</div>' +
                                              '<div class="bottom"></div>' +
                                         '</div>';
