@@ -1,4 +1,5 @@
- var domain = "http://multipro.local/";
+ //var domain = "http://multipro.local/";
+ var domain = "http://multipro.co.il.tigris.nethost.co.il/";
  
  function ErrorHandler(etype) {
      var errorTexts = ["תקלה בחיבור לשרת"];
@@ -8,6 +9,7 @@
      this.errorType = etype;
      this.errorText = errorTexts[this.errorType];
  }
+
  //calls from domain all the years of tests
  function getTestYears(callback) {
      $.ajax({
@@ -64,6 +66,21 @@
              }
              if (callback)
                  callback(dataArr);
+         },
+         error: function (e) {
+             console.log(e.message);
+             callback(new ErrorHandler(0));//sends an error handler
+         }
+     });
+ }
+ function getTestNameById(testId,callback) {
+     $.ajax({
+         type: 'GET',
+         url: domain + "?json=multi.getTestNameForId&id="+testId+"&dev=1",
+         dataType: 'json',
+         success: function (data) {                        
+             if (callback)
+                 callback(data);
          },
          error: function (e) {
              console.log(e.message);

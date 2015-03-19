@@ -39,6 +39,11 @@ function TestController() {
 
     //init the test page with the questions
     this.initTest = function (testId) {
+        //call from server the name of the given test
+        getTestNameById(testId, function (data) {
+            if (!data.error)//check that wasnt an error on call
+                setTestTitle(data);
+        });
         //call from server questions for given test
         getQuestionsForTest(testId, function (data) {
             if (!data.error) {
@@ -47,10 +52,14 @@ function TestController() {
             } //if data doesnt have error
         });
     }
+    function setTestTitle(name) {
+        $('#test-title').text('מבחן ב'+name)
+    }
     function oninitTest(data) {
         for (var i = 0; i < data.length; i++) {
                     self.questions.push(new Question(i + 1, data[i]));
                 }
+                timerController.initGeneralTimer(data.length*1.5);//set timer for minute and half for each question
                 html = '';
                 //loop on answers
                 for (i = 0; i < self.questions.length; i++) {
