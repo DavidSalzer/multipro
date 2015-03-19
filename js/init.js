@@ -6,4 +6,4 @@
     timerController.initGeneralTimer(78);
     var testController = new TestController();
     testController.attachEvents();
-    testController.initTest();
+    testController.initTest(13);

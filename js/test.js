@@ -38,117 +38,128 @@ function TestController() {
     }
 
     //init the test page with the questions
-    this.initTest = function (testArr) {
-        html = '';
-        //loop on answers
-        for (i = 0; i < self.questions.length; i++) {
-            html += '<div class="swiper-slide">';
-            html += '     <div class="question-container" data-question-num=' + (i + 1) + '>';
-            html += '         <div class="title">';
-            html += '               <div class="question-status">';
-            html += '                   <div class="asterisk settings-item" title="תזכורת לחשוב על זה שוב"></div>';
-            html += '                   <div class="circle settings-item" title="תזכורת לפתור אחר כך"></div>';
-            html += '               </div>';
-            html += '               <span class="question-title">';
-            html += '                   <span class="number">' + (i + 1) + '.</span><span class="text">' + self.questions[i].question + '</span></div>';
-            html += '               </span>';
-            html += '           <div class="answers-container">';
-            //loop on answers
-            for (j = 0; j < self.questions[i].answers.length; j++) {
-                html += '             <div class="answer-item" data-answer-num=' + (j + 1) + '><span class="not-answer-icon" title="פסילת תשובה"></span><!--<span class="answer-icon" title="סימון תשובה">--></span><span class="number" title="סימון תשובה">' + self.alphabets[j] + '.</span><span class="text">' + self.questions[i].answers[j] + '</span></div>';
-            }
-            html += '           </div>';
-            html += '           <div class="question-feature">';
-            html += '               <div class="guess question-feature-item"><div class="icon"></div><div class="question-feature-text">ניחוש</div></div>';
-            html += '               <div class="clear question-feature-item"><div class="icon"></div><div class="question-feature-text">נקה</div></div>';
-            html += '               <div class="comment question-feature-item"><div class="icon"></div>    <div class="question-feature-text"><input type="text" placeholder="כתוב הערה"></div> </div>';
-
-            html += '              <div class="timer question-feature-item"><div class="icon"></div><div class="question-feature-text">12:00</div></div>';
-            html += '           </div>';
-            html += '     </div>';
-            html += '</div>';
-
-            /////////////////////////////////////////////
-            self.testResult[i] = {
-                circle: 0,
-                asterisk: 0,
-                visited: 0,
-                guess: 0,
-                chooseNotAnswer: []
-            };
-
-        }
-
-
-        $(".swiper-wrapper").html(html);
-        $(document).tooltip();
-        var fadetimer = null; //timeout for showing timer for each question
-        //init the swiper
-        var mySwiper = new Swiper('.swiper-container', {
-            pagination: '.pagination',
-            mode: 'vertical',
-            //createPagination:false,
-            paginationClickable: true,
-            centeredSlides: true,
-            mousewheelControlForceToAxis: true,
-            mousewheelControl: true,
-            slidesPerView: 'auto',
-            watchActiveIndex: true,
-            onSwiperCreated: function (mySwiper) {
-                //initialized slider for the first slide
-                setJumpBar()
-                var current = mySwiper.activeIndex;
-                $(mySwiper.slides[current]).find('.timer').hide();
-                if (fadetimer != null)
-                    clearTimeout(fadetimer);
-                fadetimer = setTimeout(function () {//timeout for showing timer
-                    $(mySwiper.slides[current]).find('.timer').show();
-                }, 60000);
-                self.questions[current].handler.visit(function (data) {
-                    $(mySwiper.slides[current]).find('.timer .question-feature-text').html(data);
-                }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
-                self.swiper = mySwiper;
-                //set jumper bar- that would have question numbers
-                $('.swiper-pagination-switch').each(function (key) {
-                    $(this).html(key + 1);
-                });
-                //updates the pagination to current paginatuon- fast jumper
-                mySwiper.updatePagination = function () {
-                    var current = mySwiper.activeIndex;
-                    var last = mySwiper.previousIndex;
-                    $($('.swiper-pagination-switch')[current]).addClass('swiper-active-switch');
-                    $($('.swiper-pagination-switch')[last]).removeClass('swiper-active-switch');
-
-                }; //stop the update of pagination but set that would set the activated slider
-
-            },
-            onSlideChangeStart: function (swiper) {
-                //setJumpBar()
-                //each time focused on question a timer is set to check if question is centered if less then given time so its not considered that the user is in the question, 
-                //so when a question is focused the given question statrs a timer and the prev question is stopped the timer (if relevent)
-                var current = swiper.activeIndex;
-                var last = swiper.previousIndex;
-
-                $(swiper.slides[current]).find('.timer').hide();
-                //check if timeout was set at all
-                if (fadetimer != null)
-                    clearTimeout(fadetimer);
-                fadetimer = setTimeout(function () {//timeout for showing timer
-                    $(swiper.slides[current]).find('.timer').show();
-                }, 60000);
-                self.questions[last].handler.leave(function () {
-                    //check if got to last question if yes and still in stage 1 so move to stage 2
-                    checkStage(last);
-                    stagesHolder[stage].push(new timeLineObject(self.questions[last]));
-                }); //stops the previous question and check if it was considedrd a visit to add to stage holder
-                self.questions[current].handler.visit(function (data) {
-                    $(swiper.slides[current]).find('.timer .question-feature-text').html(data);
-                }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
-            }
+    this.initTest = function (testId) {
+        //call from server questions for given test
+        getQuestionsForTest(testId, function (data) {
+            if (!data.error) {
+                console.log(data)
+                oninitTest(data);
+            } //if data doesnt have error
         });
+    }
+    function oninitTest(data) {
+        for (var i = 0; i < data.length; i++) {
+                    self.questions.push(new Question(i + 1, data[i]));
+                }
+                html = '';
+                //loop on answers
+                for (i = 0; i < self.questions.length; i++) {
+                    html += '<div class="swiper-slide">';
+                    html += '     <div class="question-container" data-question-num=' + (i + 1) + '>';
+                    html += '         <div class="title">';
+                    html += '               <div class="question-status">';
+                    html += '                   <div class="asterisk settings-item" title="תזכורת לחשוב על זה שוב"></div>';
+                    html += '                   <div class="circle settings-item" title="תזכורת לפתור אחר כך"></div>';
+                    html += '               </div>';
+                    html += '               <span class="question-title">';
+                    html += '                   <span class="number">' + (i + 1) + '.</span><span class="text">' + self.questions[i].question + '</span></div>';
+                    html += '               </span>';
+                    html += '           <div class="answers-container">';
+                    //loop on answers
+                    for (j = 0; j < self.questions[i].answers.length; j++) {
+                        html += '             <div class="answer-item" data-answer-num=' + (j + 1) + '><span class="not-answer-icon" title="פסילת תשובה"></span><!--<span class="answer-icon" title="סימון תשובה">--></span><span class="number" title="סימון תשובה">' + self.alphabets[j] + '.</span><span class="text">' + self.questions[i].answers[j] + '</span></div>';
+                    }
+                    html += '           </div>';
+                    html += '           <div class="question-feature">';
+                    html += '               <div class="guess question-feature-item"><div class="icon"></div><div class="question-feature-text">ניחוש</div></div>';
+                    html += '               <div class="clear question-feature-item"><div class="icon"></div><div class="question-feature-text">נקה</div></div>';
+                    html += '               <div class="comment question-feature-item"><div class="icon"></div>    <div class="question-feature-text"><input type="text" placeholder="כתוב הערה"></div> </div>';
+
+                    html += '              <div class="timer question-feature-item"><div class="icon"></div><div class="question-feature-text">12:00</div></div>';
+                    html += '           </div>';
+                    html += '     </div>';
+                    html += '</div>';
 
 
+                    /////////////////////////////////////////////
+                    self.testResult[i] = {
+                        circle: 0,
+                        asterisk: 0,
+                        visited: 0,
+                        guess: 0,
+                        chooseNotAnswer: []
+                    };
 
+                }
+
+
+                //set Swiper
+                $(".swiper-wrapper").html(html);
+                $(document).tooltip();
+                var fadetimer = null; //timeout for showing timer for each question
+                //init the swiper
+                var mySwiper = new Swiper('.swiper-container', {
+                    pagination: '.pagination',
+                    mode: 'vertical',
+                    //createPagination:false,
+                    paginationClickable: true,
+                    centeredSlides: true,
+                    mousewheelControlForceToAxis: true,
+                    mousewheelControl: true,
+                    slidesPerView: 'auto',
+                    watchActiveIndex: true,
+                    onSwiperCreated: function (mySwiper) {
+                        //initialized slider for the first slide
+                        setJumpBar()
+                        var current = mySwiper.activeIndex;
+                        $(mySwiper.slides[current]).find('.timer').hide();
+                        if (fadetimer != null)
+                            clearTimeout(fadetimer);
+                        fadetimer = setTimeout(function () {//timeout for showing timer
+                            $(mySwiper.slides[current]).find('.timer').show();
+                        }, 60000);
+                        self.questions[current].handler.visit(function (data) {
+                            $(mySwiper.slides[current]).find('.timer .question-feature-text').html(data);
+                        }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
+                        self.swiper = mySwiper;
+                        //set jumper bar- that would have question numbers
+                        $('.swiper-pagination-switch').each(function (key) {
+                            $(this).html(key + 1);
+                        });
+                        //updates the pagination to current paginatuon- fast jumper
+                        mySwiper.updatePagination = function () {
+                            var current = mySwiper.activeIndex;
+                            var last = mySwiper.previousIndex;
+                            $($('.swiper-pagination-switch')[current]).addClass('swiper-active-switch');
+                            $($('.swiper-pagination-switch')[last]).removeClass('swiper-active-switch');
+
+                        }; //stop the update of pagination but set that would set the activated slider
+
+                    },
+                    onSlideChangeStart: function (swiper) {
+                        //setJumpBar()
+                        //each time focused on question a timer is set to check if question is centered if less then given time so its not considered that the user is in the question, 
+                        //so when a question is focused the given question statrs a timer and the prev question is stopped the timer (if relevent)
+                        var current = swiper.activeIndex;
+                        var last = swiper.previousIndex;
+
+                        $(swiper.slides[current]).find('.timer').hide();
+                        //check if timeout was set at all
+                        if (fadetimer != null)
+                            clearTimeout(fadetimer);
+                        fadetimer = setTimeout(function () {//timeout for showing timer
+                            $(swiper.slides[current]).find('.timer').show();
+                        }, 60000);
+                        self.questions[last].handler.leave(function () {
+                            //check if got to last question if yes and still in stage 1 so move to stage 2
+                            checkStage(last);
+                            stagesHolder[stage].push(new timeLineObject(self.questions[last]));
+                        }); //stops the previous question and check if it was considedrd a visit to add to stage holder
+                        self.questions[current].handler.visit(function (data) {
+                            $(swiper.slides[current]).find('.timer .question-feature-text').html(data);
+                        }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
+                    }
+                });
     }
     function setJumpBar() {
         
@@ -321,7 +332,7 @@ function TestController() {
         }
         return found;            
     }
-        {
+     /*   {
         var givenq = [{
             "question": "מי מהבאים אינו מהווה התוויית נגד מוחלטת לשימוש בגלולה למניעת הריון ?",
             "answers": ["אם שעברה אירוע מוחי בגיל 40", "אנמיה", "בת 37 מעשנת", "כאבים ברגל ללא בירור"],
@@ -484,7 +495,7 @@ function TestController() {
         for (var i = 0; i < givenq.length; i++) {
             self.questions.push(new Question(i + 1, givenq[i]));
         }
-    }
+    }*/
 
 
 }

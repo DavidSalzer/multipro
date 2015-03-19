@@ -1,4 +1,4 @@
-var domain = "http://multipro.co.il.tigris.nethost.co.il/";
+//var domain = "http://multipro.co.il.tigris.nethost.co.il/";
 function request(url, callback) {
 
     $.ajax({

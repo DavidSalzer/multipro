@@ -340,7 +340,7 @@ function AnswerChart() {
         this.correct;
         this.wrong;    
 }
-//for given elemnt knows how to print it.
+//for given elemnt knows how to print it with possibblities for cahnges.
 function Printer(elem){
     var $toPrint = $(elem).clone();//clones the div to be printed
     
@@ -375,7 +375,6 @@ function Printer(elem){
         win.document.write(data);
         
         win.document.write('</div><'+'/'+'body'+'><'+'/'+'html'+'>');      
-        //$(win.document).find('.swiper-slide').toggleClass('swiper-slide-active',true);
         
        // win.document.close();
         win.print();
