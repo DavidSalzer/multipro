@@ -397,12 +397,15 @@ display: block;
 .pagination {
     position: fixed;
     z-index: 20;
-    right:  300px;
-    left: 300px;
+    right:  0;
+    left: 0;
+    margin: auto;
     text-align: center;
     bottom: 20px;
+    width: 600px;
     height: 45px;
     overflow-x: auto;
+    overflow-y: hidden;
   white-space: nowrap;
     
 }
