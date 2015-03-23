@@ -1,5 +1,18 @@
 function ReportController() {
     var self = this;
+    var numberOfVisits = 0;
+
+    this.visit = function () { 
+        if (numberOfVisits == 0)
+            self.attachEvents();
+        numberOfVisits++;
+         $("#reportPage").show();
+         $("#reportPage .stats-title").text($("#reportPage .stats-title").text()+$('#test-title').text());
+    }
+    this.leave = function () {         
+         $("#reportPage").hide();
+    }
+
     //var handler = new Report();
     this.data_pie;
     this.chartResults= [100, 117, 66, 103, 127, 98, 100, 73, 60]; //temp;
@@ -34,7 +47,7 @@ function ReportController() {
         this.nonCorrectAnswers = report.wrongAnswers;
         this.numberOfQuestions = report.numOfQuestions();
         //run the timeline controller
-        this.timeLine = new TimeLineView('mainTimeLine', timerController.getOverAllTime(), report.getNumOfVisitedQuestions(), '#questionsTime');
+        this.timeLine = new TimeLineView('mainTimeLine', main.timerController.getOverAllTime(), report.getNumOfVisitedQuestions(), '#questionsTime');
         var guesTimeLine = new TimeLineView('guessTimeLinea', 1, 1, '#guessTimeLine');
         
         var stagesTimeLine = {};
@@ -262,7 +275,7 @@ function ReportController() {
             else   
                  $(this).parent().parent().find('.drop-box-inside').hide();
        }
-    self.attachEvents();
+    
 }
  //for a given time line elemnts controlls the scrolling of the time line
 //for a given time line elemnts controlls the scrolling of the time line

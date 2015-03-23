@@ -9,7 +9,8 @@
         <link rel="stylesheet" href="css/timeTo.css">
         <link rel="stylesheet" type="text/css" href="css/StyleMain.css">
         <link rel="stylesheet" type="text/css" href="css/StyleStatistics.css">
-        <link rel="stylesheet" type="text/css" href="css/czChart.css">       
+        <link rel="stylesheet" type="text/css" href="css/czChart.css"> 
+        <link rel="stylesheet" type="text/css" href="css/chooseTestPage.css">      
     </head>
     <body>
         <header>
@@ -22,9 +23,9 @@
                 <div id="user-image"></div>
                 <div id="user-name">ישראל ישראלי</div>
             </div>
-            <div id="test-title">מבחן גמר ברפואה</div>
+            <div id="test-title" style="display: none;">מבחן גמר ברפואה</div>
             
-            <div id="general-timer"></div>
+            <div id="general-timer" style="display: none;"></div>
 
             <div id="logo">
                 <div class="icon"></div>
@@ -63,7 +64,7 @@
                 <input type="button" id="choose-test-btn" value="תרגל"></input>
             </div>
         </div>
-        <div id="test-container">
+        <div id="test-container" style="display: none;" >
             <div id="test-settings">
                 <div id="marker"></div>
             </div>
@@ -124,7 +125,7 @@
                 </div>
             </div>
             <div class="pagination"></div>
-            <div class="swiper-scroll"></div>
+            
 
             <div id="finish"><div class="question-feature-text">סיום</div><div class="icon"></div></div>
         </div>
@@ -136,7 +137,7 @@
                 <div id="userName"style="display: inline-block; float: right; padding-top: 30px; color: #ffffff; font-size: 20px; padding-right: 10px;"> </div>
             </div>-->
             <div class="container">
-                <div class="stats-title">סיכום נתוני נבחן: מבחן גמר רפואה</div>
+                <div class="stats-title">סיכום נתוני נבחן:</div>
                 <div class="pie-chart-text"> 
                     <img src="./img/win.png" style="display: inline-block;">
                     <div style="display: inline-block;">  ציון מבחן </div>
@@ -187,13 +188,14 @@
 
         <script src="js/jquery.js"></script>
         <script src="js/idangerous.swiper.js"></script>
-         <script src="js/jquery.timeTo.min.js"></script>
+        <script src="js/jquery.timeTo.min.js"></script>
         <script type="text/javascript" src="js/excanvas.js"></script>
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>              
-       <script src="js/jquery-ui.min.js"></script>
+        <script src="js/jquery-ui.min.js"></script>
         
         <script src="model/ajaxHandler.js"></script>
-         <script src="js/Classes.js"></script>
+        <script src="js/Classes.js"></script>
+        <script src="js/chooseTestController.js"></script>
         <script src="js/script.js"></script>
         <script src="js/report.js"></script>
         <script src="js/timer.js"></script>

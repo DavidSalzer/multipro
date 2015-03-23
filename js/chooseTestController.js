@@ -1,22 +1,19 @@
 
-function Test(_id,_title,_numOfQuestions) {
-    var numberOfQuestions = _numOfQuestions;
-    
-    this._id = 0;//an id that represents the test mainly for the data base
-    this.title = _title;
-    this.getNumOfQuestions = function () {
-        return numberOfQuestions;    
-    }
-}
- 
- function testChooserController(_tests) {
+ function TestChooserController(_tests) {
     var numberOfVisits=0;
     var self=this;
     var tests = _tests;
+    
     //sets all events of the page choosetestpage
     this.attachEvents = function () {
         $(document).on('click', '#choose-test-btn', function () {
-
+            //check that there is a test chosen
+            var choice = ($('#year-choose-dropdown :selected').attr('value')); //the number of test in array
+            var choiseNumOfQuestions = $('#number-for-excercise .number-content').text();
+            console.log(tests[choice]);
+            main.testController.initTest(tests[choice].id,choiseNumOfQuestions);
+            self.leave();
+            main.testController.visit();
         });
         $(document).on('click', '.plus', function () {//add number of questions to excersise
             var number = parseInt($('.number-content').text());
@@ -35,13 +32,14 @@ function Test(_id,_title,_numOfQuestions) {
         });
         $(document).on('change', '#year-choose-dropdown', function (event) {
             self.updateChoiceOfTest();
-
         })
     }
     this.updateChoiceOfTest = function () {
         var choice = ($('#year-choose-dropdown :selected').attr('value')); //the number of test in array
+        $('#test-title').text(tests[choice].title);
+        $('#test-title').text('מבחן ב'+tests[choice].title)
         self.setNumberOfQuestionsOfTest(tests[choice].getNumOfQuestions());
-        self.setNumberOfQuestions(20);//default
+        self.setNumberOfQuestions(20); //default
     }
     //adds the tests to the dropdown
     this.setTests = function () {
@@ -79,6 +77,7 @@ function Test(_id,_title,_numOfQuestions) {
     }
 
     this.visit = function () {
+         $('#choose-test-container').show();
         if (numberOfVisits == 0)//only first visit sets all events
             self.attachEvents();
         self.setTests();
@@ -87,10 +86,12 @@ function Test(_id,_title,_numOfQuestions) {
         numberOfVisits++;
         self.setTimer(); //set timer according to chosen test(the default one)
     }
+    this.leave = function () {
+        $('#choose-test-container').hide();    
+    }
     //private function to get the max of question for given test
     function getMaxNumberOfQuestions(){
         return parseInt($("#number-Of-Questions .content").text());
-
     }    
 }
 

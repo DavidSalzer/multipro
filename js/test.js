@@ -1,6 +1,21 @@
 function TestController() {
     var self = this;
+    var numberOFVisits = 0;
 
+
+    this.visit = function (testId) {
+        if (testId)
+            self.initTest(testId);
+        $("#test-container").show();
+        $("#test-title").show();
+        $("#general-timer").show();
+        if (numberOFVisits == 0)
+            self.attachEvents();
+        numberOFVisits++;
+    }
+    this.leave = function () {
+         $("#test-container").hide();
+    }
     var stage = stages[1];//initilizes as firstStage
     //holds questions for each visit according to stage in test
     var stagesHolder = {firstStage:[],
@@ -38,28 +53,31 @@ function TestController() {
     }
 
     //init the test page with the questions
-    this.initTest = function (testId) {
-        //call from server the name of the given test
-        ajax.getTestNameById(testId, function (data) {
-            if (!data.error)//check that wasnt an error on call
-                setTestTitle(data);
-        });
+    this.initTest = function (testId,numOfquestions) {        
         //call from server questions for given test
-        ajax.getQuestionsForTest(testId, function (data) {
+        main.ajax.getQuestionsForTest(testId, function (data) {
+            var arr=data;
             if (!data.error) {
-                console.log(data)
-                oninitTest(data);
+                if(numOfquestions)
+                    arr=cutarr(arr,numOfquestions);
+                    console.log(numOfquestions);
+                console.log(arr);
+                oninitTest(arr);
             } //if data doesnt have error
         });
     }
-    function setTestTitle(name) {
-        $('#test-title').text('מבחן ב'+name)
+    function cutarr(arr,bound){
+                var cutArr=[];
+                for(var i=0;i<bound&&i<arr.length;i++)
+                    cutArr.push(arr[i]);
+                return cutArr;
     }
+   
     function oninitTest(data) {
-        for (var i = 0; i < data.length; i++) {
+                for (var i = 0; i < data.length; i++) {
                     self.questions.push(new Question(i + 1, data[i]));
                 }
-                timerController.initGeneralTimer(data.length*1.5);//set timer for minute and half for each question
+                main.timerController.initGeneralTimer(data.length*1.5);//set timer for minute and half for each question
                 html = '';
                 //loop on answers
                 for (i = 0; i < self.questions.length; i++) {
@@ -139,8 +157,10 @@ function TestController() {
                         mySwiper.updatePagination = function () {
                             var current = mySwiper.activeIndex;
                             var last = mySwiper.previousIndex;
-                            $($('.swiper-pagination-switch')[current]).addClass('swiper-active-switch');
-                            $($('.swiper-pagination-switch')[last]).removeClass('swiper-active-switch');
+                            if(current!=last){
+                                $($('.swiper-pagination-switch')[current]).addClass('swiper-active-switch');
+                                $($('.swiper-pagination-switch')[last]).removeClass('swiper-active-switch');
+                            }
 
                         }; //stop the update of pagination but set that would set the activated slider
 
@@ -167,6 +187,7 @@ function TestController() {
                         self.questions[current].handler.visit(function (data) {
                             $(swiper.slides[current]).find('.timer .question-feature-text').html(data);
                         }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
+                       // swiper.updatePagination();
                     }
                 });
     }
@@ -281,22 +302,26 @@ function TestController() {
     this.finishTest = function () {
         //if finsh test but still on question so we need to "leave that question"
         self.questions[self.swiper.activeIndex].handler.leave(function () {
-              stagesHolder[stage].push(new timeLineObject(self.questions[self.swiper.activeIndex]));
+            stagesHolder[stage].push(new timeLineObject(self.questions[self.swiper.activeIndex]));
         }); //stops the previous question and check if it was considedrd a visit to add to stage holder
-        timerController.resetGeneralTimers();
+        main.timerController.resetGeneralTimers();
         // var reportController = new ReportController();
-        
-        $("#test-container").hide();
-        $("#reportPage").show();
+
+        self.leave(); //leave the page
+        //check that there is a report controller if not initiliaze one
+        if (main.reportController);
+        else
+           main.reportController= new ReportController();
+        main.reportController.visit();
         $("body").css({ "background-color": "#f2f2f4", "direction": "ltr" });
-        report = new Report(self.questions,stagesHolder);
-        reportController.insertData(report);
+        report = new Report(self.questions, stagesHolder);
+        main.reportController.insertData(report);
         //self.checkAnswers();
         //var reportController = new ReportController();
         //reportController.initChart();
-       
+
         //reportController.initChart();
-        reportController.drawChart();
+        main.reportController.drawChart();
 
     }
 

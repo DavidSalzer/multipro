@@ -398,7 +398,7 @@ function ErrorHandler(etype) {
  function Test(_id,_title,_numOfQuestions) {
     var numberOfQuestions = _numOfQuestions;
     
-    this._id = 0;//an id that represents the test mainly for the data base
+    this.id = _id;//an id that represents the test mainly for the data base
     this.title = _title;
     this.getNumOfQuestions = function () {
         return numberOfQuestions;    
