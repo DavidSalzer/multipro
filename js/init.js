@@ -1,4 +1,4 @@
-
+    var ajax=new ajaxHandler()
     var reportController = new ReportController();
         reportController.initChart();
 
@@ -6,4 +6,4 @@
     
     var testController = new TestController();
     testController.attachEvents();
-    testController.initTest(13);
+    testController.initTest(1038);

@@ -382,4 +382,26 @@ function Printer(elem){
         return true;
     }
 }
+///////////////////////////////////////////////////////////////////////
+//class for error handling
+function ErrorHandler(etype) {
+     var errorTexts = ["תקלה בחיבור לשרת"];
+     //hold the types of erros
+     //0-connection error with server
+     this.error=true;//says that there is an error
+     this.errorType = etype;
+     this.errorText = errorTexts[this.errorType];
+ }
+
+ ///////////////////////////////////////////////////////////
+ // class that would hold data for tests - id the post id at the wordress tittle - the title of the test and number questions that the test has at the data base
+ function Test(_id,_title,_numOfQuestions) {
+    var numberOfQuestions = _numOfQuestions;
+    
+    this._id = 0;//an id that represents the test mainly for the data base
+    this.title = _title;
+    this.getNumOfQuestions = function () {
+        return numberOfQuestions;    
+    }
+}
 

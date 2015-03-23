@@ -1,0 +1,241 @@
+#welcome {
+    
+    margin-top:110px;
+    font-size: 35px;
+}
+#welcome span:first-child {
+    font-weight: bold;
+} 
+#test-tirgool {
+    
+    margin-top: 50px;
+    font-size: 20px;
+}
+.center-text {
+    text-align: center;
+}
+/*#choose-test-container {
+    text-align: center;
+}*/
+/*#year-choose-dropdown option{
+    
+    height: 50px;
+    width: 400px;
+    padding-right: 20px;
+    font-size: 20px;
+
+}*/
+#year-choose-dropdown{
+    font-size: 16px;
+}
+.choose-test-box {
+    font-size: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    height: 50px;
+    width: 400px;
+    box-sizing: border-box;
+   
+}
+
+#number-Of-Questions{
+    position: relative;   
+    background-color: #e7e8ea;   
+   
+    border: 1px solid #cfd9db;
+    border-radius: .25em;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+#number-Of-Questions span {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+#number-Of-Questions span:first-child{
+    position: absolute;
+    right: 12px;
+   
+    
+}
+#number-Of-Questions span:last-child{
+    position: absolute;
+    left: 12px;
+       
+}
+#number-Of-Questions span {
+   height: 16px;
+    top: 0;
+    bottom: 0;   
+}
+#number-for-excercise {
+padding: 12px;
+position: relative;
+vertical-align: bottom;
+}
+#number-for-excercise > div {
+    height: 24px;
+    line-height: 24px;
+}
+.plus,.minus {
+    height: 24px;
+    width: 24px;
+    border-radius: 100%;
+    background-color:#f89c21; 
+    color: white;
+    font-size: 24px;
+    line-height: 22px; 
+    text-align: center;  
+    text-indent: -1px; 
+    cursor: pointer;
+}
+.number-changer {
+    position: absolute;
+    left: 5px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 24px;
+    line-height: 24px;
+    
+}
+.number-content {
+    line-height: 24px;
+    height: 24px;
+    vertical-align: top;
+    width: 54px;
+    background-color: white;
+    text-align: center;
+    border: 1px solid #cfd9db;    
+}
+
+.number-changer > div {
+    display: inline-block;
+}
+
+#test-computer-time{
+    position: relative;
+    box-sizing: border-box;
+}
+#test-computer-time .content{
+    width: 122px;
+    background-color: #e7e8ea;
+     border: 1px solid #cfd9db;
+    border-radius: .25em;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+   
+}
+#test-computer-time .label{
+    padding-right: 12px;
+    line-height: 50px;
+    height: 50px;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+#choose-test-btn-holder {
+    text-align: center;
+}
+#choose-test-btn-holder input{
+    text-align: center;
+    background-color: #f89921;
+    border: 1px solid #cfd9db;
+    border-radius: 10px;
+    width: 115px;
+    height: 35px;
+    cursor: pointer;
+    color: white;
+    font-size: 18px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+/*.plus:after {
+    content: "+";
+    
+}
+.minus:after {
+    content: "-";
+     line-height: 23px;
+  text-indent: -1px;
+}*/
+
+
+
+/*#year-choose-dropdown {
+font-size: 16px;
+}
+
+
+#choose-test-container div.cd-select {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    height: 50px;
+    width: 400px;
+    padding-right: 20px;
+    font-size: 20px;
+}*/
+
+
+/**********************************************/
+.cd-form input[type="text"],
+.cd-form input[type="email"],
+.cd-form textarea,
+.cd-form select,
+.cd-form legend {
+  display: block;
+  width: 100%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+}
+.cd-form input[type="text"],
+.cd-form input[type="email"],
+.cd-form textarea,
+.cd-form select {
+  /* general style for input elements */
+  padding: 12px;
+  border: 1px solid #cfd9db;
+  background-color: #ffffff;
+  border-radius: .25em;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+.cd-form input[type="text"]:focus,
+.cd-form input[type="email"]:focus,
+.cd-form textarea:focus,
+.cd-form select:focus {
+  outline: none;
+  border-color: #2c97de;
+  box-shadow: 0 0 5px rgba(44, 151, 222, 0.2);
+}
+.cd-form .cd-select {
+  /* select element wapper */
+  position: relative;
+}
+.cd-form .cd-select::after {
+  /* arrow icon for select element */
+  content: '';
+  position: absolute;
+  z-index: 1;
+  left: 16px;
+  top: 45%;
+  margin-top: -8px;
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: url("../img/cd-icon-arrow.svg") no-repeat center center;
+  pointer-events: none;
+}
+.cd-form select {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+.cd-form select::-ms-expand {
+  display: none;
+}

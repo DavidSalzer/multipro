@@ -1,0 +1,96 @@
+
+function Test(_id,_title,_numOfQuestions) {
+    var numberOfQuestions = _numOfQuestions;
+    
+    this._id = 0;//an id that represents the test mainly for the data base
+    this.title = _title;
+    this.getNumOfQuestions = function () {
+        return numberOfQuestions;    
+    }
+}
+ 
+ function testChooserController(_tests) {
+    var numberOfVisits=0;
+    var self=this;
+    var tests = _tests;
+    //sets all events of the page choosetestpage
+    this.attachEvents = function () {
+        $(document).on('click', '#choose-test-btn', function () {
+
+        });
+        $(document).on('click', '.plus', function () {//add number of questions to excersise
+            var number = parseInt($('.number-content').text());
+            var max = getMaxNumberOfQuestions();
+            if ((++number) <= max) {//check that not choosing more questions than possible
+                $('.number-content').text(number);
+                self.setTimer();
+            }
+        });
+        $(document).on('click', '.minus', function () {//add number of questions to excersise
+            var number = parseInt($('.number-content').text());
+            if ((--number) >= 0) {//check that not trying to choose less than zero
+                $('.number-content').text(number);
+                self.setTimer();
+            }
+        });
+        $(document).on('change', '#year-choose-dropdown', function (event) {
+            self.updateChoiceOfTest();
+
+        })
+    }
+    this.updateChoiceOfTest = function () {
+        var choice = ($('#year-choose-dropdown :selected').attr('value')); //the number of test in array
+        self.setNumberOfQuestionsOfTest(tests[choice].getNumOfQuestions());
+        self.setNumberOfQuestions(20);//default
+    }
+    //adds the tests to the dropdown
+    this.setTests = function () {
+        var html = "";
+        for (var i = 0; i < tests.length; i++) {
+            html += '<option value="' + i + '">' + tests[i].title + '</option>';
+        }
+        $('#year-choose-dropdown').append(html).trigger('create');//add to the drop down the options of tests
+    }
+    
+    //the computer time is set according to 90 seconds for a question
+    this.setTimer = function () {
+        var numberOfQusetions = parseInt($('.number-content').text());
+        var time = 1.5 * numberOfQusetions;
+        var hours = (Math.floor(time / 60));
+        var seconds = (Math.floor(time * 60)) % 60;
+        var minutes = Math.floor(time) % 60;
+        $('#test-computer-time .content').text((hours < 10 ? "0" : "" ) + hours + ":" + (minutes < 10 ? "0" : "" ) + minutes+ ":" + (seconds < 10 ? "0" : "" ) + seconds);
+    }
+    
+    //set number of question of test
+    this.setNumberOfQuestionsOfTest = function (num) {
+        $('#number-Of-Questions .content').text(num);
+        self.setTimer();
+    }
+
+    //sets number of questions in the form
+    this.setNumberOfQuestions = function (num) {
+        var max = getMaxNumberOfQuestions();
+        if(num<=max)
+            $('#number-for-excercise .number-content').text(num);
+        else   
+            $('#number-for-excercise .number-content').text(max);
+        self.setTimer();
+    }
+
+    this.visit = function () {
+        if (numberOfVisits == 0)//only first visit sets all events
+            self.attachEvents();
+        self.setTests();
+        self.updateChoiceOfTest();
+        self.setNumberOfQuestions(20); //default as 20
+        numberOfVisits++;
+        self.setTimer(); //set timer according to chosen test(the default one)
+    }
+    //private function to get the max of question for given test
+    function getMaxNumberOfQuestions(){
+        return parseInt($("#number-Of-Questions .content").text());
+
+    }    
+}
+

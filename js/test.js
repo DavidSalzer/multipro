@@ -40,12 +40,12 @@ function TestController() {
     //init the test page with the questions
     this.initTest = function (testId) {
         //call from server the name of the given test
-        getTestNameById(testId, function (data) {
+        ajax.getTestNameById(testId, function (data) {
             if (!data.error)//check that wasnt an error on call
                 setTestTitle(data);
         });
         //call from server questions for given test
-        getQuestionsForTest(testId, function (data) {
+        ajax.getQuestionsForTest(testId, function (data) {
             if (!data.error) {
                 console.log(data)
                 oninitTest(data);
