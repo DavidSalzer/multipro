@@ -209,14 +209,15 @@ margin-left: 15px;
 .number{  
 border-radius: 40px;
 /*width: 25px;*/
-height: 25px;s
+height: 25px;
 display: inline-block;
 text-align: center;
 margin-left: 5px;
 }
 
 .answer-item .number{
-cursor: pointer;    
+cursor: pointer;
+width: 25px;    
 }
 
 .number.answer{
@@ -406,7 +407,7 @@ display: block;
     height: 45px;
     overflow-x: auto;
     overflow-y: hidden;
-  white-space: nowrap;
+    white-space: nowrap;
     
 }
 /*.swiper-scroll{
