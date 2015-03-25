@@ -1,7 +1,18 @@
 /******************** General **********************/
-@import url(https://fonts.googleapis.com/earlyaccess/opensanshebrew.css);
+/*@import url(https://fonts.googleapis.com/earlyaccess/opensanshebrew.css);*/
 
-
+@font-face {
+    font-family: "Open Sans Hebrew";
+    src: url('../font/Opes_Sans_Hebrew_Fixed/opensanshebrew-regular-webfont.eot');
+    src: url('../font/Opes_Sans_Hebrew_Fixed/opensanshebrew-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../font/Opes_Sans_Hebrew_Fixed/opensanshebrew-regular-webfont.woff') format('woff'),
+         url('../font/Opes_Sans_Hebrew_Fixed/opensanshebrew-regular-webfont.ttf') format('truetype'),
+         url('../font/Opes_Sans_Hebrew_Fixed/opensanshebrew-regular-webfont.svg#open_sanslight') format('svg');      
+}
+body.report-page {
+    background-color: #f2f2f4; 
+    direction: ltr;
+}
 body, html {
     margin: 0;
     font-family: "Open Sans Hebrew","Open Sans","Arial",sans-serif;
@@ -18,8 +29,8 @@ header {
     background-color: #c6c6c6;
     position: relative;
     -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
--moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
 }
 
 #user-container {
@@ -169,7 +180,7 @@ margin-left: 15px;
     /*background-color: #0ff;*/
 }
 
-.swiper-slide .title {
+.question-container .title {
     /*font-style: italic;*/
     /*font-size: 25px;*/
     line-height: 20px;
@@ -182,13 +193,13 @@ margin-left: 15px;
     display: inline-block;
 }*/
 
-.swiper-slide .title .number{
+.question-container .title .number{
     display: inline-block;
     margin-left:4px; 
     text-align: center;
 }
 
-.swiper-slide .title .number.circle {
+.question-container .title .number.circle {
     border: 1px solid;
     border-radius: 20px;
 }
@@ -203,7 +214,7 @@ margin-left: 15px;
 }
 
 .answer-item{
-    
+    line-height: 22px;
 }
 
 .number{  
@@ -594,4 +605,7 @@ visibility: hidden;
     /*height: 175px; */
     width: 1105px; 
     margin: 35px auto 0;
+}
+.watch-answers {
+  
 }

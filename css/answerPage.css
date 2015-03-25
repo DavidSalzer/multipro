@@ -1,0 +1,183 @@
+#answers-page {
+    margin: auto;
+    width: 1024px;
+    padding-top: 5px;
+}
+
+#timer .icon {
+     background-image: url("../img/clock_big.png"); 
+     background-position: center center;
+     width:39px;
+}
+#timer {
+    border-left: 2px solid #fff;
+    border-right: 2px solid #fff;
+    width: 170px;
+    height: 100%;
+    position: absolute;
+    left: 191px;
+    text-align: center;
+}
+.question-state {
+    display: inline-block;
+    height: 32px;
+    width: 40px;
+}
+.question-state.correct{
+     background-image: url("../img/v.png"); 
+}
+.question-state.wrong{
+     background-image: url("../img/red-x.png"); 
+}
+#answers-page .settings-item{
+     vertical-align: bottom;
+}
+#answers-page .question-container {
+   z-index: -1;
+      height: auto;
+      width: 100%;
+      margin: auto;
+      position: relative;
+}
+#answers-page .question-title{
+    margin-right: 5px;
+    margin-bottom: 15px;   
+}
+#answers-page .title.icons{
+      height: 100%;
+  width: auto;
+  display: inline-block;
+  vertical-align: top;
+    
+}
+#answers-page .question-content {
+  width: 610px;
+  display: inline-block;
+}
+.tip-bubble-wrapper {
+    
+    position: absolute;
+    left: 0;
+    top: 20px;
+    bottom: 2px;
+    width: 200px;
+    
+    border: 2px solid #c1c1c3;  
+    box-sizing: border-box;  
+   
+}
+.tip-bubble-wrapper:before {
+   content:"";
+   position: absolute;
+   left: 185px;
+   bottom: -1px;
+   width: 25px;
+   height: 26px;
+  background-image: url("../img/bubble-right-arrow.png");
+  background-size: 100%;
+  background-repeat: no-repeat;
+   
+}
+.tip-bubble {
+   
+    padding: 20px;
+    height: 100%;
+   /* border: 2px solid #87888a;*/
+   /*padding: 32px 32px;
+   padding-left: 28px;*/
+   /*padding-right: 21px;*/   
+     box-sizing: border-box;
+     word-wrap: break-word;  
+     position: relative;
+}
+.tip-bubble .icon {
+    position: absolute;
+    top: -18px;
+    right: 30px;
+    width: 35px;
+    height: 35px;
+    background-image: url("../img/exclemationmark.png");
+}
+.tip-bubble textarea {
+    height: 100%;
+    border: none;
+    width: 100%;
+    box-sizing: border-box;
+     resize: none;
+     background-color: inherit;
+     outline: none;
+     font-family: "Open Sans Hebrew";
+    
+}
+.answer-feature {
+    white-space: nowrap;
+    overflow: hidden;
+}
+#answers-page .answer-item {
+      margin-right: -41px;
+}
+.answer-feature-item {
+    line-height: 28px;
+    vertical-align: top;
+  background-color: #E7E8EA;
+  display: inline-block; 
+  height: 30px;
+}
+.answer-feature-item.year-feature {
+  width: 60px;
+  text-align: center;
+}
+.answer-feature-item.reference {
+  width: 100%;
+  margin-right: 5px;
+  padding-right: 5px;
+}
+.answer-state {
+    width: 25px;
+    height: 27px;
+    display: inline-block;
+      vertical-align: bottom;
+      margin-left: 17px;
+}
+.answer-state.correct {
+   background-image: url("../img/v.png");
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+.answer-state.wrong {
+   background-image: url("../img/red-x.png");
+  background-size: 112%;
+  background-repeat: no-repeat;
+}
+.button-container-answer-page{
+    position: fixed;
+    bottom: 20px;
+    left: 30px;
+    height: 60px;
+    line-height: 60px;
+}
+.button-container-answer-page > div {
+    display: inline-block;
+    height: 100%;
+}
+.button-container-answer-page .icon {
+    height: 100%;
+    z-index: 5;
+}
+.print .icon {
+    background-image: url("../img/printicn.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 60px;
+    background-color: inherit;
+}
+.returnto-report .icon {
+    background-image: url("../img/back-arw.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 60px;
+    background-color: inherit;
+}
+/*#answers-page .title {
+    display: inline-block;
+}*/

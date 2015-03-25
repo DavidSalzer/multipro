@@ -7,10 +7,12 @@ function ReportController() {
             self.attachEvents();
         numberOfVisits++;
          $("#reportPage").show();
-         $("#reportPage .stats-title").text($("#reportPage .stats-title").text()+$('#test-title').text());
+         $("body").toggleClass('report-page',true);
+         $("#reportPage .stats-title").text("סיכום נתוני נבחן:"+$('#test-title').text());
     }
     this.leave = function () {         
          $("#reportPage").hide();
+         $("body").toggleClass('report-page',false);
     }
 
     //var handler = new Report();
@@ -34,11 +36,15 @@ function ReportController() {
             stagesTimeLineClick();
         });
         $(document).on('click', '.drop-box-header', function () {
-           dropboxHeaderButtonClick.call(this);
-       });
-       $(document).on('click', '.drop-box-button', function () {
-           dropboxInsideButtonClick.call(this);
-       });
+            dropboxHeaderButtonClick.call(this);
+        });
+        $(document).on('click', '.drop-box-button', function () {
+            dropboxInsideButtonClick.call(this);
+        });
+        $(document).on('click', '.watch-answers', function () {
+            watchAnswersClick();
+        });
+
     }
     //inserts data in to the report page uses report object to hold and maintain the data
     this.insertData = function (report) {
@@ -269,12 +275,16 @@ function ReportController() {
            $(this).parents('.drop-box').find('.drop-box-header').text($(this).text());
            $(this).parents('.drop-box-inside').hide();
        }
-       function dropboxHeaderButtonClick() {
+    function dropboxHeaderButtonClick() {
            if($(this).parent().parent().find('.drop-box-inside').is(':hidden'))
                 $(this).parent().parent().find('.drop-box-inside').show();
             else   
                  $(this).parent().parent().find('.drop-box-inside').hide();
-       }
+    }
+    function watchAnswersClick() {
+        self.leave();
+        main.answerPageController.visit(); 
+    }
     
 }
  //for a given time line elemnts controlls the scrolling of the time line

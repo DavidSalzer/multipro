@@ -57,7 +57,7 @@ function ajaxHandler() {
             dataType: 'json',
             success: function (data) {
                 dataArr = [];
-                for (var attr in data) {//set data to arr and not obj()
+                for (var attr in data) {//set data to arr and not obj
                     if (attr != 'status')
                         dataArr.push(data[attr]);
                 }

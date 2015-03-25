@@ -99,12 +99,33 @@ body {
 #tips{
     background: #F5F3B6;
     height: 60px;
-    width: 70%;
+    
     right: 0;
+    position: absolute;
+   line-height: 60px;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+      padding: 0 22px;
+}
+.watch-answers {
+    font-size: 100%;
+    height: 60px;
+    position: absolute;
     left: 0;
     bottom: 0;
     top: 0;
     margin: auto;
+    font-size: 15px;
+    cursor: pointer;
+    font-size: 20px;
+}
+.watch-answers .icon{
+    background-image: url("../img/watch-answers-icon.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 60px;
+    background-color: inherit;
 }
 
 #questionsTime,#guessTimeLine,#changedTimeLine,.time-line-holder{
@@ -118,9 +139,9 @@ background-repeat: no-repeat;
 background-position: center;
 }
 /**********dropdown************/
-body{
+/*body{
     background-color: #F2F2F4;
-}
+}*/
 .drop-box-button-holder:hover
 {
 	background:#f6f6f6

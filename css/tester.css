@@ -1,0 +1,32 @@
+.yellowTop {
+  background: #f3eb1a;
+  display: inline-block;
+  height: 23px;
+  margin-left: 5px;
+  margin-bottom: 15px;
+    position: relative;
+    width: 40px;
+        z-index: 1;
+        text-align: center;
+        line-height: 23px;
+        font-size: 20px;
+        color: #999999;
+}
+.yellowTop:after {
+  border-top: 24px solid #f3eb1a;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  content: "";
+  height: 0;
+  left: 0;
+  position: absolute;
+  bottom: -24px;
+  width: 0;
+  
+}
+.yellowTop.hasContent {
+visibility: visible;
+}
+.yellowTop.noContent {
+visibility: hidden;
+}

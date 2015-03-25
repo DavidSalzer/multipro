@@ -10,7 +10,8 @@
         <link rel="stylesheet" type="text/css" href="css/StyleMain.css">
         <link rel="stylesheet" type="text/css" href="css/StyleStatistics.css">
         <link rel="stylesheet" type="text/css" href="css/czChart.css"> 
-        <link rel="stylesheet" type="text/css" href="css/chooseTestPage.css">      
+        <link rel="stylesheet" type="text/css" href="css/chooseTestPage.css"> 
+        <link rel="stylesheet" type="text/css" href="css/answerPage.css">     
     </head>
     <body>
         <header>
@@ -23,8 +24,10 @@
                 <div id="user-image"></div>
                 <div id="user-name">ישראל ישראלי</div>
             </div>
-            <div id="test-title" style="display: none;">מבחן גמר ברפואה</div>
-            
+            <div id="test-title" style="display: none;"></div>
+            <div id="timer">
+                <div class="icon"></div>
+            </div>
             <div id="general-timer" style="display: none;"></div>
 
             <div id="logo">
@@ -57,7 +60,7 @@
                 </div>
             </div>
              <div id="test-computer-time"class="choose-test-box">
-                  <div class="label">זמן מחשב</div>
+                  <div class="label">זמן מחושב</div>
                   <div class="content">00:00:00</div>
              </div>
             <div class="choose-test-box" id="choose-test-btn-holder">
@@ -176,14 +179,18 @@
                 </div>
                 <div id="changedTimeLineParent" style="display: none"></div>
                 
-                <div class="tips-container"  align="center"  style="margin-top: 70px;">
+                <div class="tips-container"   style="margin-top: 70px;">
                      <div style="display: table;">
-                        <div id="tips" style="display: table-cell; vertical-align: middle; text-align: center;"></div>
+                        <div id="tips" ></div>
+                         <div class="watch-answers"><span class="icon"></span><span class="text"> צפה בתשובות</span></div>
                      </div>
                     <!--<div id="tips" align="center" ></div>-->
                 </div>
-            
+              
             </div>
+        </div>
+        <div id="answers-page" style="display: none" dir="rtl">
+              <div class="button-container-answer-page"><div class="print"><span class="icon"></span><span class="text">הדפס מבחן</span></div><div class="returnto-report"><span class="icon"></span><span class="text">חזור לדוח</span></div></div>
         </div>
 
         <script src="js/jquery.js"></script>
@@ -195,6 +202,8 @@
         
         <script src="model/ajaxHandler.js"></script>
         <script src="js/Classes.js"></script>
+        
+        <script src="js/AnswerPageController.js"></script>
         <script src="js/chooseTestController.js"></script>
         <script src="js/script.js"></script>
         <script src="js/report.js"></script>

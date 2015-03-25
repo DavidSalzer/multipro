@@ -312,9 +312,11 @@ function TestController() {
         if (main.reportController);
         else
            main.reportController= new ReportController();
+        
+        main.answerPageController.addQuestionArr(self.questions);//add to answer page the data of the question
+        main.answerPageController.addToView();
         main.reportController.visit();
-        $("body").css({ "background-color": "#f2f2f4", "direction": "ltr" });
-        report = new Report(self.questions, stagesHolder);
+        report = new Report(self.questions,stagesHolder);
         main.reportController.insertData(report);
         //self.checkAnswers();
         //var reportController = new ReportController();

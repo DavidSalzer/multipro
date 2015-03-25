@@ -4,6 +4,8 @@ function Question(qnumber,obj){
     this.question=obj.question;//the question itself
     this.answers = obj.answers;//an array of answers
     this.correctAns = obj.correctAns;//the correct answer
+    this.bookReferance = obj.bookReferance;//the rference for the question
+    this.year=obj.year;//the year of the question from the test- comes from data base
     this.questionNumber = qnumber;//the number of question in test
     this.handler = new QuestionHandler();//the handler of the behavior of the question
     this.handler.correctAnswer = obj.correctAns;//sets the correct answer at the handler

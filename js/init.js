@@ -4,6 +4,7 @@ var main = {//holds all controllers
     testChooseController: null,
     testController: new TestController(),
     reportController: new ReportController(),
+    answerPageController:new AnswerPageController('#answers-page'),
 
 
     start: function () {
