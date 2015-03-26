@@ -4,15 +4,18 @@ function AnswerPageController(element) {
     var  html = '';
     var self = this;
     var attachTo='body';
-
+        
     if (element)
         attachTo = element;
 
     this.attachEvents = function () {
         $(document).on('click', '.button-container-answer-page .print .icon', function () {
-            self.hideForPrint();
-            window.print();
-            self.showAfterPrint();
+            //var toprint = new Printer('#answers-page');
+            //toprint.print();
+
+            //self.BeforePrint();
+            //window.print();
+            //self.AfterPrint();
         });
         $(document).on('click', '.button-container-answer-page .returnto-report .icon', function () {
             self.leave();
@@ -35,11 +38,21 @@ function AnswerPageController(element) {
          $('#general-timer').show();
          $(attachTo).hide();
     }
-    this.hideForPrint=function(){
+    this.BeforePrint = function () {
+       
+        var toprint = $('#answers-page').clone();
+        $('.print-div').append(toprint);
+        $('.print-div').show();
         $('.button-container-answer-page').hide();
+        $('header').hide();
+        $('.wrapper').hide();
     }
-     this.showAfterPrint=function(){
+    this.AfterPrint = function () {
+         $('.print-div').html('');
+            $('.print-div').hide();
         $('.button-container-answer-page').show();
+        $('header').show();
+        $('.wrapper').show();
     }
     this.addQuestionArr = function (qArr) {
         for (var i = 0; i < qArr.length; i++) {

@@ -103,10 +103,12 @@
     border: none;
     width: 100%;
     box-sizing: border-box;
-     resize: none;
-     background-color: inherit;
-     outline: none;
-     font-family: "Open Sans Hebrew";
+    resize: none;
+    background-color: inherit;
+    outline: none;
+    font-family: "Open Sans Hebrew";
+    overflow-y: auto;
+    overflow-x: hidden;
     
 }
 .answer-feature {
