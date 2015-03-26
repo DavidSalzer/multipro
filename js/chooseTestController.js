@@ -1,9 +1,9 @@
 
- function TestChooserController(_tests) {
-    var numberOfVisits=0;
-    var self=this;
+function TestChooserController(_tests) {
+    var numberOfVisits = 0;
+    var self = this;
     var tests = _tests;
-    
+
     //sets all events of the page choosetestpage
     this.attachEvents = function () {
         $(document).on('click', '#choose-test-btn', function () {
@@ -15,24 +15,40 @@
             self.leave();
             main.testController.visit();
         });
-        $(document).on('click', '.plus', function () {//add number of questions to excersise
-            var number = parseInt($('.number-content').text());
-            var max = getMaxNumberOfQuestions();
-            if ((++number) <= max) {//check that not choosing more questions than possible
-                $('.number-content').text(number);
-                self.setTimer();
-            }
+        $(document).on('mousedown', '.plus', function () {//add number of questions to excersise
+            addNumberOfQuestions();
+            var longclick= setInterval(function(){
+                addNumberOfQuestions();
+            },100);
+             $(document).off('mouseup', '.plus').on('mouseup', '.plus', function () {clearInterval(longclick)});
+           
         });
-        $(document).on('click', '.minus', function () {//add number of questions to excersise
-            var number = parseInt($('.number-content').text());
-            if ((--number) >= 0) {//check that not trying to choose less than zero
-                $('.number-content').text(number);
-                self.setTimer();
-            }
+        $(document).on('mousedown', '.minus', function () {//add number of questions to excersise
+            reduceNumberOfQuestions();
+            var longclick= setInterval(function(){
+                reduceNumberOfQuestions();
+            },100);
+             $(document).off('mouseup', '.minus').on('mouseup', '.minus', function () {clearInterval(longclick)});
+           
         });
         $(document).on('change', '#year-choose-dropdown', function (event) {
             self.updateChoiceOfTest();
         })
+    }
+    function addNumberOfQuestions() {
+        var number = parseInt($('.number-content').text());
+        var max = getMaxNumberOfQuestions();
+        if ((++number) <= max) {//check that not choosing more questions than possible
+            $('.number-content').text(number);
+            self.setTimer();
+        }
+    }
+    function reduceNumberOfQuestions(){
+        var number = parseInt($('.number-content').text());
+            if ((--number) >= 0) {//check that not trying to choose less than zero
+                $('.number-content').text(number);
+                self.setTimer();
+            }
     }
     this.updateChoiceOfTest = function () {
         var choice = ($('#year-choose-dropdown :selected').attr('value')); //the number of test in array
@@ -87,7 +103,8 @@
         self.setTimer(); //set timer according to chosen test(the default one)
     }
     this.leave = function () {
-        $('#choose-test-container').hide();    
+        $('#choose-test-container').hide();
+       $('.footer').hide();    
     }
     //private function to get the max of question for given test
     function getMaxNumberOfQuestions(){

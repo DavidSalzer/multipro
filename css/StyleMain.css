@@ -20,10 +20,11 @@ body, html {
     height: 100%;
     width: 100%;
     direction: ltr;
+    overflow: hidden;
     /*background-color: #f2f2f4;*/
 }
 
-header {
+header{
     direction: rtl;
     height: 70px;
     background-color: #c6c6c6;
@@ -31,6 +32,37 @@ header {
     -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
     box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+.wrapper{
+  overflow-y: auto;
+  position: absolute;
+  top: 70px;
+  bottom: 80px;
+  left: 0;
+  right: 0;
+}
+.footer {
+    width: 100%;
+    height: 70px;
+    position: fixed;
+    bottom: 0;
+    background-color: #faa33a;
+    z-index: 1;
+    text-align: center;
+    line-height: 70px;
+}
+.footer-container{
+    display: inline-block;
+   direction: rtl;
+    margin: auto;
+    line-height: 100%;
+}
+.footer-container > div {
+    display: inline-block;    
 }
 
 #user-container {
@@ -150,6 +182,11 @@ top: 0;
     -ms-transform:  scale(0.9);
     -o-transform:  scale(0.9);
     transform:  scale(0.9);
+    -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
 }
 
 .swiper-slide-active {
@@ -161,6 +198,11 @@ top: 0;
     -ms-transform: scale(1);
     -o-transform: scale(1);
     transform: scale(1);
+    -webkit-filter: blur(0px);
+      -moz-filter: blur(0px);
+      -o-filter: blur(0px);
+      -ms-filter: blur(0px);
+      filter: blur(0px);
     /*-webkit-box-shadow: inset 0px 0px 0px 3px rgba(0,0,0,0.71);
     -moz-box-shadow: inset 0px 0px 0px 3px rgba(0,0,0,0.71);
     box-shadow: inset 0px 0px 0px 3px rgba(0,0,0,0.71);*/
@@ -527,7 +569,7 @@ display: block;
     border-radius: 5px;
     color: #ffffff;
     text-align: center;
-    font-size: 26px;
+    font-size: 15px;
     line-height:  51px;
     margin-bottom: 3px;
     

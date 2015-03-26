@@ -9,6 +9,7 @@ function TestController() {
         $("#test-container").show();
         $("#test-title").show();
         $("#general-timer").show();
+        
         if (numberOFVisits == 0)
             self.attachEvents();
         numberOFVisits++;
@@ -31,19 +32,19 @@ function TestController() {
     }
 
     this.attachEvents = function () {
-        $(".swiper-wrapper").on("click", ".asterisk", self.asterisk);
+        $(".swiper-wrapper ").on("click", ".swiper-slide-active .asterisk", self.asterisk);
 
-        $(".swiper-wrapper").on("click", ".circle", self.circle);
+        $(".swiper-wrapper").on("click", ".swiper-slide-active .circle", self.circle);
 
-        $(".swiper-wrapper").on("click", ".answer-icon", self.pushAnswer);
+        $(".swiper-wrapper").on("click", ".swiper-slide-active .answer-icon", self.pushAnswer);
 
-        $(".swiper-wrapper").on("click", ".answer-item .number", self.pushAnswer);
+        $(".swiper-wrapper").on("click", ".swiper-slide-active .answer-item .number", self.pushAnswer);
 
-        $(".swiper-wrapper").on("click", ".not-answer-icon", self.notAnswer);
+        $(".swiper-wrapper").on("click", ".swiper-slide-active .not-answer-icon", self.notAnswer);
 
-        $(".swiper-wrapper").on("click", ".clear", self.clear);
+        $(".swiper-wrapper").on("click", ".swiper-slide-active .clear", self.clear);
 
-        $(".swiper-wrapper").on("click", ".guess", self.guess);
+        $(".swiper-wrapper").on("click", ".swiper-slide-active .guess", self.guess);
 
         $("#finish").on("click", self.finishTest);
 

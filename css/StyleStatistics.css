@@ -14,6 +14,7 @@ body {
     width: 1104px;
     height: 100%;
     margin: auto;
+    position: relative;
 }
 
 .stats-title {

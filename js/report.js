@@ -2,15 +2,17 @@ function ReportController() {
     var self = this;
     var numberOfVisits = 0;
 
-    this.visit = function () { 
+    this.visit = function () {
         if (numberOfVisits == 0)
             self.attachEvents();
         numberOfVisits++;
-         $("#reportPage").show();
-         $("body").toggleClass('report-page',true);
-         $("#reportPage .stats-title").text("סיכום נתוני נבחן:"+$('#test-title').text());
+        $('.wrapper').css('bottom', '0');
+        $("#reportPage").show();
+        $("body").toggleClass('report-page', true);
+        $("#reportPage .stats-title").text("סיכום נתוני נבחן:" + $('#test-title').text());
     }
-    this.leave = function () {         
+    this.leave = function () {    
+    $('.wrapper').css('bottom', '70px');     
          $("#reportPage").hide();
          $("body").toggleClass('report-page',false);
     }
@@ -392,7 +394,8 @@ function ReportController() {
            var attachToElem; //if wanted the name of the element that the time line would be attached to
            var overAllTime = overAllTime; //the over all time of the time line that according to it the pieces of the questions would be set
            var averageTimePerQuestion = (overAllTime / numOfQuestions); //the average time that is given for each question would be used to calculate the width of elements
-           var width = 70; //thw shown width of the time line that according to it the proportion of the timeline elemnts would be- its not dynmic according to change of view
+           var width = 30; //thw shown width of the time line that according to it the proportion of the timeline elemnts would be- its not dynmic according to change of view
+           var minwidth = 15;//the minimum width of an element on the timeline
            var timelineList = ''; //the holder of the list of the elemnts to be inserted to the timeline
            var scroll; //scroller controll for the time line would be created at creation of timeline
            //check if wanted to attach the time line to specific element, if not the to be attahed to element would just be body
@@ -447,8 +450,8 @@ function ReportController() {
                var correctClass = (correct == true) ? "correct" : "notCorrect";
                var elemWidth = (time / averageTimePerQuestion) * (width);
                //check that wont be to small
-               if (elemWidth < 45) {
-                   elemWidth = 45;
+               if (elemWidth < minwidth) {
+                   elemWidth = minwidth;
                }
                var elem = '<div class="timeLineQuestion answered ' + correctClass + '" id="questionNum' + questionNum + '" style="width:' + elemWidth + 'px">' +
                                             '<div class="yellowTop ' + hidden + '">' + _questionMArk + '' + _asterisk + '</div>' +
@@ -467,8 +470,8 @@ function ReportController() {
                var hidden = (asterisk || questionMark) ? "hasContent" : "noContent"; //variable that holds the class of the yellow part if to be shown or hidden - if no content so hide   
                var elemWidth = (time / averageTimePerQuestion) * (width);
                //check that wont be to small
-               if (elemWidth < 45) {
-                   elemWidth = 45;
+               if (elemWidth < minwidth) {
+                   elemWidth = minwidth;
                }
                var elem = '<div class="timeLineQuestion notAnswered" id="questionNum' + questionNum + '" style="width:' + elemWidth + 'px">' +
                                             '<div class="yellowTop ' + hidden + '">' + _questionMArk + '' + _asterisk + '</div>' +

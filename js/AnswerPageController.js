@@ -73,7 +73,7 @@ function AnswerPageController(element) {
         html += '</div>';
         html += '<div class="answer-feature">';
         html += '<div class="year-feature answer-feature-item">'+question.year+'</div>';
-        html += '<div class="reference answer-feature-item">'+question.bookReferance+'</div>';
+        html += '<div class="reference answer-feature-item" dir="ltr"><span>'+question.bookReferance[1]+'  </span><span> '+question.bookReferance[0] +'</span></div>';
         html += '</div>';
         html += '</div>';
          html += ' <div class="tip-bubble-wrapper"><div class="tip-bubble"><span class="content"><textarea placeholder="הכנס הערה"></textarea></span><div class="icon"></div></div></div>';
