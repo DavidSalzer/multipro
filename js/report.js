@@ -12,7 +12,7 @@ function ReportController() {
         $("#reportPage .stats-title").text("סיכום נתוני נבחן:" + $('#test-title').text());
     }
     this.leave = function () {    
-    $('.wrapper').css('bottom', '70px');     
+    $('.wrapper').css('bottom', '80px');     
          $("#reportPage").hide();
          $("body").toggleClass('report-page',false);
     }

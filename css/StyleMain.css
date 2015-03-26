@@ -41,11 +41,12 @@ header{
   overflow-y: auto;
   position: absolute;
   top: 70px;
-  bottom: 80px;
+  bottom:0;
   left: 0;
   right: 0;
 }
 .footer {
+    display: none;
     width: 100%;
     height: 70px;
     position: fixed;
@@ -132,7 +133,11 @@ position: absolute;
 left: 0;
 top: 0;
 }
-
+.print-div {
+    display: none;
+    height: 100%;
+    width: 100%;
+}
 /******************** test **********************/
 #test-container {
     width: 80%;

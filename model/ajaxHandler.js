@@ -1,7 +1,7 @@
 
 function ajaxHandler() {
-    var domain = "http://multipro.local/";
-    //var domain = "http://multipro.co.il.tigris.nethost.co.il/";
+    //var domain = "http://multipro.local/";
+    var domain = "http://multipro.co.il.tigris.nethost.co.il/";
     this.getTestYears = getTestYears;
     this.getTestNames=getTestNames;
     this.getQuestionsForTest = getQuestionsForTest;
