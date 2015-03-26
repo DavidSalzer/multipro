@@ -10,10 +10,11 @@ function TestChooserController(_tests) {
             //check that there is a test chosen
             var choice = ($('#year-choose-dropdown :selected').attr('value')); //the number of test in array
             var choiseNumOfQuestions = $('#number-for-excercise .number-content').text();
-            console.log(tests[choice]);
-            main.testController.initTest(tests[choice].id,choiseNumOfQuestions);
+            //console.log(tests[choice]);
+           
             self.leave();
-            main.testController.visit();
+             main.testController.initTest(tests[choice].id,choiseNumOfQuestions);
+            //main.testController.visit();
         });
         $(document).on('mousedown', '.plus', function () {//add number of questions to excersise
             addNumberOfQuestions();

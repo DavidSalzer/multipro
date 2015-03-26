@@ -2,10 +2,18 @@ function TestController() {
     var self = this;
     var numberOFVisits = 0;
 
-
+    //represents an entrance to the page-the only way to enter the test page
     this.visit = function (testId) {
+        
         if (testId)
             self.initTest(testId);
+        setTimeout(function(){
+            self.showTip(1);
+             setTimeout(function(){
+                 self.showTip(2);
+             },20000);
+        },20000);
+        //setTimeout(self.showTip(2),40000);
         $("#test-container").show();
         $("#test-title").show();
         $("#general-timer").show();
@@ -14,9 +22,19 @@ function TestController() {
             self.attachEvents();
         numberOFVisits++;
     }
+    //represents an exit from the test page
     this.leave = function () {
          $("#test-container").hide();
     }
+
+    this.showTip=function(number){
+        $('.tip'+number).fadeIn();
+        setTimeout(function(){self.hideTip(number)},5000);
+    }
+    this.hideTip=function(number){
+        $('.tip'+number).fadeOut();
+    }
+
     var stage = stages[1];//initilizes as firstStage
     //holds questions for each visit according to stage in test
     var stagesHolder = {firstStage:[],
@@ -48,6 +66,10 @@ function TestController() {
 
         $("#finish").on("click", self.finishTest);
 
+        $('.tip-x').on('click',function(event){
+            $(event.target).parents('.test-tip').hide();
+        })
+
         $("#user-container").on("click", function () {
             window.location = "indexStatistics.html";
         });
@@ -57,6 +79,7 @@ function TestController() {
     this.initTest = function (testId,numOfquestions) {        
         //call from server questions for given test
         main.ajax.getQuestionsForTest(testId, function (data) {
+            self.visit();
             var arr=data;
             if (!data.error) {
                 if(numOfquestions)
@@ -73,6 +96,7 @@ function TestController() {
                     cutArr.push(arr[i]);
                 return cutArr;
     }
+
    
     function oninitTest(data) {
                 for (var i = 0; i < data.length; i++) {
