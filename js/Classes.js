@@ -161,9 +161,10 @@ function Timer(){
      //for given format from timer as time="mm:ss" would get number of seconds
      Timer.convertFromFormat = function (time) {
          var parsed = time.split(":");
-         var minutes = Number.parseInt(parsed[0]);
-         var seconds= Number.parseInt(parsed[1]);
-         return minutes*60+seconds
+         console.log(parsed);
+         var minutes = parseInt(parsed[0]);
+         var seconds = parseInt(parsed[1]);
+         return minutes * 60 + seconds
      }
      function tick() {
         var self=this;
