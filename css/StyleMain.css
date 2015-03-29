@@ -9,6 +9,10 @@
          url('../font/Opes_Sans_Hebrew_Fixed/opensanshebrew-regular-webfont.ttf') format('truetype'),
          url('../font/Opes_Sans_Hebrew_Fixed/opensanshebrew-regular-webfont.svg#open_sanslight') format('svg');      
 }
+@media print
+{
+    * {-webkit-print-color-adjust:exact;}
+}
 body.report-page {
     background-color: #f2f2f4; 
     direction: ltr;

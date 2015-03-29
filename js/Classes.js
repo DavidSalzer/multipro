@@ -362,8 +362,9 @@ function Printer(elem){
 
     function Popup(data) 
     {
-        win = window.open();
-        self.focus();
+       
+        win = window.open('', 'my div', 'height=400,width=600');
+        self.focus();   
         win.document.open();
         win.document.write('<'+'html'+'><'+'head'+'>');
         win.document.write('<link rel="stylesheet" type="text/css" href="css/reset.css">'+
@@ -376,13 +377,39 @@ function Printer(elem){
                                                       '<script src="js/jquery.js"></script>');
         win.document.write('<'+'/'+'head'+'"><'+'body'+' dir="rtl"><div dir="rtl">');
         win.document.write(data);
-        
         win.document.write('</div><'+'/'+'body'+'><'+'/'+'html'+'>');      
-        
+        console.log((win.document));
        // win.document.close();
         win.print();
         win.close();        
         return true;
+    }
+    this.printDiv = function () {
+        //Get the HTML of div
+        var divElements = $toPrint.html();
+        //Get the HTML of whole page
+        var oldPage = document.body.innerHTML;
+        
+        //Reset the page's HTML with div's HTML only
+        document.body.innerHTML =
+              '<html dir="rtl"><head>' + '<link rel="stylesheet" type="text/css" href="css/reset.css">' +
+                                                      '<link rel="stylesheet" href="css/idangerous.swiper.css">' +
+                                                      '<link rel="stylesheet" href="css/jquery-ui.css">' +
+                                                       '<link rel="stylesheet" href="css/timeTo.css">' +
+                                                      '<link rel="stylesheet" type="text/css" href="css/StyleMain.css">' +
+                                                   '<link rel="stylesheet" type="text/css" href="css/StyleStatistics.css">' +
+                                                      '<link rel="stylesheet" type="text/css" href="css/czChart.css">' +
+                                                      '<script src="js/jquery.js"></script>' + '<title></title></head><body>' +
+              divElements + '</body>';
+       
+        //Print Page
+        window.print();
+
+        //Restore orignal HTML
+        document.body.innerHTML = oldPage;
+        
+
+
     }
 }
 ///////////////////////////////////////////////////////////////////////

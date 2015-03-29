@@ -10,12 +10,10 @@ function AnswerPageController(element) {
 
     this.attachEvents = function () {
         $(document).on('click', '.button-container-answer-page .print .icon', function () {
-            //var toprint = new Printer('#answers-page');
-            //toprint.print();
-
-            //self.BeforePrint();
-            //window.print();
-            //self.AfterPrint();
+           self.BeforePrint();//things to do before print like hide button and eetc
+            var toprint = new Printer(".wrapper");           
+            toprint.printDiv();
+            self.AfterPrint();//bring back hideen elements and return to initial state
         });
         $(document).on('click', '.button-container-answer-page .returnto-report .icon', function () {
             self.leave();
@@ -39,20 +37,13 @@ function AnswerPageController(element) {
          $(attachTo).hide();
     }
     this.BeforePrint = function () {
-       
-        var toprint = $('#answers-page').clone();
-        $('.print-div').append(toprint);
-        $('.print-div').show();
+
+        $('html,body').css('overflow', 'initial');
         $('.button-container-answer-page').hide();
-        $('header').hide();
-        $('.wrapper').hide();
     }
     this.AfterPrint = function () {
-         $('.print-div').html('');
-            $('.print-div').hide();
-        $('.button-container-answer-page').show();
-        $('header').show();
-        $('.wrapper').show();
+          $('html,body').css('overflow', 'hidden');
+           $('.button-container-answer-page').show();
     }
     this.addQuestionArr = function (qArr) {
         for (var i = 0; i < qArr.length; i++) {
@@ -69,8 +60,8 @@ function AnswerPageController(element) {
         html += '<div class="title icons">';
         html += '<div class="question-status">';
         html += '<div class="question-state ' + qState + '"></div>';
-        html += '<div class="asterisk settings-item ' + asterisk + '" title="תזכורת לחשוב על זה שוב"></div>';
-        html += '<div class="circle settings-item " title="תזכורת לפתור אחר כך"></div>';
+        html += '<div class="asterisk settings-item ' + asterisk + '" title="תזכורת לחשוב על זה שוב"><img src="../img/asterisk.png"></div>';
+        html += '<div class="circle settings-item '+questionMark+'" title="תזכורת לפתור אחר כך"><img src="../img/circle.png"></div>';
         html += '</div>';
         html += '</div>';
         html += '<div class="question-content">';
@@ -78,10 +69,10 @@ function AnswerPageController(element) {
         html += '<div class="question-title">';
         html += '<span class="number">' + question.questionNumber + '</span><span class="text">' + question.question + '</span></div>';
         for (var i = 0; i < question.answers.length; i++) {//add answers
-            var aState = ((i + 1) == question.correctAns) ? "correct" : "";
-            var wrong = ((i + 1) == question.handler.nowAnswer() && !question.handler.answerdCorrectly()) ? "wrong" : "";
+            var aState = ((i + 1) == question.correctAns) ? "<img src='img/v.png'/>" : "";//would hold the sorce correct answer image
+            var wrong = ((i + 1) == question.handler.nowAnswer() && !question.handler.answerdCorrectly()) ? "<img src='../img/red-x.png'/>" : "";//would hold the sorce for wrong  image
             var choice = ((i + 1) == question.handler.nowAnswer()) ? "answer" : "";
-            html += '<div class="answer-item" data-answer-num="' + i + 1 + '"><div class="answer-state '+aState+' '+wrong+'"></div><span class="number ' + choice + '" title="סימון תשובה">' + alphabets[i] + '.</span><span class="text">' + question.answers[i] + '</span></div>';
+            html += '<div class="answer-item" data-answer-num="' + i + 1 + '"><div class="answer-state">'+aState+wrong+'</div><span class="number ' + choice + '" title="סימון תשובה">' + alphabets[i] + '.</span><span class="text">' + question.answers[i] + '</span></div>';
         }
         html += '</div>';
         html += '<div class="answer-feature">';

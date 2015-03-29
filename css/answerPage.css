@@ -22,15 +22,49 @@
     display: inline-block;
     height: 32px;
     width: 40px;
+     vertical-align: bottom;
 }
-.question-state.correct{
-     background-image: url("../img/v.png"); 
+.question-state.correct:after{
+     content: url("../img/v.png");
 }
-.question-state.wrong{
-     background-image: url("../img/red-x.png"); 
+.question-state.wrong:after{
+      
+       content: url("../img/red-x.png"); 
 }
+
 #answers-page .settings-item{
      vertical-align: bottom;
+     position: relative;
+}
+#answers-page .settings-item.asterisk{
+    background-image: initial;
+}
+#answers-page .settings-item.asterisk img{
+    position: absolute;
+   top: 0;
+   left:1px;
+    clip: rect(0,21px,21px,0px);
+}
+#answers-page .settings-item.asterisk.selected img{
+    position: absolute;
+    top: 0;
+    left:-22px;
+    clip: rect(0,45px,21px,21px);
+}
+#answers-page .settings-item.circle{
+    background-image: initial;
+}
+#answers-page .settings-item.circle img{
+    position: absolute;
+   top: 0;
+   left:1px;
+    clip: rect(0,21px,21px,0px);
+}
+#answers-page .settings-item.circle.selected img{
+    position: absolute;
+    top: 0;
+    left:-22px;
+    clip: rect(0,45px,21px,21px);
 }
 #answers-page .question-container {
   
@@ -69,23 +103,16 @@
 .tip-bubble-wrapper:before {
    content:"";
    position: absolute;
-   left: 185px;
-   bottom: -1px;
+   left: 188px;
+   bottom: 4px;
    width: 25px;
    height: 26px;
-  background-image: url("../img/bubble-right-arrow.png");
-  background-size: 100%;
-  background-repeat: no-repeat;
-   
+   content: url("../img/bubble-right-arrow.png");
 }
 .tip-bubble {
    
     padding: 20px;
     height: 100%;
-   /* border: 2px solid #87888a;*/
-   /*padding: 32px 32px;
-   padding-left: 28px;*/
-   /*padding-right: 21px;*/   
      box-sizing: border-box;
      word-wrap: break-word;  
      position: relative;
@@ -96,7 +123,10 @@
     right: 30px;
     width: 35px;
     height: 35px;
-    background-image: url("../img/exclemationmark.png");
+    
+}
+.tip-bubble .icon:after {  
+    content: url("../img/exclemationmark.png");
 }
 .tip-bubble textarea {
     height: 100%;
@@ -142,16 +172,33 @@
       vertical-align: bottom;
       margin-left: 17px;
 }
-.answer-state.correct {
+.answer-state img{
+     width: 25px;
+    height: 27px;
+}
+/*.answer-state:after {
+    height: 100%;
+    width: 100%;
+}*/
+/*.answer-state.correct {
    background-image: url("../img/v.png");
   background-size: 100%;
   background-repeat: no-repeat;
-}
-.answer-state.wrong {
+}*/
+/*.answer-state.correct:after {
+   content: url("../img/v.png");
+     width: 25px;
+    height: 27px;
+   
+}*/
+/*.answer-state.wrong {
    background-image: url("../img/red-x.png");
   background-size: 112%;
   background-repeat: no-repeat;
-}
+}*/
+/*.answer-state.wrong:after{
+   content: url("../img/red-x.png");
+}*/
 .button-container-answer-page{
     position: fixed;
     bottom: 10px;
