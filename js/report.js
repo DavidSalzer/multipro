@@ -10,6 +10,7 @@ function ReportController() {
         $("#reportPage").show();
         $("body").toggleClass('report-page', true);
         $("#reportPage .stats-title").text("סיכום נתוני נבחן:" + $('#test-title').text());
+         self.drawChart();
     }
     this.leave = function () {    
     $('.wrapper').css('bottom', '80px');     
@@ -284,8 +285,9 @@ function ReportController() {
                  $(this).parent().parent().find('.drop-box-inside').hide();
     }
     function watchAnswersClick() {
-        self.leave();
-        main.answerPageController.visit(); 
+        //self.leave();
+        //main.answerPageController.visit(); 
+       main.navigatorController.changeToPage('answers-page');//move to the test page
     }
     
 }
@@ -394,8 +396,8 @@ function ReportController() {
            var attachToElem; //if wanted the name of the element that the time line would be attached to
            var overAllTime = overAllTime; //the over all time of the time line that according to it the pieces of the questions would be set
            var averageTimePerQuestion = (overAllTime / numOfQuestions); //the average time that is given for each question would be used to calculate the width of elements
-           var width = 30; //thw shown width of the time line that according to it the proportion of the timeline elemnts would be- its not dynmic according to change of view
-           var minwidth = 15;//the minimum width of an element on the timeline
+           var width = 35; //thw shown width of the time line that according to it the proportion of the timeline elemnts would be- its not dynmic according to change of view
+           var minwidth = 28;//the minimum width of an element on the timeline
            var timelineList = ''; //the holder of the list of the elemnts to be inserted to the timeline
            var scroll; //scroller controll for the time line would be created at creation of timeline
            //check if wanted to attach the time line to specific element, if not the to be attahed to element would just be body

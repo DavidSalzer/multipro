@@ -37,6 +37,7 @@
             
         </header>
        <div id="wrapper" class="wrapper">
+      
          <div id="choose-test-container" style="display: none;"class="cd-form" dir="rtl">
             <div id="welcome" class="choose-test-box center-text"><span>ברוך הבא:</span><span id="welcome-name">ישראל ישראלי</span></div>
             <div id="test-tirgool" class="choose-test-box center-text">תרגול מבחן</div>
@@ -68,6 +69,7 @@
                 <input type="button" id="choose-test-btn" value="תרגל"></input>
             </div>
         </div>
+       
         <div id="test-container" style="display: none;" >
             <div id="test-settings">
                 <div id="marker"></div>
@@ -214,11 +216,11 @@
         </div>
         <div class="footer">
             <div class="footer-container">
-                <div>אודותינו</div>
+                <div><span>אודותינו</span></div>
                 <div>שאלות ותשובות</div>
-                <div>פורום למידה</div>
-                <div>פייסבוק</div>
-                <div>צור קשר</div>
+                <div class="footer-learning-forum">פורום למידה<span class="icon"></span></div>
+                <div class="footer-facebook">פייסבוק<span class="icon"></span></div>
+                <a href="mailto:someone@example.com?Subject=צור קשר" target="_top">צור קשר</a>
             </div>
         </div>
         <div class="print-div"></div>
@@ -233,6 +235,7 @@
         <script src="js/Classes.js"></script>
         
         <script src="js/AnswerPageController.js"></script>
+        <script src="js/navigatorController.js"></script>
         <script src="js/chooseTestController.js"></script>
         <script src="js/script.js"></script>
         <script src="js/report.js"></script>

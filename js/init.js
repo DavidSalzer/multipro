@@ -1,25 +1,19 @@
 var main = {//holds all controllers
     ajax: new ajaxHandler(),
     timerController: new TimerController(),
-    testChooseController: null,
+    testChooseController: new TestChooserController(),
     testController: new TestController(),
     reportController: new ReportController(),
-    answerPageController:new AnswerPageController('#answers-page'),
+    answerPageController: new AnswerPageController('#answers-page'),
+    navigatorController: new Navigator(),
 
 
     start: function () {
         //main.reportController = new TestController();
+        main.navigatorController.attachEvents();
         main.reportController.initChart();
-        main.ajax.getTests(function (data) {
-            if (!data.error) {
-                var testArr = []; ;
-                for (var i = 0; i < data.length; i++) {
-                    testArr.push(new Test(data[i].id, data[i].title, data[i].numberOfQuestions));
-                }
-                main.testChooseController = new TestChooserController(testArr);
-                main.testChooseController.visit();
-            }
-        });
+        main.navigatorController.changeToPage('choose-test');//the first page to move to
+        
     }
 }
     main.start();

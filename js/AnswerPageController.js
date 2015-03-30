@@ -16,8 +16,7 @@ function AnswerPageController(element) {
             self.AfterPrint();//bring back hideen elements and return to initial state
         });
         $(document).on('click', '.button-container-answer-page .returnto-report .icon', function () {
-            self.leave();
-            main.reportController.visit();
+             main.navigatorController.changeToPage('reportPage');//move to the test page
         });
     }
 

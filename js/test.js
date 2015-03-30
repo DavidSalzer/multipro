@@ -1,12 +1,26 @@
 function TestController() {
     var self = this;
     var numberOFVisits = 0;
+    var testId;
+    var numOfQuestions;
 
     //represents an entrance to the page-the only way to enter the test page
-    this.visit = function (testId) {
-        
-        if (testId)
-            self.initTest(testId);
+    this.visit = function () {
+      
+      //call from server questions for given test
+        main.ajax.getQuestionsForTest(testId, function (data) {
+          
+          //self.visit();
+            var arr=data;
+            if (!data.error) {
+                if(numOfQuestions)
+                    arr=cutarr(arr,numOfQuestions);
+                    console.log(numOfQuestions);
+                console.log(arr);
+                oninitTest(arr);
+            } //if data doesnt have error
+        });
+        //time out for tips
         setTimeout(function(){
             self.showTip(1);
              setTimeout(function(){
@@ -25,6 +39,7 @@ function TestController() {
     //represents an exit from the test page
     this.leave = function () {
          $("#test-container").hide();
+         main.timerController.resetGeneralTimers();
     }
 
     this.showTip=function(number){
@@ -76,19 +91,10 @@ function TestController() {
     }
 
     //init the test page with the questions
-    this.initTest = function (testId,numOfquestions) {        
-        //call from server questions for given test
-        main.ajax.getQuestionsForTest(testId, function (data) {
-            self.visit();
-            var arr=data;
-            if (!data.error) {
-                if(numOfquestions)
-                    arr=cutarr(arr,numOfquestions);
-                    console.log(numOfquestions);
-                console.log(arr);
-                oninitTest(arr);
-            } //if data doesnt have error
-        });
+    this.initTest = function (_testId,_numOfquestions) {
+        testId=_testId;  
+        numOfQuestions=_numOfquestions;   
+        
     }
     function cutarr(arr,bound){
                 var cutArr=[];
@@ -183,6 +189,15 @@ function TestController() {
                             var current = mySwiper.activeIndex;
                             var last = mySwiper.previousIndex;
                             if(current!=last){
+                                var width=37;//single element of pagination width with margin
+                                var holderWidth=$('.pagination').width();
+                                var numberOfElements=$('.swiper-pagination-switch').length;
+                                var pos=current*37;
+                                var overallWidth=width*numberOfElements;
+                                var pagePos=overallWidth-pos-37;//the actual position on the elemnt 
+                                var centerOfParent=width*7;
+                                console.log(pagePos);
+                                $('.pagination').scrollLeft(pagePos-centerOfParent);//-would keep the bar at the position of the currnt slide
                                 $($('.swiper-pagination-switch')[current]).addClass('swiper-active-switch');
                                 $($('.swiper-pagination-switch')[last]).removeClass('swiper-active-switch');
                             }
@@ -332,7 +347,7 @@ function TestController() {
         main.timerController.resetGeneralTimers();
         // var reportController = new ReportController();
 
-        self.leave(); //leave the page
+        //self.leave(); //leave the page
         //check that there is a report controller if not initiliaze one
         if (main.reportController);
         else
@@ -340,15 +355,14 @@ function TestController() {
         
         main.answerPageController.addQuestionArr(self.questions);//add to answer page the data of the question
         main.answerPageController.addToView();
-        main.reportController.visit();
+        //main.reportController.visit();
+        self.leave();
+        main.navigatorController.changeToPage('reportPage');//move to the test page
+
         report = new Report(self.questions,stagesHolder);
         main.reportController.insertData(report);
-        //self.checkAnswers();
-        //var reportController = new ReportController();
-        //reportController.initChart();
-
-        //reportController.initChart();
-        main.reportController.drawChart();
+       
+      
 
     }
 

@@ -1,36 +1,37 @@
 
-function TestChooserController(_tests) {
+function TestChooserController() {
     var numberOfVisits = 0;
     var self = this;
-    var tests = _tests;
+    var tests = null;
 
     //sets all events of the page choosetestpage
     this.attachEvents = function () {
         $(document).on('click', '#choose-test-btn', function () {
             //check that there is a test chosen
             var choice = ($('#year-choose-dropdown :selected').attr('value')); //the number of test in array
-            var choiseNumOfQuestions = $('#number-for-excercise .number-content').text();
+            var choiseNumOfQuestions = $('#number-for-excercise .number-content').text(); //the number of wanted questions
             //console.log(tests[choice]);
-           
             self.leave();
-             main.testController.initTest(tests[choice].id,choiseNumOfQuestions);
-            //main.testController.visit();
+            main.testController.initTest(tests[choice].id, choiseNumOfQuestions); //set the test page data
+            //main.navigatorController.changeToPage('test');//move to the test page
+           
+            main.testController.visit();
         });
         $(document).on('mousedown', '.plus', function () {//add number of questions to excersise
             addNumberOfQuestions();
-            var longclick= setInterval(function(){
+            var longclick = setInterval(function () {
                 addNumberOfQuestions();
-            },100);
-             $(document).off('mouseup', '.plus').on('mouseup', '.plus', function () {clearInterval(longclick)});
-           
+            }, 100);
+            $(document).off('mouseup', '.plus').on('mouseup', '.plus', function () { clearInterval(longclick) });
+
         });
         $(document).on('mousedown', '.minus', function () {//add number of questions to excersise
             reduceNumberOfQuestions();
-            var longclick= setInterval(function(){
+            var longclick = setInterval(function () {
                 reduceNumberOfQuestions();
-            },100);
-             $(document).off('mouseup', '.minus').on('mouseup', '.minus', function () {clearInterval(longclick)});
-           
+            }, 100);
+            $(document).off('mouseup', '.minus').on('mouseup', '.minus', function () { clearInterval(longclick) });
+
         });
         $(document).on('change', '#year-choose-dropdown', function (event) {
             self.updateChoiceOfTest();
@@ -93,19 +94,45 @@ function TestChooserController(_tests) {
         self.setTimer();
     }
 
+    //represent an entry to page
     this.visit = function () {
-         $('#choose-test-container').show();
+        $('.footer').show();
+        $("#test-title").hide();
+        $("#general-timer").hide();
         if (numberOfVisits == 0)//only first visit sets all events
             self.attachEvents();
-        self.setTests();
-        self.updateChoiceOfTest();
-        self.setNumberOfQuestions(20); //default as 20
         numberOfVisits++;
-        self.setTimer(); //set timer according to chosen test(the default one)
+        if (tests == null) {//if there isnt yet data for the tests call from server the data
+            main.ajax.getTests(function (data) {
+                if (!data.error) {
+                    var testArr = []; ;
+                    for (var i = 0; i < data.length; i++) {
+                        testArr.push(new Test(data[i].id, data[i].title, data[i].numberOfQuestions));
+                    }
+                    tests = testArr;
+                    setDataToView();
+                }
+            });
+        }
+        //if there is tests data allready just show it
+        else
+            setDataToView();
+
+    }
+    //sets the test from data to view for choice
+    function setDataToView() {
+                     $('#choose-test-container').show();//show the page
+
+                    self.setTests(); //put the test in dropbox
+                    self.updateChoiceOfTest(); //set data according to default test the top test
+                    self.setNumberOfQuestions(20); //default as 20                
+                    self.setTimer(); //set timer according to chosen test(the default one)
     }
     this.leave = function () {
+       
         $('#choose-test-container').hide();
-       $('.footer').hide();    
+        $('.footer').hide();
+
     }
     //private function to get the max of question for given test
     function getMaxNumberOfQuestions(){

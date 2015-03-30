@@ -1,6 +1,6 @@
 #welcome {
     
-    margin-top:110px;
+    /*margin-top:110px;*/
     font-size: 35px;
 }
 #welcome span:first-child {
@@ -14,9 +14,11 @@
 .center-text {
     text-align: center;
 }
-/*#choose-test-container {
-    text-align: center;
-}*/
+
+#choose-test-container {
+    margin-top: auto;
+ 
+}
 /*#year-choose-dropdown option{
     
     height: 50px;
