@@ -1,12 +1,14 @@
+//conteolls navigation for pages through hashing controllers should have visit and leave for working with Navigator
 function Navigator() {
     var self = this;
     
     var currentPage = '';
-
+    //all controllers are could through main
     var controllers = {"choose-test":"testChooseController", "test":"testController", "reportPage":"reportController", "answers-page":"answerPageController"};
 
     var pages = ["choose-test", "test", "reportPage", "answers-page"];
 
+    //attch events for change pages one is the on hash change and other - documnet ready for refresh pages
     this.attachEvents = function () {
 
         //if refresh so also call the function
@@ -19,7 +21,7 @@ function Navigator() {
     }
 
     this.changeToPage = function (page) {
-        ////if the moving back to test  which means not getting to test from chosse test so jump to choose test
+        //if the moving back to test  which means not getting to test from chosse test so jump to choose test
         //if (page == 'test' && currentPage != 'choose-test')
         //    location.hash = 'choose-test';
         //else//other pages
@@ -43,9 +45,9 @@ function Navigator() {
         
 
         //move to the wanted page 
-        console.log(controllers[moveTo]);
+        
         main[controllers[moveTo]].visit();
         currentPage = moveTo; //save the new page as current
-        console.log(moveTo);
+        
     }
 }

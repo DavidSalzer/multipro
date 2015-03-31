@@ -11,28 +11,29 @@ function TestChooserController() {
             var choice = ($('#year-choose-dropdown :selected').attr('value')); //the number of test in array
             var choiseNumOfQuestions = $('#number-for-excercise .number-content').text(); //the number of wanted questions
             //console.log(tests[choice]);
-            self.leave();
+            self.leave();//leave current page
             main.testController.initTest(tests[choice].id, choiseNumOfQuestions); //set the test page data
             //main.navigatorController.changeToPage('test');//move to the test page
            
-            main.testController.visit();
+            main.testController.visit();//change page to test
         });
         $(document).on('mousedown', '.plus', function () {//add number of questions to excersise
             addNumberOfQuestions();
             var longclick = setInterval(function () {
                 addNumberOfQuestions();
             }, 100);
-            $(document).off('mouseup', '.plus').on('mouseup', '.plus', function () { clearInterval(longclick) });
+            $(document).off('mouseup', '.plus').on('mouseup', '.plus', function () { clearInterval(longclick) });//for long click
 
         });
-        $(document).on('mousedown', '.minus', function () {//add number of questions to excersise
+        $(document).on('mousedown', '.minus', function () {//reduce number of questions to excersise
             reduceNumberOfQuestions();
             var longclick = setInterval(function () {
                 reduceNumberOfQuestions();
             }, 100);
-            $(document).off('mouseup', '.minus').on('mouseup', '.minus', function () { clearInterval(longclick) });
+            $(document).off('mouseup', '.minus').on('mouseup', '.minus', function () { clearInterval(longclick) });//for long click
 
         });
+        //choice of test affects oter fields
         $(document).on('change', '#year-choose-dropdown', function (event) {
             self.updateChoiceOfTest();
         })
@@ -128,10 +129,11 @@ function TestChooserController() {
                     self.setNumberOfQuestions(20); //default as 20                
                     self.setTimer(); //set timer according to chosen test(the default one)
     }
+
     this.leave = function () {
        
-        $('#choose-test-container').hide();
-        $('.footer').hide();
+        $('#choose-test-container').hide();//leve page hide the page
+        $('.footer').hide();//footer at other parts of the test is hidden
 
     }
     //private function to get the max of question for given test

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" type="text/css" href="css/tester.css">
+        <link rel="stylesheet" type="text/css" href="css/reset.css">
+        <link rel="stylesheet" href="css/idangerous.swiper.css">
+        <link rel="stylesheet" href="css/jquery-ui.css">
+        <link rel="stylesheet" href="css/timeTo.css">
+        <link rel="stylesheet" type="text/css" href="css/StyleMain.css">
+        <link rel="stylesheet" type="text/css" href="css/StyleStatistics.css">
+        <link rel="stylesheet" type="text/css" href="css/czChart.css">
+        <script></script>
+         <script src="js/jquery.js"></script>
+        <title></title>
+    </head>
+    <body dir="rtl">
+        <div id="reportPage">
+            <!--<div style="background-color: #808080; width: 100%; height: 80px;">
+                <img src="./img/sidebar.png" style="display: inline-block; padding-left: 20px; padding-top: 24px;">
+                <img src="./img/userImage.png" style="display: inline-block; padding-right: 20px; padding-top: 24px; float: right;">
+                <div id="userName"style="display: inline-block; float: right; padding-top: 30px; color: #ffffff; font-size: 20px; padding-right: 10px;"> </div>
+            </div>-->
+            <div class="container">
+                <div class="stats-title">סיכום נתוני נבחן:</div>
+                <div class="pie-chart-text"> 
+                    <img src="./img/win.png" style="display: inline-block;">
+                    <div style="display: inline-block;">  ציון מבחן </div>
+                </div>
+                <div id="chart_div_pie" style="display: inline-block;"></div>
+                <div id="chart_div_bar" style="width: 700px; height: 300px; display: inline-block;"></div>
+               <div id="drop-box-holder" dir="rtl">
+                    <div class="drop-box" id="report-chooser" dir="rtl">
+                        <div class="drop-box-button-holder"><button class="drop-box-header" >תצוגה לפי מהלך המבחן</button></div>
+                        <div class="drop-box-arrow-holder"><img src="img/arrowdown.png"></div>
+                            <div class="drop-box-inside">
+                              <div>
+                                  <div class="drop-box-button-holder"><button id="viewTimeTest" class="drop-box-button" >תצוגה לפי מהלך המבחן</button></div>
+                                  <div class="drop-box-button-holder"><button id="stages-Timeline-button" class="drop-box-button" >חלוקה לשלישים</button></div>
+                                  <div class="drop-box-button-holder"><button id="chooseGuess" class="drop-box-button" >שאלות שניחשתי</button></div>
+                                  <div class="drop-box-button-holder"><button id="changed-Timeline-button" class="drop-box-button" >שאלות ששיניתי</button></div> 
+                              </div>           
+                            </div>         
+                    </div>
+                </div>
+                <div class="nonStageTimeLine-Holder time-line-grandfather" >
+                    <div class="time-line-holder" id="questionsTime" style="display: inline-block;"></div>
+                    <div class="time-line-holder" id="guessTimeLine" style="display: none"></div>
+                </div>
+                <div class="stageTimeLine-Holder time-line-grandfather" style="display: none">
+                    <div dir="rtl" class="timeLine-label">שליש ראשון</div>
+                    <div class="time-line-holder" id="firstStageTimeLine" style="display: inline-block;"></div>
+                </div>
+                <div class="stageTimeLine-Holder time-line-grandfather" style="display: none">
+                   <div dir="rtl" class="timeLine-label">שליש שני</div>
+                     <div class="time-line-holder" id="secondStageTimeLine" style="display: inline-block;"></div>
+                </div>
+                <div class="stageTimeLine-Holder time-line-grandfather" style="display: none">
+                    <div dir="rtl" class="timeLine-label">שליש שלישי</div>
+                    <div class="time-line-holder" id="thirdStageTimeLine" style="display: inline-block;"></div>
+                </div>
+                <div id="changedTimeLineParent" style="display: none"></div>
+                
+                <div class="tips-container"  align="center"  style="margin-top: 70px;">
+                     <div style="position: relative;">
+                          <div class="watch-answers"><span class="icon"></span><span class="text"> צפה בתשובות</span></div>
+                        <div id="tips" style="display: table-cell; vertical-align: middle; text-align: center;"></div>
+                        
+                     </div>
+                    <!--<div id="tips" align="center" ></div>-->
+                </div>
+              
+            </div>
+        </div>
+        <div class="test-tip tip1">
+            <div class="tip-container">
+                <div class="tip-x"></div>
+                <div class="owl-icon"></div>
+                <div class="tip-text">
+                    <span>סימנת מעט שאלות לחזור עליהן.<br>חבל! זה כלי חשוב <span class="tip-text-bold">בכל מה שאתה מתלבט סמן כוכבית!</span></span>
+                </div>
+                <div class="asterik-icon"></div>
+             </div>
+        </div>
+        <div class="test-tip tip2">
+            <div class="tip-container">
+                <div class="tip-x"></div>
+                <div class="owl-icon"></div>
+                <div class="tip-text">
+                    <span>אתה עובר מהר מדי בין השאלות לא מרוכז?<span class="tip-text-bold"><br>זה הזמן להפסקה יזומה!</span></span>
+                </div>
+             </div>
+        </div>
+      <script src="js/jquery.js"></script>
+        <script src="model/ajaxHandler.js"></script>
+        <!--<script src="js/idangerous.swiper.js"></script>
+         <script src="js/jquery.timeTo.min.js"></script>
+        <script type="text/javascript" src="js/excanvas.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>              
+       <script src="js/jquery-ui.min.js"></script>
+
+         <script src="js/Classes.js"></script>
+        <script src="js/script.js"></script>
+        <script src="js/report.js"></script>
+        <script src="js/timer.js"></script>
+        <script src="js/test.js"></script>
+        <script src="js/init.js"></script>-->
+        
+   <script>
+       var a = new ajaxHandler();
+       a.logIn('asssfffssssss', '123123', function (data) {
+          console.log(data);
+       });
+       //a.logOut();
+   </script>
+    </body>
+</html>
