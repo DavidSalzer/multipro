@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" type="text/css" href="css/reset.css">
+        <link rel="stylesheet" href="css/idangerous.swiper.css">
+        <link rel="stylesheet" href="css/jquery-ui.css">
+        <link rel="stylesheet" href="css/timeTo.css">
+        <link rel="stylesheet" type="text/css" href="css/StyleMain.css">
+        <link rel="stylesheet" type="text/css" href="css/StyleStatistics.css">
+        <link rel="stylesheet" type="text/css" href="css/czChart.css">
+        <link rel="stylesheet" type="text/css" href="css/chooseTestPage.css">
+        <link rel="stylesheet" type="text/css" href="css/answerPage.css">
+        <title></title>
+    </head>
+    <body>
+        <header>
+            <div id="user-container">
+                <div id="user-image"></div>
+                <div id="user-name">ישראל ישראלי</div>
+            </div>
+            <div id="timer">
+                <div class="icon"></div>
+            </div>
+            <div id="logo">
+                <div class="icon"></div>
+            </div>
+        </header>
+        <div id="wrapper" class="wrapper">
+        <div id="answers-page" dir="rtl">
+            
+            <div class="button-container-answer-page"><div class="print"><span class="icon"></span><span class="text">הדפס מבחן</span></div><div class="returnto-report"><span class="icon"></span><span class="text">חזור לדוח</span></div></div>
+        </div>
+            </div>
+        <div class="print-div"></div>
+        <script src="js/jquery.js"></script>
+        <script src="js/Classes.js"></script>
+        <!--<script src="model/ajaxHandler.js"></script>-->
+        <script src="js/AnswerPageController.js"></script>
+        <script>
+            $('.wrapper').css('bottom', '80px');
+            var a = new AnswerPageController('#answers-page');
+            var q = {
+                "question": "מה נכון לגבי השינויים במערכת הנשימה בהריון ?",
+                "answers": [
+                   "היקף בית החזה קטן",
+            "הנפח השאריתי residual volume עולה",
+            "ישנה חמצת נשימתית קלה",
+            "נפח בית החזה קטן"
+                    ],
+                "correctAns": 4,
+                "year": 2000,
+                "bookReferance": 100,
+                "handler": new QuestionHandler()
+            }
+            q.handler.visit();
+            q.handler.addAnswer(2);
+            q.handler.leave();
+            a.addQuestion(q);
+            q.handler.asterisk = true;
+            a.addQuestion(q);
+            q.handler.questionMark = true;
+            a.addQuestion(q);
+            a.addQuestion(q); a.addQuestion(q);
+            a.addQuestion(q);
+            a.addQuestion(q);
+            a.addQuestion(q);
+            a.addQuestion(q);
+
+            a.addQuestion(q);
+            a.addQuestion(q);
+            a.addQuestion(q);
+            a.addQuestion(q);
+            a.addQuestion(q);
+            a.addQuestion(q);
+            a.addQuestion(q);
+            a.addQuestion(q);
+            a.addQuestion(q);
+
+            a.addToView();
+            a.visit();
+        </script>
+    </body>
+</html>

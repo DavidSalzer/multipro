@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" type="text/css" href="css/reset.css">
+        <link rel="stylesheet" href="css/idangerous.swiper.css">
+        <link rel="stylesheet" href="css/jquery-ui.css">
+        <link rel="stylesheet" href="css/timeTo.css">
+        <link rel="stylesheet" type="text/css" href="css/StyleMain.css">
+        <link rel="stylesheet" type="text/css" href="css/StyleStatistics.css">
+        <link rel="stylesheet" type="text/css" href="css/czChart.css">  
+        <link rel="stylesheet" type="text/css" href="css/chooseTestPage.css">
+        <title></title>
+    </head>
+    <body>
+        <header>
+            <div id="user-container">
+                <div id="user-image"></div>
+                <div id="user-name">ישראל ישראלי</div>
+            </div>
+                    
+           
+
+            <div id="logo">
+                <div class="icon"></div>
+            </div>            
+        </header>
+        <div id="choose-test-container" class="cd-form" dir="rtl">
+            <div id="welcome" class="choose-test-box center-text"><span>ברוך הבא:</span><span id="welcome-name">ישראל ישראלי</span></div>
+            <div id="test-tirgool" class="choose-test-box center-text">תרגול מבחן</div>
+            <div class="cd-select choose-test-box">
+                    <select id="year-choose-dropdown">
+                       <!-- <option value="a">שחזור 2006</option>-->
+                    </select>
+                </div>
+            
+            <div id="number-Of-Questions" class="choose-test-box">
+               
+                <span class="label">מספר שאלות במבחן</span>
+                <span class="content">10</span>
+               
+            </div>
+            <div id="number-for-excercise" class="choose-test-box">
+                <div>מספר שאלות לתרגול</div>
+                <div class="number-changer">
+                    <div class="plus">+</div>
+                    <div class="number-content">10</div>
+                    <div class="minus">-</div>
+                </div>
+            </div>
+             <div id="test-computer-time"class="choose-test-box">
+                  <div class="label">זמן מחשב</div>
+                  <div class="content">00:00:00</div>
+             </div>
+            <div class="choose-test-box" id="choose-test-btn-holder">
+                <input type="button" id="choose-test-btn" value="תרגל"></input>
+            </div>
+        </div>
+        <script src="js/jquery.js"></script>
+        <script src="js/Classes.js"></script>
+        <script src="model/ajaxHandler.js"></script>
+        <script src="js/chooseTestController.js"></script>
+    </body>
+</html>

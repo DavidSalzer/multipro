@@ -1,6 +1,7 @@
 var stages=[0,'firstStage','secondStage','thirdStage']//stages that are in the test- constant variable
 //holds a question of test
 function Question(qnumber,obj){
+    this.id = obj.id;
     this.question=obj.question;//the question itself
     this.answers = obj.answers;//an array of answers
     this.correctAns = obj.correctAns;//the correct answer
@@ -31,6 +32,7 @@ function QuestionHandler(){
     this.timeInVisit = {firstStage:[],
                         secondStage:[],
                         thirdStage:[]};//holds for each focus on question how much time was on focus according to each stage
+    this.timeInQuestion = [];
    //when visit a question it might be only to scroll on, so check time for considiring if called for visit, saves the times the question was focused on and,  and how much time was focused in question
    //the callback would return with astring of the time and would be given only after delaytime for show timer
     this.visit = function (callback) {
@@ -40,26 +42,27 @@ function QuestionHandler(){
                                     callback(self.timer.setToView())
                             });
                         }
-    this.leave = function (callback) {//once there is a focus out of a question then it might have been early so stop the timer so the number of visits wouldnt update, furthermore if there was an answer or it was changed so add the given answer
-        if (self.timer.minutes > 0 || self.timer.seconds > delayTimeBetweenQuestion || tempAnswer != null) {
-            self.currentAnswer = tempAnswer;
-            self.timesvisited++;
-            self.timeInVisit[QuestionHandler.stage].push(self.timer.setToView());
-            if (callback)
-                callback();
-        }
-        if (timeForAnswer != null) {//stop the delay for adding answer as given answer
-            clearTimeout(timeForAnswer);
-            timeForAnswer = null;
-        }
-        this.timer.stopTimer();
-        //if there is a given answer so add the answer to memory
-        if (tempAnswer != null) {
-            self.currentAnswer = tempAnswer;
-            self.givenAnswers[QuestionHandler.stage].push(tempAnswer);
-            tempAnswer = null;
-        }
-    }
+     this.leave = function (callback) {//once there is a focus out of a question then it might have been early so stop the timer so the number of visits wouldnt update, furthermore if there was an answer or it was changed so add the given answer
+                            if (self.timer.minutes > 0 || self.timer.seconds > delayTimeBetweenQuestion || tempAnswer != null) {
+                                self.currentAnswer = tempAnswer;
+                                self.timesvisited++;
+                                self.timeInVisit[QuestionHandler.stage].push(self.timer.setToView());
+                                if (callback)
+                                    callback();
+                            }
+                            if (timeForAnswer != null) {//stop the delay for adding answer as given answer
+                                clearTimeout(timeForAnswer);
+                                timeForAnswer = null;
+                            }
+                            this.timer.stopTimer();
+                            //if there is a given answer so add the answer to memory
+                            if (tempAnswer != null) {
+                                self.currentAnswer = tempAnswer;
+                                self.givenAnswers[QuestionHandler.stage].push(tempAnswer);
+                                tempAnswer = null;
+                            }
+                            self.timeInQuestion = self.timeInVisit[QuestionHandler.stage];//fix up- no stages in question
+                        }
 
     this.addAnswer = function (answer) {//once given answer add to given answers for further processing, concept- if change while in question not consdiered a change and only the last answer would be considered, chnage is called for when user leffed a question and returend and only then would save question or changed after 60 seconds
         self.eraseNonAnswer(answer); //check if in non answers array and erase if overthere
@@ -69,7 +72,7 @@ function QuestionHandler(){
         }
         timeForAnswer = setTimeout(function () { self.givenAnswers[QuestionHandler.stage].push(answer) }, 180000); //after 3 minutes save the answer() if wont be changed would be added the leave of question
         tempAnswer = answer; //the answer for while on focus on question
-        console.log(self.getGivenAnswersAll());
+        
     }
     this.eraseAnswer = function (answer) {
         if (this.currentAnswer == answer)

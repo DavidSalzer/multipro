@@ -12,7 +12,7 @@ function TestChooserController() {
             var choiseNumOfQuestions = $('#number-for-excercise .number-content').text(); //the number of wanted questions
             //console.log(tests[choice]);
             self.leave();//leave current page
-            main.testController.initTest(tests[choice].id, choiseNumOfQuestions); //set the test page data
+            main.testController.initTest(tests[choice].id, choiseNumOfQuestions); //set the test page data and move to test page
             //main.navigatorController.changeToPage('test');//move to the test page
            
             main.testController.visit();//change page to test

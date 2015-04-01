@@ -12,6 +12,7 @@ function ajaxHandler() {
     this.addUser = addUser;
     this.logIn = logIn;
     this.logOut = logOut;
+    this.add_question_data_to_user = add_question_data_to_user;
     //calls from domain all the years of tests
     function getTestYears(callback) {
         $.ajax({
@@ -110,7 +111,23 @@ function ajaxHandler() {
             }
         });
     }
-
+    function add_question_data_to_user(qArr,callback) {
+        $.ajax({
+            type: 'GET',
+            data: {
+                questionArr:JSON.stringify(qArr)
+            },
+            url: domain + "?json=multi.set_questions_behavior&dev=1",
+            dataType: 'json',
+            success: function (data) {
+                if (callback)
+                    callback(data);
+            },
+            error: function (e) {
+                console.log(e.message);
+            }
+        });
+    }
     function tester() {
         $.ajax({
             type: 'GET',
@@ -119,7 +136,7 @@ function ajaxHandler() {
                 password:"123456",
                 email:"asd@dsadhhhhs.com"  
             },
-            url: domain + "?json=users.getCurrent&dev=1",
+            url: domain + "?json=multi.getQB&dev=1",
             dataType: 'json',
             success: function (data) {
                 console.log(data);
