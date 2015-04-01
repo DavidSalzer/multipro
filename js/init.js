@@ -1,5 +1,7 @@
 var main = {//holds all controllers
     ajax: new ajaxHandler(),
+
+    signInController:new SignInController(),
     timerController: new TimerController(),
     testChooseController: new TestChooserController(),
     testController: new TestController(),

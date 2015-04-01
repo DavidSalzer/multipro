@@ -4,7 +4,7 @@ function Navigator() {
     
     var currentPage = '';
     //all controllers are could through main
-    var controllers = {"choose-test":"testChooseController", "test":"testController", "reportPage":"reportController", "answers-page":"answerPageController"};
+    var controllers = {"signIn":"signInController","choose-test":"testChooseController", "test":"testController", "reportPage":"reportController", "answers-page":"answerPageController"};
 
     var pages = ["choose-test", "test", "reportPage", "answers-page"];
 

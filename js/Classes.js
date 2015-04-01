@@ -421,9 +421,10 @@ function ErrorHandler(etype) {
      var errorTexts = ["תקלה בחיבור לשרת"];
      //hold the types of erros
      //0-connection error with server
+     //1-local error
      this.error=true;//says that there is an error
      this.errorType = etype;
-     this.errorText = errorTexts[this.errorType];
+     this.text = errorTexts[this.errorType];
  }
 
  ///////////////////////////////////////////////////////////
