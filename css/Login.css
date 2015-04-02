@@ -1,19 +1,11 @@
 .Login-page {
-    height: 100%;
-    width: 100%;
     background-color: #f2f2f4;
-}
-.enter-btn {
-    height: 40px;
-    width: 112px;
-    background-color: #f89921;
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-right: 25px;
-    color: white;
-    line-height: 34px;
-    text-align: center;
-    border-radius: 3px;
+     overflow-y: auto;
+  position: absolute;
+  top: 0;
+  bottom:0;
+  left: 0;
+  right: 0;
 }
 
 .Login-header {
@@ -80,6 +72,7 @@ text-align: center;
   border: 2px solid #D57F2A;
   padding: 10px 0 10px 0;
   margin-top: 15px;
+  cursor: pointer;
 }
 
 input{

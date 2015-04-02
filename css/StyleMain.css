@@ -96,6 +96,7 @@ header{
     width: 180px;
     height: 100%;
     border-left: 2px solid #fff;
+    cursor: pointer;
 }
 
 #user-image {

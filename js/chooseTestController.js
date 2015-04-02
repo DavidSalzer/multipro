@@ -6,23 +6,27 @@ function TestChooserController() {
 
     //sets all events of the page choosetestpage
     this.attachEvents = function () {
+        $(document).on('click', '#user-container', function () {//logout
+            main.ajax.logOut();
+            main.navigatorController.changeToPage('logIn');
+        });
         $(document).on('click', '#choose-test-btn', function () {
             //check that there is a test chosen
             var choice = ($('#year-choose-dropdown :selected').attr('value')); //the number of test in array
             var choiseNumOfQuestions = $('#number-for-excercise .number-content').text(); //the number of wanted questions
             //console.log(tests[choice]);
-            self.leave();//leave current page
+            self.leave(); //leave current page
             main.testController.initTest(tests[choice].id, choiseNumOfQuestions); //set the test page data and move to test page
             //main.navigatorController.changeToPage('test');//move to the test page
-           
-            main.testController.visit();//change page to test
+
+            main.testController.visit(); //change page to test
         });
         $(document).on('mousedown', '.plus', function () {//add number of questions to excersise
             addNumberOfQuestions();
             var longclick = setInterval(function () {
                 addNumberOfQuestions();
             }, 100);
-            $(document).off('mouseup', '.plus').on('mouseup', '.plus', function () { clearInterval(longclick) });//for long click
+            $(document).off('mouseup', '.plus').on('mouseup', '.plus', function () { clearInterval(longclick) }); //for long click
 
         });
         $(document).on('mousedown', '.minus', function () {//reduce number of questions to excersise
@@ -30,7 +34,7 @@ function TestChooserController() {
             var longclick = setInterval(function () {
                 reduceNumberOfQuestions();
             }, 100);
-            $(document).off('mouseup', '.minus').on('mouseup', '.minus', function () { clearInterval(longclick) });//for long click
+            $(document).off('mouseup', '.minus').on('mouseup', '.minus', function () { clearInterval(longclick) }); //for long click
 
         });
         //choice of test affects oter fields
@@ -98,6 +102,9 @@ function TestChooserController() {
     //represent an entry to page
     this.visit = function () {
         $('.footer').show();
+        $("#timer").show();
+        $('#user-container').show();
+        $('#logo').show();
         $("#test-title").hide();
         $("#general-timer").hide();
         if (numberOfVisits == 0)//only first visit sets all events
@@ -131,7 +138,7 @@ function TestChooserController() {
     }
 
     this.leave = function () {
-       
+        console.log('chosse leave')
         $('#choose-test-container').hide();//leve page hide the page
         $('.footer').hide();//footer at other parts of the test is hidden
 

@@ -13,6 +13,7 @@ function ajaxHandler() {
     this.logIn = logIn;
     this.logOut = logOut;
     this.add_question_data_to_user = add_question_data_to_user;
+    this.get_logged_in = get_logged_in;
     //calls from domain all the years of tests
     function getTestYears(callback) {
         $.ajax({
@@ -150,6 +151,9 @@ function ajaxHandler() {
     function addUser(username,pass,email,callback) {
         $.ajax({
             type: 'GET',
+            xhrFields: {
+             withCredentials: true
+           },  
             data:{
                 username:username,
                 password:pass,
@@ -168,18 +172,24 @@ function ajaxHandler() {
         });
     }
     //log in for given user log in with the wordpress
-    function logIn(username,pass,callback) {
+    function logIn(email,pass,callback) {
+        var d = new Date();
+        var n = d.getTime();
         $.ajax({
             type: 'GET',
-            data:{
-                username:username,
-                password:pass
+            data: {
+                email: email,
+                password: pass
             },
-            url: domain + "?json=users.logIn&dev=1",
+            xhrFields: {
+             withCredentials: true
+           },   
+            url: domain + "?json=users.logIn&dev=1&x="+n,
             dataType: 'json',
             success: function (data) {
-               if(callback)
-                    callback(data)
+                console.log(data);
+                if (callback)
+                    callback(data);
             },
             error: function (e) {
                 console.log(e.message);
@@ -193,6 +203,9 @@ function ajaxHandler() {
             type: 'GET',       
             url: domain + "?json=users.logOut&dev=1",
             dataType: 'json',
+            xhrFields: {
+             withCredentials: true
+           },
             success: function (data) {
                if(callback)
                     callback(data)
@@ -221,5 +234,24 @@ function ajaxHandler() {
         });
     }
 
+    //gets current userthat is logged in on current session
+    function get_logged_in(callback) {
+        $.ajax({
+            type: 'POST',
+            xhrFields: {
+             withCredentials: true
+           },       
+            url: domain + "?json=users.getCurrent&dev=1",
+            dataType: 'json',
+            success: function (data) {
+               if(callback)
+                    callback(data)
+            },
+            error: function (e) {
+                console.log(e.message);
+                callback(new ErrorHandler(0)); //sends an error handler
+            }
+        });
+    }
 
 }
