@@ -59,8 +59,8 @@ function AnswerPageController(element) {
         html += '<div class="title icons">';
         html += '<div class="question-status">';
         html += '<div class="question-state ' + qState + '"></div>';
-        html += '<div class="asterisk settings-item ' + asterisk + '" title="תזכורת לחשוב על זה שוב"><img src="../img/asterisk.png"></div>';
-        html += '<div class="circle settings-item '+questionMark+'" title="תזכורת לפתור אחר כך"><img src="../img/circle.png"></div>';
+        html += '<div class="asterisk settings-item ' + asterisk + '" title="תזכורת לחשוב על זה שוב"><img src="img/asterisk.png"></div>';
+        html += '<div class="circle settings-item '+questionMark+'" title="תזכורת לפתור אחר כך"><img src="img/circle.png"></div>';
         html += '</div>';
         html += '</div>';
         html += '<div class="question-content">';
@@ -69,7 +69,7 @@ function AnswerPageController(element) {
         html += '<span class="number">' + question.questionNumber + '</span><span class="text">' + question.question + '</span></div>';
         for (var i = 0; i < question.answers.length; i++) {//add answers
             var aState = ((i + 1) == question.correctAns) ? "<img src='img/v.png'/>" : "";//would hold the sorce correct answer image
-            var wrong = ((i + 1) == question.handler.nowAnswer() && !question.handler.answerdCorrectly()) ? "<img src='../img/red-x.png'/>" : "";//would hold the sorce for wrong  image
+            var wrong = ((i + 1) == question.handler.nowAnswer() && !question.handler.answerdCorrectly()) ? "<img src='img/red-x.png'/>" : "";//would hold the sorce for wrong  image
             var choice = ((i + 1) == question.handler.nowAnswer()) ? "answer" : "";
             html += '<div class="answer-item" data-answer-num="' + i + 1 + '"><div class="answer-state">'+aState+wrong+'</div><span class="number ' + choice + '" title="סימון תשובה">' + alphabets[i] + '.</span><span class="text">' + question.answers[i] + '</span></div>';
         }

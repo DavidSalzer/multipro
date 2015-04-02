@@ -84,7 +84,7 @@
   cursor: pointer;
 }
 
-input{
+.signIn-page input,.Login-page input{
     font-family: "Open Sans Hebrew","Open Sans","Arial",sans-serif;
     font-size: 1.2em;
     text-align: right;

@@ -75,16 +75,7 @@ text-align: center;
   cursor: pointer;
 }
 
-input{
-    font-family: "Open Sans Hebrew","Open Sans","Arial",sans-serif;
-    font-size: 1.2em;
-    text-align: right;
-    height: 35px;
-    padding-right: 4%;
-    margin-bottom: 15px;
-    border-style: none;
-    border: 1px solid #dddddf;
-}
+
 
 .Login-forgot{
 text-align: right;

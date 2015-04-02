@@ -13,8 +13,9 @@ var main = {//holds all controllers
 
     start: function () {
         main.navigatorController.attachEvents();
-        main.reportController.initChart();
+        main.reportController.initChart();//initilze the report mainly to load google api
         main.ajax.get_logged_in(function (data) {
+            
             console.log(data)
             if (data != false) {//if logged in and got user so go to choose test
                 main.userId = data.ID; //the user id that was created-saved globally
@@ -25,9 +26,11 @@ var main = {//holds all controllers
             else {//not logged in so go to log in page
                 main.navigatorController.changeToPage('logIn'); //the first page to move to
             }
+           
         })
     }
 }
+ 
     main.start();
     //var reportController = new ReportController();
     //    reportController.initChart();
