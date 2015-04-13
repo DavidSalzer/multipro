@@ -1,13 +1,15 @@
 
 function ajaxHandler() {
-    //var domain = "http://multipro.local/";
-    var domain = "http://multipro.co.il.tigris.nethost.co.il/";
+    var domain = "http://multipro.local/";
+    //var domain = "http://multipro.co.il.tigris.nethost.co.il/";
 
     this.getTestYears = getTestYears;
     this.getTestNames=getTestNames;
     this.getQuestionsForTest = getQuestionsForTest;
     this.getTestNameById = getTestNameById;
     this.getTests = getTests;
+    this.set_last_question = set_last_question;
+    this.get_last_question = get_last_question;
     this.tester = tester;
     this.addUser = addUser;
     this.logIn = logIn;
@@ -56,20 +58,20 @@ function ajaxHandler() {
             }
         });
     }
-    //calls from domain all the names of tests
-    function getQuestionsForTest(testId, callback) {
+    //calls from domain questions of tests-and sets the questions in two arrays one is for the not done questions and second for done questions, gets the number of wanted questions of not done
+    function getQuestionsForTest(user_id,test_id,numberOfQuestions, callback) {
         $.ajax({
             type: 'GET',
-            url: domain + "?json=multi.getQuestionsForTest&id=" + testId + "&dev=1",
+            url: domain + "?json=multi.getQuestionsForTest&dev=1",
             dataType: 'json',
+             data:{
+                userID:user_id,
+                numberOfQuestions:numberOfQuestions,
+                testID:test_id
+            },
             success: function (data) {
-                dataArr = [];
-                for (var attr in data) {//set data to arr and not obj
-                    if (attr != 'status')
-                        dataArr.push(data[attr]);
-                }
                 if (callback)
-                    callback(dataArr);
+                    callback(data);
             },
             error: function (e) {
                 console.log(e.message);
@@ -92,6 +94,7 @@ function ajaxHandler() {
             }
         });
     }
+    //gets all test from server
     function getTests(callback) {
         $.ajax({
             type: 'GET',
@@ -112,13 +115,55 @@ function ajaxHandler() {
             }
         });
     }
-    function add_question_data_to_user(qArr,callback) {
+    function set_last_question(user_id,test_id,number_of_question,callback) {
         $.ajax({
             type: 'GET',
-            data: {
-                questionArr:JSON.stringify(qArr)
+            data:{
+                userID:user_id,
+                testID:test_id,
+                numOfQuestion:number_of_question
             },
-            url: domain + "?json=multi.set_questions_behavior&dev=1",
+            url: domain + "?json=multi.set_last_question&dev=1",
+            dataType: 'json',
+            success: function (data) {
+                if (callback)
+                    callback(data);
+            },
+            error: function (e) {
+                console.log(e.message);
+                callback(new ErrorHandler(0)); //sends an error handler
+            }
+        });
+    }
+    //gets the number of the last question of given test id
+    function get_last_question(user_id,test_id,callback) {
+        $.ajax({
+            type: 'GET',
+            data:{
+                userID:user_id,
+                testID:test_id
+            },
+            url: domain + "?json=multi.get_last_question&dev=1",
+            dataType: 'json',
+            success: function (data) {
+                if (callback)
+                    callback(data);
+            },
+            error: function (e) {
+                console.log(e.message);
+                callback(new ErrorHandler(0)); //sends an error handler
+            }
+        });
+    }
+    function add_question_data_to_user(userId,qArr,testid,callback) {
+        $.ajax({
+            type: 'POST',
+            data: {
+                questionArr:JSON.stringify(qArr),
+                userID:userId,
+                testID:testid
+            },
+            url: domain + "?json=multi.set_test_behavior&dev=1",
             dataType: 'json',
             success: function (data) {
                 if (callback)
@@ -240,7 +285,8 @@ function ajaxHandler() {
             type: 'POST',
             xhrFields: {
              withCredentials: true
-           },       
+           },
+                 
             url: domain + "?json=users.getCurrent&dev=1",
             dataType: 'json',
             success: function (data) {

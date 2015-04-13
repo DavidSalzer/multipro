@@ -73,18 +73,17 @@ function ReportController() {
                     stagesTimeLine[stage].addToTimeLine(stagestimelineData[stage][i].questionNum, stagestimelineData[stage][i].timeInQuestion, stagestimelineData[stage][i].correct,stagestimelineData[stage][i].asterisk,stagestimelineData[stage][i].questionMark);
                 }
                 else {
-
                     stagesTimeLine[stage].addToTimeLineNotAnswered(stagestimelineData[stage][i].questionNum, stagestimelineData[stage][i].timeInQuestion,stagestimelineData[stage][i].asterisk,stagestimelineData[stage][i].questionMark);
                 }
             }
         }
         for (var i = 0; i < timelineData.length; i++) {
             if (timelineData[i].answered)
-                this.timeLine.addToTimeLine(i + 1, timelineData[i].time, timelineData[i].correct,timelineData[i].asterisk,timelineData[i].questionMark);
+                this.timeLine.addToTimeLine(timelineData[i].qNumber, timelineData[i].time, timelineData[i].correct,timelineData[i].asterisk,timelineData[i].questionMark);
             else
                 this.timeLine.addToTimeLineNotAnswered(i + 1, timelineData[i].time,timelineData[i].asterisk,timelineData[i].questionMark);
             if (timelineData[i].answered && timelineData[i].guess) {
-                guesTimeLine.addToTimeLine(i + 1, 1, timelineData[i].correct,timelineData[i].asterisk,timelineData[i].questionMark);
+                guesTimeLine.addToTimeLine(timelineData[i].qNumber, 1, timelineData[i].correct,timelineData[i].asterisk,timelineData[i].questionMark);
             }
         }
         createChangedTimeLine(report);

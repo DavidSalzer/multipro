@@ -1,33 +1,36 @@
 function TestController() {
     var self = this;
+    this.alphabets = ["א", "ב", "ג", "ד", "ה", "ו"];
+    this.questions = [];
+    this.doneQuestions = [];
+    this.notdoneQuestions = [];
     var numberOFVisits = 0;
     var testId;
     var numOfQuestions;
+    var firstQuestion;//the first question is the question after the last question done
 
     //represents an entrance to the page-the only way to enter the test page
     this.visit = function () {
-      
       //call from server questions for given test
-        main.ajax.getQuestionsForTest(testId, function (data) {
-          
+        main.ajax.getQuestionsForTest(main.userId,testId,numOfQuestions, function (data) {
+          console.log(main.userId);
+          console.log(testId);
           //self.visit();
             var arr=data;
-            if (!data.error) {
-                if(numOfQuestions)
-                    arr=cutarr(arr,numOfQuestions);
-                    console.log(numOfQuestions);
-                console.log(arr);
-                oninitTest(arr);
+            if (!data.error) {    
+                console.log(data);          
+                oninitTest(data.test,data.done);//sets the test with not done questions and with done questions-would begin at not done questions
+                 //time out for tips
+                setTimeout(function(){
+                    self.showTip(1);
+                     setTimeout(function(){
+                         self.showTip(2);
+                     },20000);
+                },20000);
             } //if data doesnt have error
         });
-        //time out for tips
-        setTimeout(function(){
-            self.showTip(1);
-             setTimeout(function(){
-                 self.showTip(2);
-             },20000);
-        },20000);
-        //setTimeout(self.showTip(2),40000);
+       
+        
         $("#test-container").show();
         $("#test-title").show();
         $("#general-timer").show();
@@ -65,19 +68,21 @@ function TestController() {
     }
 
     this.attachEvents = function () {
-        $(".swiper-wrapper ").on("click", ".swiper-slide-active .asterisk", self.asterisk);
+        $(".swiper-wrapper ").on("click", ".swiper-slide-active .active .asterisk", self.asterisk);
 
-        $(".swiper-wrapper").on("click", ".swiper-slide-active .circle", self.circle);
+        $(".swiper-wrapper").on("click", ".swiper-slide-active .active .circle", self.circle);
 
-        $(".swiper-wrapper").on("click", ".swiper-slide-active .answer-icon", self.pushAnswer);
+        $(".swiper-wrapper").on("click", ".swiper-slide-active .active .answer-icon", self.pushAnswer);
 
-        $(".swiper-wrapper").on("click", ".swiper-slide-active .answer-item .number", self.pushAnswer);
+        $(".swiper-wrapper").on("click", ".swiper-slide-active .active .answer-item .number", self.pushAnswer);
 
-        $(".swiper-wrapper").on("click", ".swiper-slide-active .not-answer-icon", self.notAnswer);
+        $(".swiper-wrapper").on("click", ".swiper-slide-active .active .not-answer-icon", self.notAnswer);
 
-        $(".swiper-wrapper").on("click", ".swiper-slide-active .clear", self.clear);
+        $(".swiper-wrapper").on("click", ".swiper-slide-active .active .clear", self.clear);
 
-        $(".swiper-wrapper").on("click", ".swiper-slide-active .guess", self.guess);
+        $(".swiper-wrapper").on("click", ".swiper-slide-active .active .guess", self.guess);
+
+        $(".swiper-wrapper").on("focusout", ".swiper-slide-active .active .question-feature-text input",saveComment);
 
         $("#finish").on("click", self.finishTest);
 
@@ -96,61 +101,49 @@ function TestController() {
         numOfQuestions=_numOfquestions;   
         
     }
-    function cutarr(arr,bound){
-                var cutArr=[];
-                for(var i=0;i<bound&&i<arr.length;i++)
-                    cutArr.push(arr[i]);
-                return cutArr;
+    
+    //after inserting comment saves the comment
+    function saveComment(event){
+        var current=self.swiper.activeIndex;
+        self.questions[current].handler.comment=$(event.target).val();
     }
-
    
-    function oninitTest(data) {
-                for (var i = 0; i < data.length; i++) {
-                    self.questions.push(new Question(i + 1, data[i]));
+    function oninitTest(questions_not_done,questions_done) {
+                
+                firstQuestion=questions_done.length;//the first question is the question after the last question done
+                 for (var i = 0; i <questions_done.length; i++) {//sets the questions that were done allready and are not going to be active
+                    var numOfquestion=i + 1;
+                    var question=questions_done[i];
+                    self.doneQuestions.push(question);//add to done and add to test
+                    self.questions.push(question);
                 }
-                main.timerController.initGeneralTimer(data.length*1.5);//set timer for minute and half for each question
-                html = '';
-                //loop on answers
-                for (i = 0; i < self.questions.length; i++) {
-                    html += '<div class="swiper-slide">';
-                    html += '     <div class="question-container" data-question-num=' + (i + 1) + '>';
-                    html += '         <div class="title">';
-                    html += '               <div class="question-status">';
-                    html += '                   <div class="asterisk settings-item" title="תזכורת לחשוב על זה שוב"></div>';
-                    html += '                   <div class="circle settings-item" title="תזכורת לפתור אחר כך"></div>';
-                    html += '               </div>';
-                    html += '               <span class="question-title">';
-                    html += '                   <span class="number">' + (i + 1) + '.</span><span class="text">' + self.questions[i].question + '</span></div>';
-                    html += '               </span>';
-                    html += '           <div class="answers-container">';
-                    //loop on answers
-                    for (j = 0; j < self.questions[i].answers.length; j++) {
-                        html += '             <div class="answer-item" data-answer-num=' + (j + 1) + '><span class="not-answer-icon" title="פסילת תשובה"></span><!--<span class="answer-icon" title="סימון תשובה">--></span><span class="number" title="סימון תשובה">' + self.alphabets[j] + '.</span><span class="text">' + self.questions[i].answers[j] + '</span></div>';
-                    }
-                    html += '           </div>';
-                    html += '           <div class="question-feature">';
-                    html += '               <div class="guess question-feature-item"><div class="icon"></div><div class="question-feature-text">ניחוש</div></div>';
-                    html += '               <div class="clear question-feature-item"><div class="icon"></div><div class="question-feature-text">נקה</div></div>';
-                    html += '               <div class="comment question-feature-item"><div class="icon"></div>    <div class="question-feature-text"><input type="text" placeholder="כתוב הערה"></div> </div>';
-
-                    html += '              <div class="timer question-feature-item"><div class="icon"></div><div class="question-feature-text">12:00</div></div>';
-                    html += '           </div>';
-                    html += '     </div>';
-                    html += '</div>';
-
-
-                    /////////////////////////////////////////////
-                    self.testResult[i] = {
+                for (var j=0; j <questions_not_done.length; i++,j++) {
+                    var numOfquestion=i+1;
+                    var question=(new Question(numOfquestion,questions_not_done[j]));
+                    self.questions.push(question);//add to not done and add to test
+                    self.notdoneQuestions.push(question);
+                     self.testResult[i] = {
                         circle: 0,
                         asterisk: 0,
                         visited: 0,
                         guess: 0,
                         chooseNotAnswer: []
                     };
-
                 }
-
-
+               
+                main.timerController.initGeneralTimer(questions_not_done.length*1.5);//set timer for minute and half for each question
+                html = '';
+                                
+                for (i = 0; i <  self.doneQuestions.length; i++) {
+                     html +=setSlideQuestion(false,self.doneQuestions[i]);
+                 }
+                 //loop on questions not done
+                for (i = 0; i < self.notdoneQuestions.length; i++) {
+                     html +=setSlideQuestion(true,self.notdoneQuestions[i]);
+                     /////////////////////////////////////////////                   
+                }
+                
+                    
                 //set Swiper
                 $(".swiper-wrapper").html(html);
                 $(document).tooltip();
@@ -167,19 +160,13 @@ function TestController() {
                     slidesPerView: 'auto',
                     watchActiveIndex: true,
                     onSwiperCreated: function (mySwiper) {
-                        //initialized slider for the first slide
-                        setJumpBar()
-                        var current = mySwiper.activeIndex;
-                        $(mySwiper.slides[current]).find('.timer').hide();
-                        if (fadetimer != null)
-                            clearTimeout(fadetimer);
-                        fadetimer = setTimeout(function () {//timeout for showing timer
-                            $(mySwiper.slides[current]).find('.timer').show();
-                        }, 60000);
-                        self.questions[current].handler.visit(function (data) {
-                            $(mySwiper.slides[current]).find('.timer .question-feature-text').html(data);
-                        }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
                         self.swiper = mySwiper;
+                        //initialized slider for the first slide
+                        setJumpBar();//sets pagination as jump bar
+                        var current = mySwiper.activeIndex;
+                        if(current>=firstQuestion)
+                            onVisitQuestion(current);
+                        
                         //set jumper bar- that would have question numbers
                         $('.swiper-pagination-switch').each(function (key) {
                             $(this).html(key + 1);
@@ -203,46 +190,95 @@ function TestController() {
                             }
 
                         }; //stop the update of pagination but set that would set the activated slider
+                        mySwiper.swipeTo(firstQuestion);
 
                     },
                     onSlideChangeStart: function (swiper) {
-                        //setJumpBar()
+                        
                         //each time focused on question a timer is set to check if question is centered if less then given time so its not considered that the user is in the question, 
                         //so when a question is focused the given question statrs a timer and the prev question is stopped the timer (if relevent)
                         var current = swiper.activeIndex;
                         var last = swiper.previousIndex;
-
-                        $(swiper.slides[current]).find('.timer').hide();
-                        //check if timeout was set at all
-                        if (fadetimer != null)
-                            clearTimeout(fadetimer);
-                        fadetimer = setTimeout(function () {//timeout for showing timer
-                            $(swiper.slides[current]).find('.timer').show();
-                        }, 60000);
-                        self.questions[last].handler.leave(function () {
-                            //check if got to last question if yes and still in stage 1 so move to stage 2
-                            checkStage(last);
-                            stagesHolder[stage].push(new timeLineObject(self.questions[last]));
-                        }); //stops the previous question and check if it was considedrd a visit to add to stage holder
-                        self.questions[current].handler.visit(function (data) {
-                            $(swiper.slides[current]).find('.timer .question-feature-text').html(data);
-                        }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
-                       // swiper.updatePagination();
+                        if(current>=firstQuestion)//only if the question is part of the active test so handle question
+                            onVisitQuestion(current);
+                        if(last>=firstQuestion)//only if the last question is part of active test so handle question
+                            onLeaveQuestion(last);
+                       
                     }
                 });
+
+                //handles the visit of question on change of slide
+               function onVisitQuestion(current){
+                                $(self.swiper.slides[current]).find('.timer').hide();
+                                //check if timeout was set at all
+                                if (fadetimer != null)
+                                    clearTimeout(fadetimer);
+                                fadetimer = setTimeout(function () {//timeout for showing timer
+                                    $(self.swiper.slides[current]).find('.timer').show();
+                                }, 60000);
+                                 self.questions[current].handler.visit(function (data) {
+                                    $(self.swiper.slides[current]).find('.timer .question-feature-text').html(data);
+                                }); //visit the question and start timer to see if the user actually wants to be in the question and if stays so save how much time, additionally the timer woud be shown after a minute. 
+            }
+            //handles the leaving of question on change of slide
+            function onLeaveQuestion(last){
+                console.log('leave q');
+                            self.questions[last].handler.leave(function () {
+                                //check if got to last question if yes and still in stage 1 so move to stage 2
+                                checkStage(last);
+                                stagesHolder[stage].push(new timeLineObject(self.questions[last]));
+                            }); //stops the previous question and check if it was considedrd a visit to add to stage holder
+            }
+            self.onLeaveQuestion=onLeaveQuestion;        
     }
+    
     function setJumpBar() {
         
                     $elemArr = $('.swiper-pagination-switch');
-                    $elemArr.toggleClass('swiper-visible-switch', false);
-                    for (var i = 0; i < $elemArr.length; i++) {
-                        //$($elemArr[i]).toggleClass('swiper-hidden-switch', i % 5 !== 0);
-                        $($elemArr[i]).toggleClass('swiper-visible-switch');
-                    }
+                    $elemArr.toggleClass('swiper-visible-switch', true);
+                    //for (var i = 0; i < $elemArr.length; i++) {
+                    //    //$($elemArr[i]).toggleClass('swiper-hidden-switch', i % 5 !== 0);
+                    //    $($elemArr[i]).toggleClass('swiper-visible-switch');
+                    //}
     }
-    //check visited for this question
-    this.visited = function () {
+    
+    //set a slider question for a  question on init test get active for active question for not done question and not active for in pass done question
+    function setSlideQuestion(active,question){
+                var activeclass=(active)?'active':'not-active';
+                var asterisk = (question.handler.asterisk) ? "selected" : "";//for done questions add the data to view
+                var questionMark = (question.handler.questionMark) ? "selected" : "";
+                var guess=(question.handler.guess) ? "selected" : "";
 
+
+                var html='';
+                    html += '<div class="swiper-slide">';
+                    html += '     <div class="question-container '+activeclass+'" data-question-num=' + question.questionNumber+ '>';
+                    html += '         <div class="title">';
+                    html += '               <div class="question-status">';
+                    html += '                   <div class="asterisk settings-item '+asterisk+'" title="תזכורת לחשוב על זה שוב"></div>';
+                    html += '                   <div class="circle settings-item '+questionMark +'" title="תזכורת לפתור אחר כך"></div>';
+                    html += '               </div>';
+                    html += '               <span class="question-title">';
+                    html += '                   <span class="number">' + question.questionNumber + '.</span><span class="text">' + question.question + '</span></div>';
+                    html += '               </span>';
+                    html += '           <div class="answers-container">';
+                    //loop on answers
+                    for (j = 0; j < question.answers.length; j++) {
+                        var choice = ((j + 1) == question.handler.currentAnswer) ? "answer" : "";
+                        html += '             <div class="answer-item" data-answer-num=' + (j + 1) + '><span class="not-answer-icon" title="פסילת תשובה"></span><!--<span class="answer-icon" title="סימון תשובה">--></span><span class="number '+choice+'" title="סימון תשובה">' + self.alphabets[j] + '.</span><span class="text">' + question.answers[j] + '</span></div>';
+                    }
+                    html += '           </div>';
+                    html += '           <div class="question-feature">';
+                    html += '               <div class="guess question-feature-item '+guess+'"><div class="icon"></div><div class="question-feature-text">ניחוש</div></div>';
+                    html += '               <div class="clear question-feature-item"><div class="icon"></div><div class="question-feature-text">נקה</div></div>';
+                    html += '               <div class="comment question-feature-item"><div class="icon"></div>    <div class="question-feature-text"><input type="text" placeholder="כתוב הערה" value="'+question.handler.comment+'"></div> </div>';
+
+                    html += '              <div class="timer question-feature-item"><div class="icon"></div><div class="question-feature-text">12:00</div></div>';
+                    html += '           </div>';
+                    html += '     </div>';
+                    html += '</div>';
+                                       
+             return html;
     }
 
     //save a asterisk for this question
@@ -340,30 +376,31 @@ function TestController() {
 
 
     this.finishTest = function () {
+        if(self.swiper.activeIndex>=firstQuestion)
+            self.onLeaveQuestion(self.swiper.activeIndex);
         //if finsh test but still on question so we need to "leave that question"
-        self.questions[self.swiper.activeIndex].handler.leave(function () {
-            stagesHolder[stage].push(new timeLineObject(self.questions[self.swiper.activeIndex]));
-        }); //stops the previous question and check if it was considedrd a visit to add to stage holder
+        
         main.timerController.resetGeneralTimers();
         // var reportController = new ReportController();
 
         //self.leave(); //leave the page
         //check that there is a report controller if not initiliaze one
-        if (main.reportController);
+        if (main.reportController);//check that report is initiliazesd
         else
            main.reportController= new ReportController();
         
-        main.answerPageController.addQuestionArr(self.questions);//add to answer page the data of the question
+        main.answerPageController.addQuestionArr(self.notdoneQuestions);//add to answer page the data of the question
         main.answerPageController.addToView();
         //main.reportController.visit();
         self.leave();
         main.navigatorController.changeToPage('reportPage');//move to the test page
 
-        report = new Report(self.questions,stagesHolder);
+        report = new Report(self.notdoneQuestions,stagesHolder);
         main.reportController.insertData(report);
-       
+        main.ajax.add_question_data_to_user(main.userId, self.questions, testId, function (data) {
+               console.log(data);
+        });
       
-
     }
 
     this.checkAnswers = function () {
@@ -386,8 +423,7 @@ function TestController() {
         //reportController.initChartPie(10, 4);
     }
 
-    this.alphabets = ["א", "ב", "ג", "ד", "ה", "ו"];
-    this.questions = [];
+    
     //checks If all questions were answerd to see if need to move to third Stage
     function checkStage(qNumber) {
         if (qNumber + 1 == self.questions.length && stage == stages[1])
@@ -401,8 +437,8 @@ function TestController() {
     //checks if there is a question not answered
     function findNotAnswered(){
         var found = false;
-        for(var i=0;i<self.questions.length;i++){
-            if (self.questions[i].handler.nowAnswer() == null)
+        for(var i=0;i<self.notdoneQuestions.length;i++){
+            if (self.notdoneQuestions[i].handler.nowAnswer() == null)
                 found = true;
         }
         return found;            

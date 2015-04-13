@@ -110,22 +110,46 @@
         
    <script>
        var a = new ajaxHandler();
-       a.getQuestionsForTest(13, function (data) {
-           var arr = data;
-           var qarr = [];
-           if (!data.error) {
-               console.log(arr);
-               for (var i = 0; i < data.length; i++) {
-                   qarr.push(new Question(i + 1, data[i]));
-               }
-               qarr[1].handler.visit();
-               qarr[1].handler.addAnswer(1);
-               qarr[1].handler.leave();
-               a.add_question_data_to_user(qarr, function (datab) {
-                   console.log(datab);
-               });
-           } //if data doesnt have error
-       });
+       //a.set_last_question(16, 1038, 5, function (data) {
+       //    console.log(data);
+       //    a.get_last_question(16, 1038, function (data) { 
+       //          console.log(data);
+       //    });
+       //});
+       var q = [{
+           "question": "לאחר חריגת ביצית בשלה בביוץ:   ",
+           "answers": [
+                       "נשאר בשחלה גופיף צהוב שמפריש פרוגסטרון ותומך בהריון",
+               "הביצית הבשלה שחרגה מפרישה לעצמה את ההורמונים הדרושים להתפתחות הריון",
+               "הגופיף הצהוב הינו איזור בשחלה ללא תפקיד",
+               "רק אם ביצית תופרה על ידי זרע יופרש פרוגסטרון מהגופיף הצהוב"
+                       ],
+           "correctAns": 1,
+           "id": 25,
+           "handler": new QuestionHandler()
+       }]
+       var b = [];
+       a.getQuestionsForTest(16,1363, 3, function (data) {
+           console.log(data);
+           for (var i = 0; i < data.test.length; i++) {
+               b.push(new Question(i + 1, data.test[i]));
+           }
+           console.log(b);
+           //b[0].handler.visit();
+           //b[0].handler.addAnswer(2);
+           //b[0].handler.leave();
+           //b[1].handler.visit();
+           //b[1].handler.addAnswer(2);
+           //b[1].handler.leave();
+           a.add_question_data_to_user(16, b,1363, function (data) {
+               console.log(data);
+           });
+
+       })
+       //a.add_question_data_to_user(16, q, function (data) {
+       //    console.log(data);
+       //});
+
 
 
        //a.logOut();

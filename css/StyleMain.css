@@ -453,6 +453,8 @@ display: inline-block;
 .question-feature-item.timer {
    background-color: #6d6e72;
    width: 100px;
+   display: none;
+   
 }
 
 .question-feature-item.comment input{

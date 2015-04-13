@@ -22,6 +22,7 @@ function QuestionHandler(){
     this.questionMark = false;
     this.currentAnswer = null;//the actual answer of the question initiliazed as null for no answer
     this.correctAnswer = 0;
+    this.comment = '';
     this.guess=0;//initilize as non guess
     this.timer = new Timer();
     this.givenAnswers = {firstStage:[],
@@ -255,7 +256,7 @@ function Report(givenQuestions,stagesHolder) {
     this.getDataForQuestions = function () {
         var arr = []
         for (var i = 0; i < questions.length; i++) {
-            arr.push({ time: questions[i].handler.getOverAllTimeInQuestion(), correct: questions[i].handler.answerdCorrectly(), answered: questions[i].handler.nowAnswer() != null, guess: questions[i].handler.guess == 1,changed:questions[i].handler.getGivenAnswersAll().length>1,asterisk:questions[i].handler.asterisk,questionMark :questions[i].handler.questionMark  });            
+            arr.push({ qNumber:questions[i].questionNumber,time: questions[i].handler.getOverAllTimeInQuestion(), correct: questions[i].handler.answerdCorrectly(), answered: questions[i].handler.nowAnswer() != null, guess: questions[i].handler.guess == 1,changed:questions[i].handler.getGivenAnswersAll().length>1,asterisk:questions[i].handler.asterisk,questionMark :questions[i].handler.questionMark  });            
         }
         return arr;
     }
@@ -271,10 +272,10 @@ function Report(givenQuestions,stagesHolder) {
                 for (var i = 0; i < numberOFChanges; i++) {
                     if (qarr.length - 1 >= i) {
                         var correct = (qarr[i] == questions[j].correctAns)
-                        arr[i].push({ qNumber: j + 1, correct: correct, changed: true,asterisk:questions[j].handler.asterisk,questionMark :questions[j].handler.questionMark });
+                        arr[i].push({ qNumber: questions[j].questionNumber, correct: correct, changed: true,asterisk:questions[j].handler.asterisk,questionMark :questions[j].handler.questionMark });
                     }
                     else
-                        arr[i].push({ qNumber: j + 1, changed: false,asterisk:questions[j].handler.asterisk,questionMark :questions[j].handler.questionMark });
+                        arr[i].push({ qNumber: questions[j].questionNumber, changed: false,asterisk:questions[j].handler.asterisk,questionMark :questions[j].handler.questionMark });
                 }
                 //for
             }
