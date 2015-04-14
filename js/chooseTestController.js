@@ -6,9 +6,14 @@ function TestChooserController() {
 
     //sets all events of the page choosetestpage
     this.attachEvents = function () {
-        $(document).on('click', '#user-container', function () {//logout
-            main.ajax.logOut();
-            main.navigatorController.changeToPage('logIn');
+        $(document).on('mouseenter', '#user-container', function () {//open - logout
+            $('#user-logout').show();
+        });
+        $(document).on('mouseleave', '#user-container', function () {//close - logout
+            $('#user-logout').hide();
+        });
+        $(document).on('click', '#user-logout', function () {//logout
+            logOut();
         });
         $(document).on('click', '#choose-test-btn', function () {
             //check that there is a test chosen
@@ -41,6 +46,10 @@ function TestChooserController() {
         $(document).on('change', '#year-choose-dropdown', function (event) {
             self.updateChoiceOfTest();
         })
+    }
+    function logOut() { 
+            main.ajax.logOut();
+            main.navigatorController.changeToPage('logIn');
     }
     function addNumberOfQuestions() {
         var number = parseInt($('.number-content').text());

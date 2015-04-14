@@ -112,6 +112,9 @@ function TestController() {
     function oninitTest(questions_not_done,questions_done) {
                 
                 firstQuestion=questions_done.length;//the first question is the question after the last question done
+                if(firstQuestion>0){//notify that test begins not at question number 1
+                    alert('המבחן מתחיל משאלה: '+(firstQuestion+1));
+                }
                  for (var i = 0; i <questions_done.length; i++) {//sets the questions that were done allready and are not going to be active
                     var numOfquestion=i + 1;
                     var question=questions_done[i];
