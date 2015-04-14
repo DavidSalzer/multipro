@@ -307,6 +307,9 @@ function Report(givenQuestions,stagesHolder) {
             sum += stagesArrays[stage][i].timeInQuestion;
         return sum;
     }
+    this.getMark = function () {
+        return mark = Math.floor(this.correctAnswers / numberOfquestions * 100);
+    }
     self.setChartStats();
     // check if there were answers before that were mistakes 
     function checkIfChangedFromWrong(question) {

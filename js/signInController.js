@@ -39,8 +39,11 @@ function SignInController() {
                  $('#user-name,#welcome-name').text(username);
                  console.log(data);
              }
-             else {
-                 alert(data.text); //show error text
+             else{
+                 var msg = '';
+                 for (var i = 0; i < data.error.length; i++)
+                     msg += data.error[i].text + ', ';
+                 alert(msg);
              } //error
          });
      }

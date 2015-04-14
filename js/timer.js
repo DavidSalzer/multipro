@@ -28,7 +28,7 @@ function TimerController() {
            function () {
                $("#general-timer").html("00:00:00");
                alert("המבחן נגמר!");
-               testController.finishTest(); //finish test               
+               main.testController.finishTest(); //finish test               
            }, minutes * 60 * 1000);
 
     }

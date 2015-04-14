@@ -55,6 +55,7 @@ function ReportController() {
         this.correctAnswers = report.correctAnswers;
         this.nonCorrectAnswers = report.wrongAnswers;
         this.numberOfQuestions = report.numOfQuestions();
+        $('#test-mark').text(report.getMark());//put mark
         //run the timeline controller
         this.timeLine = new TimeLineView('mainTimeLine', main.timerController.getOverAllTime(), report.getNumOfVisitedQuestions(), '#questionsTime');
         var guesTimeLine = new TimeLineView('guessTimeLinea', 1, 1, '#guessTimeLine');
@@ -130,7 +131,7 @@ function ReportController() {
 
         //self.questionsTime = [{ time: 5, corectAns: true }, { time: 5, corectAns: true }, { time: 1, corectAns: true }, { time: 3, corectAns: true }, { time: 3, corectAns: true }, { time: 2, corectAns: true }, { time: 7, corectAns: true }, { time: 5, corectAns: true }, { time: 4, corectAns: true }, { time: 1, corectAns: true }, { time: 1, corectAns: true }, { time: 3, corectAns: true }, { time: 9, corectAns: true }, { time: 13, corectAns: true }, { time: 3, corectAns: true }, { time: 5, corectAns: true}];
 
-        self.setUser({ firstName: "ישראל", lastName: "ישראלי" });
+        //self.setUser({ firstName: "ישראל", lastName: "ישראלי" });
 
         // Load the Visualization API and the piechart package.
         google.load('visualization', '1.0', { 'packages': ['corechart'] });

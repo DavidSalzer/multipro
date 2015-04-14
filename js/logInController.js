@@ -43,9 +43,12 @@ function LogInController() {
                  main.navigatorController.changeToPage('choose-test');
                  $('#user-name,#welcome-name').text(data.user.data.display_name);
                  console.log(data);
-             }//success
+             } //success
              else {
-                 alert(data.text); //show error text
+                 var msg = '';
+                 for (var i = 0; i < data.error.length; i++)
+                     msg += data.error[i].text + ', ';
+                 alert(msg);
              } //error
          });
      }

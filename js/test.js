@@ -20,13 +20,14 @@ function TestController() {
             if (!data.error) {    
                 console.log(data);          
                 oninitTest(data.test,data.done);//sets the test with not done questions and with done questions-would begin at not done questions
-                 //time out for tips
-                setTimeout(function(){
-                    self.showTip(1);
-                     setTimeout(function(){
-                         self.showTip(2);
-                     },20000);
-                },20000);
+                 //time out for tips- in the mean time disabled
+
+                //setTimeout(function(){
+                //    self.showTip(1);
+                //     setTimeout(function(){
+                //         self.showTip(2);
+                //     },20000);
+                //},20000);
             } //if data doesnt have error
         });
        
