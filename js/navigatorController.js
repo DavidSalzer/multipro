@@ -43,21 +43,24 @@ function Navigator() {
 
         //get the hash and go to wanted page and leave currnt page
         var moveTo = (location.hash).substring(1);
-        console.log(moveTo);
-        console.log(currentPage);
-        //leave the page that was at but might be refreshed so if the same as the current dont
-        if (currentPage != '')
-            main[controllers[currentPage]].leave();
-        //if the moving back to test  which means not getting to test from chosse test so jump to choose test
-        //if (moveTo == 'test' && currentPage != 'choose-test')
-        //    moveTo = 'choose-test';
+        if (moveTo == '')//if did back at first page
+            location.hash = currentPage;
+        else {
+            console.log(moveTo);
+            console.log(currentPage);
+            //leave the page that was at but might be refreshed so if the same as the current dont
+            if (currentPage != '')
+                main[controllers[currentPage]].leave();
+            //if the moving back to test  which means not getting to test from chosse test so jump to choose test
+            //if (moveTo == 'test' && currentPage != 'choose-test')
+            //    moveTo = 'choose-test';
 
 
-        //move to the wanted page 
-        
-        main[controllers[moveTo]].visit();
-        currentPage = moveTo; //save the new page as current
-        
+            //move to the wanted page 
+
+            main[controllers[moveTo]].visit();
+            currentPage = moveTo; //save the new page as current
+        }
 
     }
 }
