@@ -111,3 +111,10 @@ text-align: right;
     margin-bottom: 15px;
     font-size: 25.5px;
 }
+.explanation {
+    margin-top: 15px;    
+    font-size: 17px;
+}
+.explanation a {
+    color: blue;
+}
