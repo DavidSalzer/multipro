@@ -83,3 +83,31 @@ text-align: right;
   margin-right: 15px;
   color: #6D6E72;
 }
+.phone-numbers {
+    margin-top: 30px;
+    font-size: 0;
+    text-align: center;
+    
+}
+.phone-numbers a{
+    color: #6D6E72;
+    text-decoration:none;
+    margin-right: 2px;
+}
+.phone-divider {
+    margin: 0 3px;
+    text-align: center;
+    display: inline-block;
+    font-size: 17px;
+}
+.phone-numbers .phonenumber {
+    display: inline-block;
+    font-size: 17px;
+    color: #6D6E72;
+}
+.phone-number-details {
+   
+    color: #6D6E72;
+    margin-bottom: 15px;
+    font-size: 25.5px;
+}
