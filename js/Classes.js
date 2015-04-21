@@ -165,7 +165,7 @@ function Timer(){
      //for given format from timer as time="mm:ss" would get number of seconds
      Timer.convertFromFormat = function (time) {
          var parsed = time.split(":");
-         console.log(parsed);
+         //console.log(parsed);
          var minutes = parseInt(parsed[0]);
          var seconds = parseInt(parsed[1]);
          return minutes * 60 + seconds
@@ -385,7 +385,7 @@ function Printer(elem){
         win.document.write('<'+'/'+'head'+'"><'+'body'+' dir="rtl"><div dir="rtl">');
         win.document.write(data);
         win.document.write('</div><'+'/'+'body'+'><'+'/'+'html'+'>');      
-        console.log((win.document));
+        //console.log((win.document));
        // win.document.close();
         win.print();
         win.close();        

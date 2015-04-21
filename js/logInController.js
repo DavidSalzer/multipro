@@ -42,7 +42,7 @@ function LogInController() {
                  main.userId = data.user.ID; //the user id that was created-saved globally
                  main.navigatorController.changeToPage('choose-test');
                  $('#user-name,#welcome-name').text(data.user.data.display_name);
-                 console.log(data);
+                 //console.log(data);
              } //success
              else {
                  var msg = '';

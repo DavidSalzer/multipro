@@ -11,7 +11,7 @@ function request(url, callback) {
             callback(data);
         },
         error: function (e) {
-            console.log(e.message);
+            //console.log(e.message);
         }
     });
 }
@@ -30,7 +30,7 @@ function getTest() {
                 givenq[i].handler = new QuestionHandler();
             }
         }
-        console.log(data);
+        //console.log(data);
     });
 }
 

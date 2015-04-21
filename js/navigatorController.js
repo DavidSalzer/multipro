@@ -46,8 +46,8 @@ function Navigator() {
         if (moveTo == '')//if did back at first page
             location.hash = currentPage;
         else {
-            console.log(moveTo);
-            console.log(currentPage);
+            //console.log(moveTo);
+            //console.log(currentPage);
             //leave the page that was at but might be refreshed so if the same as the current dont
             if (currentPage != '')
                 main[controllers[currentPage]].leave();

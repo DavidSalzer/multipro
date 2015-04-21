@@ -66,7 +66,7 @@ function ReportController() {
         }
         var timelineData = report.getDataForQuestions();
         var stagestimelineData = report.getDataForStages();
-        console.log(stagestimelineData);
+        //console.log(stagestimelineData);
         //create three stages time line
         for (var stage in stagestimelineData) {
             for (var i = 0; i < stagestimelineData[stage].length; i++) {
@@ -375,7 +375,7 @@ function ReportController() {
                var scroller_height = copied_elem.height();
                var scroller_width = copied_elem.find('#' + $elem.parent().attr('id') + ' .timeline').width();
                copied_elem.remove();
-               console.log(scroller_width);
+               //console.log(scroller_width);
                if ((position + scroller_width) < getMostRight())
                    $elem.parent().find('.arrowHolderRight').show();
                else

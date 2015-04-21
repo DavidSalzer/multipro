@@ -8,17 +8,20 @@ function TestController() {
     var testId;
     var numOfQuestions;
     var firstQuestion;//the first question is the question after the last question done
+    var mySwiper;
 
     //represents an entrance to the page-the only way to enter the test page
     this.visit = function () {
+        this.doneQuestions = [];
+        this.notdoneQuestions = [];
       //call from server questions for given test
         main.ajax.getQuestionsForTest(main.userId,testId,numOfQuestions, function (data) {
-          console.log(main.userId);
-          console.log(testId);
+          //console.log(main.userId);
+          //console.log(testId);
           //self.visit();
             var arr=data;
             if (!data.error) {    
-                console.log(data);          
+                //console.log(data);          
                 oninitTest(data.test,data.done);//sets the test with not done questions and with done questions-would begin at not done questions
                  //time out for tips- in the mean time disabled
 
@@ -42,7 +45,9 @@ function TestController() {
     }
     //represents an exit from the test page
     this.leave = function () {
+        $(".swiper-wrapper").html('');
          $("#test-container").hide();
+         
          main.timerController.resetGeneralTimers();
     }
 
@@ -69,6 +74,9 @@ function TestController() {
     }
 
     this.attachEvents = function () {
+        $(document).on('click', '#user-logout', function () {//close - logout
+           self.leave();
+        });
         $(".swiper-wrapper ").on("click", ".swiper-slide-active .active .asterisk", self.asterisk);
 
         $(".swiper-wrapper").on("click", ".swiper-slide-active .active .circle", self.circle);
@@ -91,9 +99,7 @@ function TestController() {
             $(event.target).parents('.test-tip').hide();
         })
 
-        $("#user-container").on("click", function () {
-            window.location = "indexStatistics.html";
-        });
+       
     }
 
     //init the test page with the questions
@@ -153,7 +159,7 @@ function TestController() {
                 $(document).tooltip();
                 var fadetimer = null; //timeout for showing timer for each question
                 //init the swiper
-                var mySwiper = new Swiper('.swiper-container', {
+                 mySwiper = new Swiper('.swiper-container', {
                     pagination: '.pagination',
                     mode: 'vertical',
                     //createPagination:false,
@@ -187,7 +193,7 @@ function TestController() {
                                 var overallWidth=width*numberOfElements;
                                 var pagePos=overallWidth-pos-37;//the actual position on the elemnt 
                                 var centerOfParent=width*7;
-                                console.log(pagePos);
+                                //console.log(pagePos);
                                 $('.pagination').scrollLeft(pagePos-centerOfParent);//-would keep the bar at the position of the currnt slide
                                 $($('.swiper-pagination-switch')[current]).addClass('swiper-active-switch');
                                 $($('.swiper-pagination-switch')[last]).removeClass('swiper-active-switch');
@@ -226,7 +232,7 @@ function TestController() {
             }
             //handles the leaving of question on change of slide
             function onLeaveQuestion(last){
-                console.log('leave q');
+                //console.log('leave q');
                             self.questions[last].handler.leave(function () {
                                 //check if got to last question if yes and still in stage 1 so move to stage 2
                                 checkStage(last);
@@ -396,14 +402,15 @@ function TestController() {
         main.answerPageController.addQuestionArr(self.notdoneQuestions);//add to answer page the data of the question
         main.answerPageController.addToView();
         //main.reportController.visit();
-        self.leave();
+        
         main.navigatorController.changeToPage('reportPage');//move to the test page
-
+        self.leave();
         report = new Report(self.notdoneQuestions,stagesHolder);
         main.reportController.insertData(report);
         main.ajax.add_question_data_to_user(main.userId, self.questions, testId, function (data) {
-               console.log(data);
+              
         });
+        
       
     }
 

@@ -111,9 +111,9 @@
    <script>
        var a = new ajaxHandler();
        //a.set_last_question(16, 1038, 5, function (data) {
-       //    console.log(data);
+       //    ////console.log(data);
        //    a.get_last_question(16, 1038, function (data) { 
-       //          console.log(data);
+       //          ////console.log(data);
        //    });
        //});
        var q = [{
@@ -130,11 +130,11 @@
        }]
        var b = [];
        a.getQuestionsForTest(16,1363, 3, function (data) {
-           console.log(data);
+           ////console.log(data);
            for (var i = 0; i < data.test.length; i++) {
                b.push(new Question(i + 1, data.test[i]));
            }
-           console.log(b);
+           ////console.log(b);
            //b[0].handler.visit();
            //b[0].handler.addAnswer(2);
            //b[0].handler.leave();
@@ -142,12 +142,12 @@
            //b[1].handler.addAnswer(2);
            //b[1].handler.leave();
            a.add_question_data_to_user(16, b,1363, function (data) {
-               console.log(data);
+               ////console.log(data);
            });
 
        })
        //a.add_question_data_to_user(16, q, function (data) {
-       //    console.log(data);
+       //    ////console.log(data);
        //});
 
 

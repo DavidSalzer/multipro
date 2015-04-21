@@ -7,6 +7,7 @@ function TestChooserController() {
     //sets all events of the page choosetestpage
     this.attachEvents = function () {
         $(document).on('mouseenter', '#user-container', function () {//open - logout
+            
             $('#user-logout').show();
         });
         $(document).on('mouseleave', '#user-container', function () {//close - logout
@@ -19,7 +20,7 @@ function TestChooserController() {
             //check that there is a test chosen
             var choice = ($('#year-choose-dropdown :selected').attr('value')); //the number of test in array
             var choiseNumOfQuestions = $('#number-for-excercise .number-content').text(); //the number of wanted questions
-            //console.log(tests[choice]);
+            ////console.log(tests[choice]);
             self.leave(); //leave current page
             main.testController.initTest(tests[choice].id, choiseNumOfQuestions); //set the test page data and move to test page
             //main.navigatorController.changeToPage('test');//move to the test page
@@ -139,15 +140,15 @@ function TestChooserController() {
     //sets the test from data to view for choice
     function setDataToView() {
                      $('#choose-test-container').show();//show the page
-
-                    self.setTests(); //put the test in dropbox
+                    if(numberOfVisits==1)
+                        self.setTests(); //put the test in dropbox 
                     self.updateChoiceOfTest(); //set data according to default test the top test
                     self.setNumberOfQuestions(20); //default as 20                
                     self.setTimer(); //set timer according to chosen test(the default one)
     }
 
     this.leave = function () {
-        console.log('chosse leave')
+        //console.log('chosse leave')
         $('#choose-test-container').hide();//leve page hide the page
         $('.footer').hide();//footer at other parts of the test is hidden
 

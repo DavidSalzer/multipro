@@ -32,7 +32,7 @@ function ajaxHandler() {
                     callback(dataArr);
             },
             error: function (e) {
-                console.log(e.message);
+                ////////console.log(e.message);
                 callback(new ErrorHandler(0)); //sends an error handler
             }
         });
@@ -53,7 +53,7 @@ function ajaxHandler() {
                     callback(dataArr);
             },
             error: function (e) {
-                console.log(e.message);
+                //////////console.log(e.message);
                 callback(new ErrorHandler(0)); //sends an error handler
             }
         });
@@ -74,7 +74,7 @@ function ajaxHandler() {
                     callback(data);
             },
             error: function (e) {
-                console.log(e.message);
+                ////////console.log(e.message);
                 callback(new ErrorHandler(0)); //sends an error handler
             }
         });
@@ -89,7 +89,7 @@ function ajaxHandler() {
                     callback(data);
             },
             error: function (e) {
-                console.log(e.message);
+                //////////console.log(e.message);
                 callback(new ErrorHandler(0)); //sends an error handler
             }
         });
@@ -110,7 +110,7 @@ function ajaxHandler() {
                     callback(dataArr);
             },
             error: function (e) {
-                console.log(e.message);
+                ////////console.log(e.message);
                 callback(new ErrorHandler(0)); //sends an error handler
             }
         });
@@ -130,7 +130,7 @@ function ajaxHandler() {
                     callback(data);
             },
             error: function (e) {
-                console.log(e.message);
+                ////////console.log(e.message);
                 callback(new ErrorHandler(0)); //sends an error handler
             }
         });
@@ -150,7 +150,7 @@ function ajaxHandler() {
                     callback(data);
             },
             error: function (e) {
-                console.log(e.message);
+                ////////console.log(e.message);
                 callback(new ErrorHandler(0)); //sends an error handler
             }
         });
@@ -170,7 +170,7 @@ function ajaxHandler() {
                     callback(data);
             },
             error: function (e) {
-                console.log(e.message);
+                ////////console.log(e.message);
             }
         });
     }
@@ -185,10 +185,10 @@ function ajaxHandler() {
             url: domain + "?json=multi.getQB&dev=1",
             dataType: 'json',
             success: function (data) {
-                console.log(data);
+                ////////console.log(data);
             },
             error: function (e) {
-                console.log(e.message);
+                ////////console.log(e.message);
             }
         });
     }
@@ -211,7 +211,7 @@ function ajaxHandler() {
                     callback(data)
             },
             error: function (e) {
-                console.log(e.message);
+                ////////console.log(e.message);
                 callback(new ErrorHandler(0)); //sends an error handler
             }
         });
@@ -232,12 +232,12 @@ function ajaxHandler() {
             url: domain + "?json=users.logIn&dev=1&x="+n,
             dataType: 'json',
             success: function (data) {
-                console.log(data);
+                ////////console.log(data);
                 if (callback)
                     callback(data);
             },
             error: function (e) {
-                console.log(e.message);
+                ////////console.log(e.message);
                 callback(new ErrorHandler(0)); //sends an error handler
             }
         });
@@ -256,7 +256,7 @@ function ajaxHandler() {
                     callback(data)
             },
             error: function (e) {
-                console.log(e.message);
+                ////////console.log(e.message);
                 callback(new ErrorHandler(0)); //sends an error handler
             }
         });
@@ -273,7 +273,7 @@ function ajaxHandler() {
                     callback(data)
             },
             error: function (e) {
-                console.log(e.message);
+                ////////console.log(e.message);
                 callback(new ErrorHandler(0)); //sends an error handler
             }
         });
@@ -294,7 +294,7 @@ function ajaxHandler() {
                     callback(data)
             },
             error: function (e) {
-                console.log(e.message);
+                ////////console.log(e.message);
                 callback(new ErrorHandler(0)); //sends an error handler
             }
         });
