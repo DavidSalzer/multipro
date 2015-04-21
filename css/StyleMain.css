@@ -491,7 +491,9 @@ display: inline-block;
    display: inline-block;
    
 }
-
+.not-active .question-feature-item.timer {
+    display: none;
+}
 .question-feature-item.comment input{
     height: 20px;
 display: inline-block;
