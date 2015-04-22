@@ -13,6 +13,7 @@ function Question(qnumber,obj){
 }
 //A handler for the questions comment the question handler doesnt handle stages- it was a mistake but could still work as regular with taking all answers
 function QuestionHandler(){  
+    
     var delayTimeBetweenQuestion=5;//number of seconds of delay that are for saying if the user is at the question or just passing by.
     var self = this;
     var timeForAnswer=null;//timeout for answer the timeout for time of delay for focus on question
@@ -137,8 +138,16 @@ function QuestionHandler(){
         }
         return sum;
     }
-       
+          
 }
+QuestionHandler.fromParse = function (obj) {
+        var temp = new QuestionHandler();
+        for (var key in obj) {
+            temp[key] = obj[key];
+        }
+        return temp;
+    }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function timeLineObject(question) {
     this.questionNum = question.questionNumber;

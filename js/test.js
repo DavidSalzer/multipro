@@ -18,10 +18,13 @@ function TestController() {
         main.ajax.getQuestionsForTest(main.userId,testId,numOfQuestions, function (data) {
           //console.log(main.userId);
           //console.log(testId);
-          //self.visit();
+          
             var arr=data;
             if (!data.error) {    
-                //console.log(data);          
+                //set done questions with prototype
+                for(var i=0;i<data.done.length;i++){
+                    data.done[i].handler=QuestionHandler.fromParse(data.done[i].handler);//sets to proto type QuestionHandler
+                }       
                 oninitTest(data.test,data.done);//sets the test with not done questions and with done questions-would begin at not done questions
                  //time out for tips- in the mean time disabled
 
@@ -399,12 +402,12 @@ function TestController() {
         else
            main.reportController= new ReportController();
         
-        main.answerPageController.addQuestionArr(self.notdoneQuestions);//add to answer page the data of the question
+        main.answerPageController.addQuestionArr(self.questions);//add to answer page the data of the questions
         main.answerPageController.addToView();
         //main.reportController.visit();
         
         main.navigatorController.changeToPage('reportPage');//move to the test page
-        self.leave();
+        self.leave();//hash wont leave beecause the hash is choose test
         report = new Report(self.notdoneQuestions,stagesHolder);
         main.reportController.insertData(report);
         main.ajax.add_question_data_to_user(main.userId, self.questions, testId, function (data) {
