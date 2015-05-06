@@ -63,7 +63,7 @@ function AnswerPageController(element) {
         var asterisk = (question.handler.asterisk) ? "selected" : "";
         var questionMark = (question.handler.questionMark) ? "selected" : "";
         var comment = question.handler.answerComment;
-        console.log(question.handler.answerComment);
+      
         html += '<div class="question-container" data-question-num="' + question.questionNumber + '">';
 
         html += '<div class="title icons">';

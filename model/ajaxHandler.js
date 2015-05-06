@@ -91,7 +91,7 @@ function ajaxHandler() {
                 testID: test_id
             },
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 if (callback)
                     callback(data);
             },
