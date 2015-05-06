@@ -109,46 +109,66 @@
         <script src="js/init.js"></script>-->
         
    <script>
-       var a = new ajaxHandler();
-       //a.set_last_question(16, 1038, 5, function (data) {
+       //var a = new ajaxHandler();
+       ////a.set_last_question(16, 1038, 5, function (data) {
+       ////    ////console.log(data);
+       ////    a.get_last_question(16, 1038, function (data) { 
+       ////          ////console.log(data);
+       ////    });
+       ////});
+       //var q = [{
+       //    "question": "לאחר חריגת ביצית בשלה בביוץ:   ",
+       //    "answers": [
+       //                "נשאר בשחלה גופיף צהוב שמפריש פרוגסטרון ותומך בהריון",
+       //        "הביצית הבשלה שחרגה מפרישה לעצמה את ההורמונים הדרושים להתפתחות הריון",
+       //        "הגופיף הצהוב הינו איזור בשחלה ללא תפקיד",
+       //        "רק אם ביצית תופרה על ידי זרע יופרש פרוגסטרון מהגופיף הצהוב"
+       //                ],
+       //    "correctAns": 1,
+       //    "id": 25,
+       //    "handler": new QuestionHandler()
+       //}]
+       //var b = [];
+       //a.getQuestionsForTest(16,1363, 3, function (data) {
        //    ////console.log(data);
-       //    a.get_last_question(16, 1038, function (data) { 
-       //          ////console.log(data);
+       //    for (var i = 0; i < data.test.length; i++) {
+       //        b.push(new Question(i + 1, data.test[i]));
+       //    }
+       //    ////console.log(b);
+       //    //b[0].handler.visit();
+       //    //b[0].handler.addAnswer(2);
+       //    //b[0].handler.leave();
+       //    //b[1].handler.visit();
+       //    //b[1].handler.addAnswer(2);
+       //    //b[1].handler.leave();
+       //    a.add_question_data_to_user(16, b,1363, function (data) {
+       //        ////console.log(data);
        //    });
-       //});
-       var q = [{
-           "question": "לאחר חריגת ביצית בשלה בביוץ:   ",
-           "answers": [
-                       "נשאר בשחלה גופיף צהוב שמפריש פרוגסטרון ותומך בהריון",
-               "הביצית הבשלה שחרגה מפרישה לעצמה את ההורמונים הדרושים להתפתחות הריון",
-               "הגופיף הצהוב הינו איזור בשחלה ללא תפקיד",
-               "רק אם ביצית תופרה על ידי זרע יופרש פרוגסטרון מהגופיף הצהוב"
-                       ],
-           "correctAns": 1,
-           "id": 25,
-           "handler": new QuestionHandler()
-       }]
-       var b = [];
-       a.getQuestionsForTest(16,1363, 3, function (data) {
-           ////console.log(data);
-           for (var i = 0; i < data.test.length; i++) {
-               b.push(new Question(i + 1, data.test[i]));
-           }
-           ////console.log(b);
-           //b[0].handler.visit();
-           //b[0].handler.addAnswer(2);
-           //b[0].handler.leave();
-           //b[1].handler.visit();
-           //b[1].handler.addAnswer(2);
-           //b[1].handler.leave();
-           a.add_question_data_to_user(16, b,1363, function (data) {
-               ////console.log(data);
-           });
 
-       })
+       //})
        //a.add_question_data_to_user(16, q, function (data) {
        //    ////console.log(data);
        //});
+       var a = new ajaxHandler();
+       var domain = "http://multipro.local/";
+       $.ajax({
+           type: 'POST',
+           url: domain + "?json=multi.test_qb&dev=1",
+           dataType: 'json',
+           success: function (data) {
+               console.log(data);
+               delete data.status;
+               data.handler.answerComment = 'test';
+               a.update_question_behavior(data, function (data) {
+                   console.log(data);
+               });
+           },
+           error: function (e) {
+               ////////console.log(e.message);
+               alert();
+               callback(new ErrorHandler(0)); //sends an error handler
+           }
+       });
 
 
 

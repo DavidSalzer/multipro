@@ -12,8 +12,9 @@ function Question(qnumber,obj){
     this.handler.correctAnswer = obj.correctAns;//sets the correct answer at the handler
 }
 //A handler for the questions comment the question handler doesnt handle stages- it was a mistake but could still work as regular with taking all answers
-function QuestionHandler(){  
-    
+function QuestionHandler(){
+
+    this.handler_id = -1;//identefier for qhandler on server initiliaze as -1 only when come from server would come with identifier 
     var delayTimeBetweenQuestion=5;//number of seconds of delay that are for saying if the user is at the question or just passing by.
     var self = this;
     var timeForAnswer=null;//timeout for answer the timeout for time of delay for focus on question
@@ -24,6 +25,7 @@ function QuestionHandler(){
     this.currentAnswer = null;//the actual answer of the question initiliazed as null for no answer
     this.correctAnswer = 0;
     this.comment = '';
+    this.answerComment = '';
     this.guess=0;//initilize as non guess
     this.timer = new Timer();
     this.givenAnswers = {firstStage:[],

@@ -16,6 +16,27 @@ function ajaxHandler() {
     this.logOut = logOut;
     this.add_question_data_to_user = add_question_data_to_user;
     this.get_logged_in = get_logged_in;
+    this.update_question_behavior = update_question_behavior;
+    
+    function update_question_behavior(question,callback) {
+        $.ajax({
+            type: 'POST',
+            data:{
+                qId:question.handler.handler_id,
+                question:JSON.stringify(question)
+            },
+            url: domain + "?json=multi.update_question_behavior&dev=1",
+            dataType: 'json',
+            success: function (data) {               
+                if (callback)
+                    callback(data);
+            },
+            error: function (e) {
+                ////////console.log(e.message);
+                callback(new ErrorHandler(0)); //sends an error handler
+            }
+        });
+    }
     //calls from domain all the years of tests
     function getTestYears(callback) {
         $.ajax({
@@ -64,12 +85,13 @@ function ajaxHandler() {
             type: 'GET',
             url: domain + "?json=multi.getQuestionsForTest&dev=1",
             dataType: 'json',
-             data:{
-                userID:user_id,
-                numberOfQuestions:numberOfQuestions,
-                testID:test_id
+            data: {
+                userID: user_id,
+                numberOfQuestions: numberOfQuestions,
+                testID: test_id
             },
             success: function (data) {
+                console.log(data);
                 if (callback)
                     callback(data);
             },

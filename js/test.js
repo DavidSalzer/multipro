@@ -276,6 +276,7 @@ function TestController() {
                     html += '               </span>';
                     html += '           <div class="answers-container">';
                     //loop on answers
+                   
                     for (j = 0; j < question.answers.length; j++) {
                         var choice = ((j + 1) == question.handler.currentAnswer) ? "answer" : "";
                         html += '             <div class="answer-item" data-answer-num=' + (j + 1) + '><span class="not-answer-icon" title="פסילת תשובה"></span><!--<span class="answer-icon" title="סימון תשובה">--></span><span class="number '+choice+'" title="סימון תשובה">' + self.alphabets[j] + '.</span><span class="text">' + question.answers[j] + '</span></div>';
