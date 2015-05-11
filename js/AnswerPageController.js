@@ -4,12 +4,19 @@ function AnswerPageController(element) {
     var alphabets = ["א", "ב", "ג", "ד", "ה", "ו","ז","ח"];
     var  html = '';
     var self = this;
+    var changedtext=false;
     var attachTo='body';
         
     if (element)
         attachTo = element;
 
     this.attachEvents = function () {
+        
+        //checks that data of text area is saved
+        $(window).on('beforeunload', function () {
+            if(changedtext)
+                return 'הוכנס מידע חדש שלא נשמר ';
+        });
         $(document).on('click', '.button-container-answer-page .print .icon', function () {
             self.BeforePrint(); //things to do before print like hide button and eetc
             var toprint = new Printer(".wrapper");
@@ -20,14 +27,17 @@ function AnswerPageController(element) {
             main.navigatorController.changeToPage('reportPage'); //move to the test page
         });
         $(document).on('focusout', 'textarea', function (event) {
-      
+
             var questionNumber = $(event.target).parents('.question-container').attr('data-question-num');
             var text = $(event.target).val();
             questionsHolder[questionNumber - 1].handler.answerComment = text;
             $(event.target).html(text);
-            main.ajax.update_question_behavior(questionsHolder[questionNumber - 1], function (data) { console.log(data) }); //saves the comment to server
+            main.ajax.update_question_behavior(questionsHolder[questionNumber - 1], function (data) { console.log(data);changedtext=false }); //saves the comment to server
         });
-       
+        $(document).on('keydown', 'textarea', function (event) {
+            changedtext =true;
+        });
+
     }
 
     this.visit = function () {
