@@ -19,7 +19,7 @@ function AnswerPageController(element) {
         $(document).on('click', '.button-container-answer-page .returnto-report .icon', function () {
             main.navigatorController.changeToPage('reportPage'); //move to the test page
         });
-        $(document).on('change', 'textarea', function (event) {
+        $(document).on('focusout', 'textarea', function (event) {
       
             var questionNumber = $(event.target).parents('.question-container').attr('data-question-num');
             var text = $(event.target).val();
