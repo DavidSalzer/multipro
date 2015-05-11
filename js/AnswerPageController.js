@@ -19,13 +19,15 @@ function AnswerPageController(element) {
         $(document).on('click', '.button-container-answer-page .returnto-report .icon', function () {
             main.navigatorController.changeToPage('reportPage'); //move to the test page
         });
-        $(document).on('focusout', 'textarea', function (event) {
+        $(document).on('change', 'textarea', function (event) {
+      
             var questionNumber = $(event.target).parents('.question-container').attr('data-question-num');
             var text = $(event.target).val();
             questionsHolder[questionNumber - 1].handler.answerComment = text;
             $(event.target).html(text);
-            main.ajax.update_question_behavior(questionsHolder[questionNumber - 1],function(data){console.log(data)});//saves the comment to server
+            main.ajax.update_question_behavior(questionsHolder[questionNumber - 1], function (data) { console.log(data) }); //saves the comment to server
         });
+       
     }
 
     this.visit = function () {
@@ -89,7 +91,7 @@ function AnswerPageController(element) {
         html += '<div class="reference answer-feature-item" dir="ltr"><span>' + question.bookReferance[1] + '  </span><span> ' + question.bookReferance[0] + '</span></div>';
         html += '</div>';
         html += '</div>';
-        html += ' <div class="tip-bubble-wrapper"><div class="tip-bubble"><span class="content"><textarea placeholder="הכנס הערה">' + comment + '</textarea></span><div class="icon"></div></div></div>';
+        html += ' <div class="tip-bubble-wrapper"><div class="tip-bubble"><span class="content"><textarea maxlength="200" placeholder="הכנס הערה">' + comment + '</textarea></span><div class="icon"></div></div></div>';
         html += '</div>';
     }
     this.addToView = function () {//adds attached elemnts that are sitting in html variable to view
