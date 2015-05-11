@@ -48,9 +48,12 @@ function TestChooserController() {
             self.updateChoiceOfTest();
         })
     }
-    function logOut() { 
-            main.ajax.logOut();
-            main.navigatorController.changeToPage('logIn');
+    function logOut() {
+        main.ajax.logOut(function () {
+            main.reset();
+            $('#user-logout').hide();
+        });
+            //main.navigatorController.changeToPage('logIn');
     }
     function addNumberOfQuestions() {
         var number = parseInt($('.number-content').text());

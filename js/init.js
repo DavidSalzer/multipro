@@ -1,5 +1,5 @@
 var main = {//holds all controllers
-    userId:null,//would hold the users id on thw wordpress    
+    userId: null, //would hold the users id on thw wordpress    
 
     ajax: new ajaxHandler(),
 
@@ -15,9 +15,9 @@ var main = {//holds all controllers
 
     start: function () {
         main.navigatorController.attachEvents();
-        main.reportController.initChart();//initilze the report mainly to load google api
+        main.reportController.initChart(); //initilze the report mainly to load google api
         main.ajax.get_logged_in(function (data) {
-            
+
             //console.log(data)
             if (data != false && !data.error) {//if logged in and got user so go to choose test
                 main.userId = data.ID; //the user id that was created-saved globally
@@ -28,8 +28,20 @@ var main = {//holds all controllers
             else {//not logged in so go to log in page
                 main.navigatorController.changeToPage('logIn'); //the first page to move to
             }
-           
+
         })
+    },
+    reset: function () {
+        $(document).off();//turn off all listners
+        main.logInController = new LogInController(),
+        main.signInController = new SignInController(),
+        main.timerController = new TimerController(),
+        main.testChooseController = new TestChooserController(),
+        main.testController = new TestController(),
+        main.reportController = new ReportController(),
+        main.answerPageController = new AnswerPageController('#answers-page');
+        main.start();
+
     }
 }
  

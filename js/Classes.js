@@ -1,6 +1,7 @@
 var stages=[0,'firstStage','secondStage','thirdStage']//stages that are in the test- constant variable
 //holds a question of test
 function Question(qnumber,obj){
+
     this.id = obj.id;
     this.question=obj.question;//the question itself
     this.answers = obj.answers;//an array of answers
