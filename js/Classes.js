@@ -41,7 +41,7 @@ function QuestionHandler(){
    //when visit a question it might be only to scroll on, so check time for considiring if called for visit, saves the times the question was focused on and,  and how much time was focused in question
    //the callback would return with astring of the time and would be given only after delaytime for show timer
     this.visit = function (callback) {
-        console.log(self.currentAnswer);
+     //   console.log(self.currentAnswer);
         //tempAnswer = self.currentAnswer;
         self.timer.startTimer(function () {
             if (callback)//set to view to user     

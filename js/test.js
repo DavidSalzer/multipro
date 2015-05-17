@@ -223,7 +223,7 @@ function TestController() {
 
                 //handles the visit of question on change of slide
                function onVisitQuestion(current){
-                    console.log('visit q' +current);
+                  //  console.log('visit q' +current);
                                 $(self.swiper.slides[current]).find('.timer').hide();
                                 //check if timeout was set at all
                                 if (fadetimer != null)
@@ -237,7 +237,7 @@ function TestController() {
             }
             //handles the leaving of question on change of slide
             function onLeaveQuestion(last){
-                console.log('leave q ' +last);
+               // console.log('leave q ' +last);
                             self.questions[last].handler.leave(function () {
                                 //check if got to last question if yes and still in stage 1 so move to stage 2
                                 checkStage(last);
