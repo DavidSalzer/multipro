@@ -163,12 +163,13 @@ function TestController() {
                 var fadetimer = null; //timeout for showing timer for each question
                 //init the swiper
                  mySwiper = new Swiper('.swiper-container', {
+                    followFinger:false,
                     pagination: '.pagination',
                     mode: 'vertical',
                     //createPagination:false,
                     paginationClickable: true,
                     centeredSlides: true,
-                    mousewheelControlForceToAxis: true,
+                 //   mousewheelControlForceToAxis: true,
                     mousewheelControl: true,
                     slidesPerView: 'auto',
                     watchActiveIndex: true,
@@ -206,7 +207,7 @@ function TestController() {
                         mySwiper.swipeTo(firstQuestion);
 
                     },
-                    onSlideChangeStart: function (swiper) {
+                   onSlideChangeStart: function (swiper) {
                         
                         //each time focused on question a timer is set to check if question is centered if less then given time so its not considered that the user is in the question, 
                         //so when a question is focused the given question statrs a timer and the prev question is stopped the timer (if relevent)
@@ -222,6 +223,7 @@ function TestController() {
 
                 //handles the visit of question on change of slide
                function onVisitQuestion(current){
+                    console.log('visit q' +current);
                                 $(self.swiper.slides[current]).find('.timer').hide();
                                 //check if timeout was set at all
                                 if (fadetimer != null)
@@ -235,7 +237,7 @@ function TestController() {
             }
             //handles the leaving of question on change of slide
             function onLeaveQuestion(last){
-                //console.log('leave q');
+                console.log('leave q ' +last);
                             self.questions[last].handler.leave(function () {
                                 //check if got to last question if yes and still in stage 1 so move to stage 2
                                 checkStage(last);

@@ -41,15 +41,17 @@ function QuestionHandler(){
    //when visit a question it might be only to scroll on, so check time for considiring if called for visit, saves the times the question was focused on and,  and how much time was focused in question
    //the callback would return with astring of the time and would be given only after delaytime for show timer
     this.visit = function (callback) {
-                            //tempAnswer = self.currentAnswer;
-                            self.timer.startTimer(function () {
-                                if (callback)//set to view to user     
-                                    callback(self.timer.setToView())
-                            });
-                        }
+        console.log(self.currentAnswer);
+        //tempAnswer = self.currentAnswer;
+        self.timer.startTimer(function () {
+            if (callback)//set to view to user     
+                callback(self.timer.setToView());
+        });
+    }
      this.leave = function (callback) {//once there is a focus out of a question then it might have been early so stop the timer so the number of visits wouldnt update, furthermore if there was an answer or it was changed so add the given answer
+                            
                             if (self.timer.minutes > 0 || self.timer.seconds > delayTimeBetweenQuestion || tempAnswer != null) {
-                                self.currentAnswer = tempAnswer;
+                                //self.currentAnswer = tempAnswer;
                                 self.timesvisited++;
                                 self.timeInVisit[QuestionHandler.stage].push(self.timer.setToView());
                                 if (callback)
